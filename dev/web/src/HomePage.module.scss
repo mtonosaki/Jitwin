@@ -1,0 +1,15 @@
+@use "variables.module.scss" as *;
+
+.container {
+  background: $bg-main;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  @include heading-01;
+  color: $primary-400;
+  text-align: center;
+}

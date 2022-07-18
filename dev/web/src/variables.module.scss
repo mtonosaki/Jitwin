@@ -1,0 +1,48 @@
+$jitwin-mocha-0: #f6f2ec;
+$jitwin-mocha-50: #ece5d9;
+$jitwin-mocha-100: #e3d7c6;
+$jitwin-mocha-200: #d6c5ac;
+$jitwin-mocha-400: #c2a882;
+$jitwin-mocha-600: #645031;
+$jitwin-mocha-800: #433521;
+$jitwin-grey-0: #ffffff;
+$jitwin-grey-50: #eeeeee;
+$jitwin-grey-100: #bebebe;
+$jitwin-grey-200: #a9a9a9;
+$jitwin-grey-300: #8c8c8c;
+$jitwin-grey-400: #666666;
+$jitwin-grey-500: #333333;
+$primary-0: $jitwin-mocha-0;
+$primary-50: $jitwin-mocha-50;
+$primary-200: $jitwin-mocha-100;
+$primary-300: $jitwin-mocha-200;
+$primary-400: $jitwin-mocha-400;
+$primary-600: $jitwin-mocha-600;
+$primary-800: $jitwin-mocha-800;
+$bg-main: $jitwin-mocha-50;
+
+$font-main: "M PLUS Rounded 1c", sans-serif; // support weight 100, 400, 700, 900
+
+@mixin _paragraph-01 {
+  font-family: $font-main;
+  font-style: normal;
+  font-size: 13px;
+  line-height: 19px;
+}
+
+@mixin paragraph-01-regular {
+  @include _paragraph-01;
+  font-weight: 400;
+}
+
+@mixin paragraph-01-bold {
+  @include _paragraph-01;
+  font-weight: 400;
+}
+
+@mixin heading-01 {
+  font-family: $font-main;
+  font-style: normal;
+  font-size: 36px;
+  font-weight: 900;
+}

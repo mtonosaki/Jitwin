@@ -103,5 +103,10 @@ dist
 # TernJS port file
 .tern-port
 
-# Mac
-.DS_*
+# Customize
+.DS_Store
+.git-authors
+.env.local
+.idea/
+
+
