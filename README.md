@@ -22,3 +22,16 @@ Re-input IoT data into VSM for problem solving, studing revolutional idea and pl
 # About this repository
 Frontend : React / TypeScript
 Backend : Spring / Kotlin
+
+# Build on your PC
+
+## Preparation
+### Frontend
+1. copy ./dev/web/.env.local.copy to .env.local and edit shell environment path.
+2. cd ./dev/web
+3. yarn install
+
+## Build / Debug
+### Frontend
+1. cd ./dev/web
+2. yarn start
