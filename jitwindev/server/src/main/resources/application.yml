@@ -1,0 +1,39 @@
+spring:
+  profiles:
+    active: development
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/jitwin_dev
+    username: "admin"
+    password: "admin"
+  jpa:
+    generate-ddl: true
+  cloud:
+    azure:
+      active-directory:
+        enabled: true
+        profile:
+          tenant-id: ${JITWIN_AAD_TENANT_ID}
+        credential:
+          client-id: ${JITWIN_AAD_CLIENT_ID}
+          client-secret: ${JITWIN_AAD_CLIENT_SECRET}
+        application-type: web_application_and_resource_server
+        authorization-clients:
+          graph:
+            authorizationGrantType: authorization_code
+            scopes:
+              - https://graph.microsoft.com/User.ReadBasic.All
+
+logging:
+  level:
+    root: info
+
+jitwin:
+  host:
+    frontend: https://localhost:3000
+
+server:
+  servlet:
+    encoding:
+      charset: utf-8
+      force-response: true

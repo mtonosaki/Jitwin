@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DATABASE_URL}/jitwin_prod
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+
+  jpa:
+    generate-ddl: true
+  cloud:
+    azure:
+      active-directory:
+        enabled: true
+        profile:
+          tenant-id: ${AAD_TENANT_ID}
+        credential:
+          client-id: ${AAD_CLIENT_ID}
+          client-secret: ${AAD_CLIENT_SECRET}
+        application-type: web_application_and_resource_server
+        authorization-clients:
+          graph:
+            authorizationGrantType: authorization_code
+            scopes:
+              - https://graph.microsoft.com/User.ReadBasic.All
+        redirect-uri-template: https://www.jitwin.tomarika.com/login/oauth2/code/
+
+jitwin:
+  host:
+    frontend: ${FRONTEND_HOST}
