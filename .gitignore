@@ -108,5 +108,5 @@ dist
 .git-authors
 .env.local
 .idea/
-/jitwindev/docker
+/jitwindev/docker/db
 
