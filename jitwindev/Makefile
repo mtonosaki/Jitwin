@@ -1,6 +1,5 @@
 test:
 	cd web && yarn test
-	cd addin && yarn test
 	cd server && ./gradlew test
 
 lint:
