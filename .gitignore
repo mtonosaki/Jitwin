@@ -109,4 +109,5 @@ dist
 .env.local
 .idea/
 /jitwindev/docker/db
+/jitwindev/server/.gradle
 
