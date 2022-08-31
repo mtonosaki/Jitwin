@@ -90,3 +90,14 @@ cd ./jitwindev/server
 ./gradlew test   # to test
 ```
 
+### IDE (IntelliJ Ultimate)
+#### Prettier Setting  
+
+1. [Menu] → [IntelliJ IDEA] → [Preference]  
+2. [Plugin@Left pane]
+3. Install the plugin named 'Prettier'
+4. [OK]
+5. [Menu] → [IntelliJ IDEA] → [Preference]
+6. [Languages & Frameworks @ Left pane] → [JavaScript] → [Prettier]
+7. Select prettier package from dropdown list.
+8. Check [On 'Reformat Code' action]
