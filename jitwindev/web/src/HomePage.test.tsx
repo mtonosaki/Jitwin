@@ -9,4 +9,9 @@ describe('HomePage', () => {
   it('Show JitWin', () => {
     expect(screen.getByText('Jitwin')).toBeInTheDocument();
   });
+  describe('Login', () => {
+    it('Show login button', () => {
+      expect(screen.getByRole('button', { name: /Login/ })).toBeInTheDocument();
+    });
+  });
 });

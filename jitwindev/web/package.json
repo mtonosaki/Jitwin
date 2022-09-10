@@ -94,5 +94,8 @@
   "jest": {
     "globalSetup": "<rootDir>/src/tests/globalSetup.js"
   },
+  "prettier": {
+    "singleQuote": true
+  },
   "proxy": "http://localhost:8080"
 }

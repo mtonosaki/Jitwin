@@ -21,7 +21,7 @@ $primary-600: $jitwin-mocha-600;
 $primary-800: $jitwin-mocha-800;
 $bg-main: $jitwin-mocha-50;
 
-$font-main: "M PLUS Rounded 1c", sans-serif; // support weight 100, 400, 700, 900
+$font-main: 'M PLUS Rounded 1c', sans-serif; // support weight 100, 400, 700, 900
 
 @mixin _paragraph-01 {
   font-family: $font-main;
