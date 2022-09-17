@@ -32,8 +32,8 @@ export JITWIN_AAD_TENANT_ID=<your Azure Active Directory Tenant ID>
 export JITWIN_AAD_CLIENT_ID=<your Application Client ID in AzureAD>
 export JITWIN_AAD_CLIENT_SECRET=<your Application Client Secret Value>
 ```
-see also https://github.com/mtonosaki/Jitwin/wiki/Azure-Settings#5-make-a-client-secret
-NOTE: Setting the environment variable to ```./~zshrc``` allows development and testing to run smoothly.
+see also https://github.com/mtonosaki/Jitwin/wiki/Azure-Settings#5-make-a-client-secret  
+NOTE: Setting the environment variable to ```./~zshrc``` allows development and testing to run smoothly.  
 
 ### Frontend
 ```bash
