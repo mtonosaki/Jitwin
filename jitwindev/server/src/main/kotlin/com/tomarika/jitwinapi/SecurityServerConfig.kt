@@ -35,7 +35,6 @@ class SecurityServerConfig {
                 .csrf().ignoringAntMatchers("/api/**")
                 .and()
                 .authorizeRequests {
-                    it.antMatchers("/api/office/meetings").permitAll()
                     it.antMatchers("/api/**")
                         .authenticated()
                 }

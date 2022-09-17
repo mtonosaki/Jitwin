@@ -34,6 +34,8 @@ jitwin:
 
 server:
   servlet:
+    session:
+      timeout: 82800s
     encoding:
       charset: utf-8
       force-response: true

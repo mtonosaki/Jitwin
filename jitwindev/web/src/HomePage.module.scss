@@ -13,3 +13,16 @@
   color: $primary-400;
   text-align: center;
 }
+
+.loginButton {
+  span:nth-last-child(2) {
+    font-size: medium;
+    color: $jitwin-mocha-200;
+  }
+  span:nth-last-child(1) {
+    font-size: xx-large;
+    margin-left: 0.25rem;
+    font-weight: 800;
+    color: $jitwin-mocha-0;
+  }
+}

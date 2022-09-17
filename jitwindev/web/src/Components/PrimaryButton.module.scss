@@ -1,6 +1,9 @@
 @use '../variables.module.scss' as *;
 
 .primary {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   background-color: $primary-600;
   border: none;
   border-radius: 20px;
@@ -12,14 +15,14 @@
 
   &:hover {
     box-shadow: #00000022 1px 1px 2px 2px;
-    margin: 0px 2px 2px 0px;
+    margin: 0px 1px 1px 0px;
   }
 
   &:disabled {
     opacity: 0.5;
     color: $jitwin-mocha-400;
     cursor: auto;
-    margin: 2px 0px 0px 2px;
+    margin: 1px 0px 0px 1px;
     box-shadow: #ffffff00 0px 0px 0px 0px;
   }
 }
