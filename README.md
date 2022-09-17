@@ -33,7 +33,7 @@ export JITWIN_AAD_CLIENT_ID=<your Application Client ID in AzureAD>
 export JITWIN_AAD_CLIENT_SECRET=<your Application Client Secret Value>
 ```
 see also https://github.com/mtonosaki/Jitwin/wiki/Azure-Settings#5-make-a-client-secret  
-NOTE: Setting the environment variable to ```./~zshrc``` allows development and testing to run smoothly.  
+NOTE: Setting the environment variable to rc file such as ```~/.zshrc``` to smoothly run development and testing.  
 
 ### Frontend
 ```bash
