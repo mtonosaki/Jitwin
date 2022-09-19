@@ -1,0 +1,33 @@
+spring:
+  profiles:
+    active: test
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:jitwin-test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false;MODE=PostgreSQL;
+  jpa:
+    show-sql: true
+  main:
+    allow-bean-definition-overriding: on
+  cloud:
+    azure:
+      active-directory:
+        enabled: true
+        profile:
+          tenant-id: testing-sample-aad-tenant-id
+        credential:
+          client-id: testing-sample-aad-application-client-id
+          client-secret: testing-sample--aad-application-client-secret
+        application-type: web_application_and_resource_server
+        authorization-clients:
+          graph:
+            authorizationGrantType: authorization_code
+            scopes:
+              - https://graph.microsoft.com/User.ReadBasic.All
+
+logging:
+  level:
+    root: info
+
+jitwin:
+  host:
+    frontend: https://test-jitwin.example.com

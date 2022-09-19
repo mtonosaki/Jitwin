@@ -1,5 +1,6 @@
 package com.tomarika.jitwinapi
 
+import com.tomarika.jitwinapi.controller.HomeController
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -12,7 +13,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders
 
 @SpringBootTest
 class HomeControllerTest() {
-    private fun makeSubject(config: AppConfiguration): MockMvc {
+    private fun getMockMvc(config: AppConfiguration): MockMvc {
         return MockMvcBuilders.standaloneSetup(
             HomeController(config)
         ).build()
@@ -20,7 +21,7 @@ class HomeControllerTest() {
 
     @Test
     fun `When access to api hoge, returns 400`() {
-        makeSubject(StubAppConfiguration("na"))
+        getMockMvc(StubAppConfiguration("na"))
             .perform(get("/api/hoge"))
             .andExpect(status().isNotFound)
     }
@@ -32,14 +33,14 @@ class HomeControllerTest() {
 
         @Test
         fun `When access to document root, redirects to https localhost 3000`() {
-            makeSubject(config)
+            getMockMvc(config)
                 .perform(get("/"))
                 .andExpect(redirectedUrl("https://localhost:3000"))
         }
 
         @Test
         fun `When access to document root with query strings, redirect to https localhost 3000 with the query string`() {
-            makeSubject(config)
+            getMockMvc(config)
                 .perform(get("/?hoge=true"))
                 .andExpect(redirectedUrl("https://localhost:3000?hoge=true"))
         }
@@ -52,7 +53,7 @@ class HomeControllerTest() {
 
         @Test
         fun `When access to document root, returns 200`() {
-            makeSubject(config)
+            getMockMvc(config)
                 .perform(get("/"))
                 .andExpect(status().isOk)
         }

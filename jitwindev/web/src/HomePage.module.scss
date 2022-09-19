@@ -6,6 +6,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 0.5rem;
 }
 
 .title {
@@ -25,4 +28,13 @@
     font-weight: 800;
     color: $jitwin-mocha-0;
   }
+}
+
+.whoAmIButton {
+}
+
+.myNameIs {
+  color: $jitwin-mocha-400;
+  font-size: medium;
+  font-weight: bold;
 }

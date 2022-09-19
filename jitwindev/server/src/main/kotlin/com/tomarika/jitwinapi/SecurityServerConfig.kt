@@ -15,8 +15,8 @@ class SecurityServerConfig {
         @Throws(Exception::class)
         override fun configure(http: HttpSecurity) {
             super.configure(http)
-            http
-                .headers().frameOptions().disable().and()
+            http.headers().frameOptions().disable()
+                .and()
                 .oauth2Login {
                     it.successHandler { _, response, _ ->
                         response?.sendRedirect("/?login_redirect=true")
