@@ -1,5 +1,9 @@
 ![JitwinBanner-640x213](https://user-images.githubusercontent.com/34669114/179440686-e2a87bff-60db-453a-9fb1-424355a2c3e8.jpg)
 
+# Links
+- [Project](https://github.com/users/mtonosaki/projects/1)    
+- [Wiki](https://github.com/mtonosaki/Jitwin/wiki)   
+
 # Jitwin
 "Just-in-time + Twin" - Digital twin platform is like a broker between the real world and a virtual world to help you both to respect the real world and to find revolution idea in a virtual space.
 
