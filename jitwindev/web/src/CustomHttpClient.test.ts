@@ -1,4 +1,4 @@
-import { CustomHttpClient } from 'CustomHttpClient';
+import HttpClientCustom from 'HttpClientCustom';
 
 describe('post()', () => {
   const cases = [
@@ -23,7 +23,7 @@ describe('post()', () => {
       global.fetch = jest
         .fn()
         .mockResolvedValueOnce(new Response(JSON.stringify('')));
-      const httpClient = new CustomHttpClient(host);
+      const httpClient = new HttpClientCustom(host);
 
       // When
       await httpClient.post(path, body);
@@ -46,7 +46,7 @@ describe('post()', () => {
       })
     );
 
-    const httpClient = new CustomHttpClient(host);
+    const httpClient = new HttpClientCustom(host);
 
     // When
     const response = await httpClient.post(path, body);
@@ -66,7 +66,7 @@ describe('post()', () => {
         .fn()
         .mockResolvedValue(new Response(null, { status: 200, headers }));
 
-      const httpClient = new CustomHttpClient(host);
+      const httpClient = new HttpClientCustom(host);
 
       // When
       const response = await httpClient.post(path, body);
@@ -100,7 +100,7 @@ describe('patch()', () => {
       global.fetch = jest
         .fn()
         .mockResolvedValueOnce(new Response(JSON.stringify('')));
-      const httpClient = new CustomHttpClient(host);
+      const httpClient = new HttpClientCustom(host);
 
       // When
       await httpClient.patch(path, body);
@@ -123,7 +123,7 @@ describe('patch()', () => {
       })
     );
 
-    const httpClient = new CustomHttpClient(host);
+    const httpClient = new HttpClientCustom(host);
 
     // When
     const response = await httpClient.patch(path, body);
@@ -143,7 +143,7 @@ describe('patch()', () => {
         .fn()
         .mockResolvedValue(new Response(null, { status: 200, headers }));
 
-      const httpClient = new CustomHttpClient(host);
+      const httpClient = new HttpClientCustom(host);
 
       // When
       const response = await httpClient.patch(path, body);
@@ -175,7 +175,7 @@ describe('delete()', () => {
       global.fetch = jest
         .fn()
         .mockResolvedValueOnce(new Response(JSON.stringify('')));
-      const httpClient = new CustomHttpClient(host);
+      const httpClient = new HttpClientCustom(host);
 
       // When
       await httpClient.delete(path);
@@ -198,7 +198,7 @@ describe('delete()', () => {
         .fn()
         .mockResolvedValue(new Response(null, { status: 200, headers }));
 
-      const httpClient = new CustomHttpClient(host);
+      const httpClient = new HttpClientCustom(host);
 
       // When
       const response = await httpClient.delete(path);
@@ -210,7 +210,7 @@ describe('delete()', () => {
 });
 
 describe('get()', () => {
-  let httpClient: CustomHttpClient;
+  let httpClient: HttpClientCustom;
 
   beforeEach(() => {
     const response = new Response(
@@ -219,7 +219,7 @@ describe('get()', () => {
     );
     global.fetch = jest.fn().mockResolvedValueOnce(response);
 
-    httpClient = new CustomHttpClient('https://hoge.example.com');
+    httpClient = new HttpClientCustom('https://hoge.example.com');
   });
 
   it('Throw error when receiving http status other than 200', async () => {
