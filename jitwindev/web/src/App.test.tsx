@@ -1,20 +1,22 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import UsersRepositoryBackend from 'UsersRepositoryBackend';
-import SessionRepository from 'SessionRepository';
 import App from 'App';
+import { RecoilRoot } from 'recoil';
+import { useAuthenticatedUser } from 'useAuthenticatedUser';
+import HomePage from './Pages/HomePage';
 
 jest.mock('UsersRepositoryBackend');
-jest.mock('SessionRepository');
+jest.mock('Pages/HomePage');
+
+const expectedUser = {
+  oid: 'oid-1111-2222-xxxx',
+  displayName: 'Sophie Brown',
+};
 
 describe('Auth System', () => {
   describe('Authenticated', () => {
-    const stubSetAuthenticatedUser = jest.fn();
-    const expectedUser = {
-      oid: 'oid-1111-2222-xxxx',
-      displayName: 'Sophie Brown',
-    };
     let getMeCallCounter = 0;
 
     beforeEach(() => {
@@ -27,28 +29,44 @@ describe('Auth System', () => {
         },
       }));
 
-      (SessionRepository as jest.Mock).mockImplementation(() => ({
-        setAuthenticatedUser: stubSetAuthenticatedUser,
-        getAuthenticatedUser: jest.fn(),
-      }));
+      (HomePage as jest.Mock).mockReturnValue(<div>FakeHomePage</div>);
     });
+
     it('When render, call /me only one time', async () => {
-      await render(
-        <MemoryRouter initialEntries={['/']}>
-          <App />
-        </MemoryRouter>
-      );
+      await act(async () => {
+        await render(
+          <RecoilRoot>
+            <MemoryRouter initialEntries={['/']}>
+              <App />
+            </MemoryRouter>
+          </RecoilRoot>
+        );
+      });
       expect(getMeCallCounter).toBe(1);
     });
 
-    it('After /me, set the user information to sessionRepository', async () => {
-      await render(
-        <MemoryRouter initialEntries={['/']}>
-          <App />
-        </MemoryRouter>
-      );
-      expect(stubSetAuthenticatedUser).toHaveBeenCalledTimes(1);
-      expect(stubSetAuthenticatedUser).toHaveBeenCalledWith(expectedUser);
+    it('After call /me, set the user information to authenticatedUser', async () => {
+      function AppWrapperDisplayName() {
+        const [authenticatedUser] = useAuthenticatedUser();
+        return (
+          <div>
+            <div>
+              {authenticatedUser?.displayName ?? '(undefined displayName)'}
+            </div>
+            <App />
+          </div>
+        );
+      }
+      await act(async () => {
+        await render(
+          <RecoilRoot>
+            <MemoryRouter initialEntries={['/']}>
+              <AppWrapperDisplayName />
+            </MemoryRouter>
+          </RecoilRoot>
+        );
+      });
+      expect(screen.getByText(expectedUser.displayName)).toBeInTheDocument();
     });
   });
 });

@@ -1,43 +1,42 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PrimaryButton from 'Components/PrimaryButton';
-import SessionRepository from 'SessionRepository';
 import { Config } from 'Config';
-import { TestIds } from '../tests/TestIds';
+import { TestIds } from 'tests/TestIds';
+import { useAuthenticatedUser } from 'useAuthenticatedUser';
 import styles from './HomePage.module.scss';
 
-export type Props = {
-  sessionRepository: SessionRepository;
-};
-
-export default function HomePage({ sessionRepository }: Props) {
-  const [displayName, setDisplayName] = useState<string | undefined>(undefined);
-
-  useEffect(() => {
-    const me = sessionRepository.getAuthenticatedUser();
-    if (me) {
-      setDisplayName(me.displayName ?? '(no name)');
-    }
-  }, [sessionRepository]);
+export default function HomePage() {
+  const [authenticatedUser] = useAuthenticatedUser();
 
   return (
     <div className={styles.base}>
       <div className={styles.container}>
         <div className={styles.vMargin} />
-        {displayName && (
-          <div data-testid={TestIds.PAGE_HOME_DISPLAY_NAME}>{displayName}</div>
-        )}
         <div>
-          <PrimaryButton
-            className={styles.loginButton}
-            icon="login"
-            onClick={() => {
-              const url = Config.loginUrl();
-              window.location.href = url;
-            }}
-          >
-            <span>Start</span>
-            <span>Jitwin</span>
-          </PrimaryButton>
+          <div className={styles.mainContent}>
+            <div className={styles.welcomeName}>
+              {authenticatedUser && (
+                <>
+                  <span>Hi, </span>
+                  <span data-testid={TestIds.PAGE_HOME_DISPLAY_NAME}>
+                    {authenticatedUser.displayName}
+                  </span>
+                  <span> 😊</span>
+                </>
+              )}
+            </div>
+            <PrimaryButton
+              className={styles.loginButton}
+              icon="login"
+              onClick={() => {
+                const url = Config.loginUrl();
+                window.location.href = url;
+              }}
+            >
+              <span>Start</span>
+              <span>Jitwin</span>
+            </PrimaryButton>
+          </div>
         </div>
         <div className={styles.vMargin} />
       </div>

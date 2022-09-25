@@ -25,10 +25,22 @@
   width: 100%;
 }
 
-.title {
-  @include heading-01;
-  color: $primary-400;
-  text-align: center;
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.welcomeName {
+  height: 1.75em;
+  color: $jitwin-mocha-600;
+
+  span:nth-child(2) {
+    font-weight: bold;
+  }
+  span:nth-child(3) {
+    font-size: smaller;
+  }
 }
 
 .loginButton {
@@ -42,13 +54,4 @@
     font-weight: 800;
     color: $jitwin-mocha-0;
   }
-}
-
-.whoAmIButton {
-}
-
-.myNameIs {
-  color: $jitwin-mocha-400;
-  font-size: medium;
-  font-weight: bold;
 }

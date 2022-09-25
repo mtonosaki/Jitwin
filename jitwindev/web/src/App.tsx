@@ -1,31 +1,28 @@
 import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import 'reset-css';
-import HomePage from 'Pages/HomePage';
-import SessionRepository from 'SessionRepository';
 import { UsersRepository } from 'UsersRepository';
 import UsersRepositoryBackend from 'UsersRepositoryBackend';
 import HttpClientCustom from 'HttpClientCustom';
+import { useAuthenticatedUser } from 'useAuthenticatedUser';
+import HomePage from 'Pages/HomePage';
 
 export default function App() {
   const httpClient = new HttpClientCustom(process.env.REACT_APP_API_HOST!);
   const usersRepository: UsersRepository = new UsersRepositoryBackend(
     httpClient
   );
-  const sessionRepository = new SessionRepository();
+  const [, setAuthenticatedUser] = useAuthenticatedUser();
 
   useEffect(() => {
     usersRepository.getMe().then((me) => {
-      sessionRepository.setAuthenticatedUser(me);
+      setAuthenticatedUser(me);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <Routes>
-      <Route
-        path="/"
-        element={<HomePage sessionRepository={sessionRepository} />}
-      />
+      <Route path="/" element={<HomePage />} />
     </Routes>
   );
 }

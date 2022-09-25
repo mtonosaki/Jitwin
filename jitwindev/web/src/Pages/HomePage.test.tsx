@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import HomePage from 'Pages/HomePage';
 import SessionRepository from 'SessionRepository';
+import { RecoilRoot } from 'recoil';
 import { TestIds } from '../tests/TestIds';
+import { useAuthenticatedUser } from '../useAuthenticatedUser';
 
 jest.mock('SessionRepository');
 
@@ -24,7 +26,11 @@ describe('HomePage', () => {
 
       it('Given development environment, when click login button, link url starts with http://localhost:8080', () => {
         process.env.REACT_APP_NODE_ENV = 'development';
-        render(<HomePage sessionRepository={new SessionRepository()} />);
+        render(
+          <RecoilRoot>
+            <HomePage />
+          </RecoilRoot>
+        );
 
         const loginButton = getLoginButton();
         fireEvent.click(loginButton);
@@ -36,7 +42,11 @@ describe('HomePage', () => {
 
       it('Given production mode, when click login button, link url starts with /', () => {
         process.env.REACT_APP_NODE_ENV = 'production';
-        render(<HomePage sessionRepository={new SessionRepository()} />);
+        render(
+          <RecoilRoot>
+            <HomePage />
+          </RecoilRoot>
+        );
 
         const loginButton = getLoginButton();
         fireEvent.click(loginButton);
@@ -49,7 +59,11 @@ describe('HomePage', () => {
 
     describe('Behavior', () => {
       it('Show login button', () => {
-        render(<HomePage sessionRepository={new SessionRepository()} />);
+        render(
+          <RecoilRoot>
+            <HomePage />
+          </RecoilRoot>
+        );
 
         expect(
           screen.getByRole('img', { name: 'login-icon' })
@@ -68,7 +82,11 @@ describe('HomePage', () => {
           stubGetAuthenticatedUser.mockReturnValue(undefined);
         });
         it('Sophie can not see her name', () => {
-          render(<HomePage sessionRepository={new SessionRepository()} />);
+          render(
+            <RecoilRoot>
+              <HomePage />
+            </RecoilRoot>
+          );
           expect(
             screen.queryByTestId(TestIds.PAGE_HOME_DISPLAY_NAME)
           ).not.toBeInTheDocument();
@@ -76,19 +94,23 @@ describe('HomePage', () => {
       });
 
       describe('After login', () => {
-        beforeEach(() => {
-          const stubGetAuthenticatedUser = jest.fn();
-          (SessionRepository as jest.Mock).mockClear();
-          (SessionRepository as jest.Mock).mockImplementation(() => ({
-            getAuthenticatedUser: stubGetAuthenticatedUser,
-          }));
-          stubGetAuthenticatedUser.mockReturnValue({
-            oid: '111-22-333',
-            displayName: 'Sophie Brown',
-          });
-        });
+        function HomePageWrapper() {
+          const [, setAuthenticatedUser] = useAuthenticatedUser();
+          useEffect(() => {
+            setAuthenticatedUser({
+              oid: '111-22-333',
+              displayName: 'Sophie Brown',
+            });
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+          }, []);
+          return <HomePage />;
+        }
         it('Sophie can see her name', () => {
-          render(<HomePage sessionRepository={new SessionRepository()} />);
+          render(
+            <RecoilRoot>
+              <HomePageWrapper />
+            </RecoilRoot>
+          );
           expect(
             screen.getByTestId(TestIds.PAGE_HOME_DISPLAY_NAME)
           ).toBeInTheDocument();
