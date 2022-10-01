@@ -1,4 +1,4 @@
-import HttpClientCustom from 'HttpClientCustom';
+import HttpClientCustom from 'network/HttpClientCustom';
 
 describe('post()', () => {
   const cases = [

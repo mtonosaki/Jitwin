@@ -1,4 +1,4 @@
-import { User } from 'User';
+import { User } from 'models/User';
 
 export default class SessionRepository {
   private currentUser: User | undefined = undefined;

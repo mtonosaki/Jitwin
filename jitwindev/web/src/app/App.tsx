@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { UsersRepository } from 'UsersRepository';
-import UsersRepositoryBackend from 'UsersRepositoryBackend';
-import HttpClientCustom from 'HttpClientCustom';
-import { useAuthenticatedUser } from 'useAuthenticatedUser';
-import HomePage from 'Pages/HomePage';
+import { UsersRepository } from 'repos/UsersRepository';
+import UsersRepositoryBackend from 'repos/UsersRepositoryBackend';
+import HttpClientCustom from 'network/HttpClientCustom';
+import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
+import HomePage from 'pages/HomePage';
 
 export default function App() {
   const httpClient = new HttpClientCustom(process.env.REACT_APP_API_HOST!);

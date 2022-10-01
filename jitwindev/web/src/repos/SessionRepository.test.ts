@@ -1,4 +1,4 @@
-import SessionRepository from 'SessionRepository';
+import SessionRepository from 'repos/SessionRepository';
 
 describe('Session Repository', () => {
   it('getAuthenticatedUser result is same with setAuthenticatedUser', () => {

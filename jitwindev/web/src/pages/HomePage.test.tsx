@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import HomePage from 'Pages/HomePage';
-import SessionRepository from 'SessionRepository';
+import HomePage from 'pages/HomePage';
+import SessionRepository from 'repos/SessionRepository';
 import { RecoilRoot } from 'recoil';
 import { TestIds } from '../tests/TestIds';
-import { useAuthenticatedUser } from '../useAuthenticatedUser';
+import { useAuthenticatedUser } from '../hooks/useAuthenticatedUser';
 
-jest.mock('SessionRepository');
+jest.mock('repos/SessionRepository');
 
 describe('HomePage', () => {
   describe('Login', () => {

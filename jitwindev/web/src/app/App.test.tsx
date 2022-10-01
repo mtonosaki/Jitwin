@@ -1,13 +1,13 @@
 import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import UsersRepositoryBackend from 'UsersRepositoryBackend';
-import App from 'App';
+import UsersRepositoryBackend from 'repos/UsersRepositoryBackend';
+import App from 'app/App';
 import { RecoilRoot } from 'recoil';
-import { useAuthenticatedUser } from 'useAuthenticatedUser';
-import HomePage from './Pages/HomePage';
+import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
+import HomePage from '../pages/HomePage';
 
-jest.mock('UsersRepositoryBackend');
+jest.mock('repos/UsersRepositoryBackend');
 jest.mock('Pages/HomePage');
 
 const expectedUser = {

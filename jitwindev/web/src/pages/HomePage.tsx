@@ -1,8 +1,8 @@
 import React from 'react';
 import PrimaryButton from 'Components/PrimaryButton';
-import { Config } from 'Config';
+import { Config } from 'app/Config';
 import { TestIds } from 'tests/TestIds';
-import { useAuthenticatedUser } from 'useAuthenticatedUser';
+import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
 import styles from './HomePage.module.scss';
 
 export default function HomePage() {
