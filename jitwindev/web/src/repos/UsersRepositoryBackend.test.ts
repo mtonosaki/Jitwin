@@ -24,7 +24,7 @@ describe('UsersRepositoryBackend', () => {
 
   it('getMe returns GraphApi me via httpClient', async () => {
     const expectedUser: User = {
-      oid: '8888-1223-8282',
+      userId: '8888-1223-8282',
       displayName: 'Taro Micro',
     };
     stubSpyGet.mockResolvedValue(expectedUser);
@@ -32,7 +32,7 @@ describe('UsersRepositoryBackend', () => {
 
     const me = await repos.getMe();
 
-    expect(me.oid).toEqual(expectedUser.oid);
+    expect(me.userId).toEqual(expectedUser.userId);
     expect(me.displayName).toEqual(expectedUser.displayName);
   });
 });

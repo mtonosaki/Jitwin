@@ -1,4 +1,4 @@
 export type User = {
+  userId: string;
   displayName?: string;
-  oid: string;
 };

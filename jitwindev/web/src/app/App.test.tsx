@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import UsersRepositoryBackend from 'repos/UsersRepositoryBackend';
 import App from 'app/App';
@@ -15,13 +15,23 @@ const expectedUser = {
   displayName: 'Sophie Brown',
 };
 
+function WrapperAppAndDisplayName() {
+  const [authenticatedUser] = useAuthenticatedUser();
+  return (
+    <div>
+      <div>{authenticatedUser?.displayName ?? '(undefined displayName)'}</div>
+      <App />
+    </div>
+  );
+}
+
 describe('Auth System', () => {
   describe('Authenticated', () => {
     let getMeCallCounter = 0;
 
     beforeEach(() => {
       getMeCallCounter = 0;
-
+      (UsersRepositoryBackend as jest.Mock).mockClear();
       (UsersRepositoryBackend as jest.Mock).mockImplementation(() => ({
         getMe: () => {
           getMeCallCounter += 1;
@@ -46,27 +56,22 @@ describe('Auth System', () => {
     });
 
     it('After call /me, set the user information to authenticatedUser', async () => {
-      function AppWrapperDisplayName() {
-        const [authenticatedUser] = useAuthenticatedUser();
-        return (
-          <div>
-            <div>
-              {authenticatedUser?.displayName ?? '(undefined displayName)'}
-            </div>
-            <App />
-          </div>
-        );
-      }
       await act(async () => {
         await render(
           <RecoilRoot>
             <MemoryRouter initialEntries={['/']}>
-              <AppWrapperDisplayName />
+              <div data-testid="testing-wrapper-app-and-display-name">
+                <WrapperAppAndDisplayName />
+              </div>
             </MemoryRouter>
           </RecoilRoot>
         );
       });
-      expect(screen.getByText(expectedUser.displayName)).toBeInTheDocument();
+      expect(
+        within(
+          screen.getByTestId('testing-wrapper-app-and-display-name')
+        ).getByText(expectedUser.displayName)
+      ).toBeInTheDocument();
     });
   });
 });

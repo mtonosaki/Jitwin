@@ -5,4 +5,5 @@ export const TestIds = {
   POPUP: 'Popup',
   PAGE_HOME: 'PAGE_HOME',
   PAGE_HOME_DISPLAY_NAME: 'PAGE_HOME_DISPLAY_NAME',
+  PAGE_MENU: 'PAGE_MENU',
 } as const;

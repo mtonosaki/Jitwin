@@ -5,6 +5,7 @@ import UsersRepositoryBackend from 'repos/UsersRepositoryBackend';
 import HttpClientCustom from 'network/HttpClientCustom';
 import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
 import HomePage from 'pages/HomePage';
+import MenuPage from 'pages/MenuPage';
 
 export default function App() {
   const httpClient = new HttpClientCustom(process.env.REACT_APP_API_HOST!);
@@ -23,6 +24,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
+      <Route path="/:targetOid/menu" element={<MenuPage />} />
     </Routes>
   );
 }
