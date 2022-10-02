@@ -1,11 +1,11 @@
 export default class HttpClientCustom {
-  private readonly host: string;
+  public readonly host: string;
 
   constructor(host: string) {
     this.host = host;
   }
 
-  async post(path: string, body: any): Promise<any> {
+  async post(path: string, body?: any): Promise<any> {
     const response = await fetch(this.host + path, {
       method: 'POST',
       body: JSON.stringify(body),

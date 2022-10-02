@@ -1,12 +1,16 @@
 import { User } from 'models/User';
+import HttpClientCustom from '../network/HttpClientCustom';
 
 export default class SessionRepository {
   private storage: Storage; // Need blank line below : Expected blank line between class members lines-between-class-members
 
+  private httpClient: HttpClientCustom; // Need blank line below : Expected blank line between class members lines-between-class-members
+
   private currentUser: User | undefined = undefined;
 
-  constructor(sessionStorage: Storage) {
+  constructor(sessionStorage: Storage, httpClient: HttpClientCustom) {
     this.storage = sessionStorage;
+    this.httpClient = httpClient;
   }
 
   public setAuthenticatedUser(user: User | undefined) {
@@ -34,8 +38,12 @@ export default class SessionRepository {
     this.storage.removeItem('InLoginProcess');
   }
 
-  public isinLoginProcess(): boolean {
+  public isInLoginProcess(): boolean {
     const ret = this.storage.getItem('InLoginProcess') ?? 'false';
     return ret === 'true';
+  }
+
+  public async logoutSession() {
+    await this.httpClient.post('/logout');
   }
 }

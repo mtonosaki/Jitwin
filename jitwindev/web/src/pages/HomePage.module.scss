@@ -55,3 +55,23 @@
     color: $jitwin-mocha-0;
   }
 }
+
+.logoutMessage {
+  margin-top: 1rem;
+  color: $jitwin-mocha-400;
+  font-size: 12px;
+  button {
+    background-color: transparent;
+    border: 0;
+    font-size: 12px;
+    color: $jitwin-mocha-400;
+    margin: 0;
+    padding: 0;
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover {
+      color: $jitwin-mocha-600;
+    }
+  }
+}

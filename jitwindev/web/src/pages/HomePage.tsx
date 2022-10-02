@@ -7,13 +7,16 @@ import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
 import SessionRepository from 'repos/SessionRepository';
 import styles from './HomePage.module.scss';
 
-export default function HomePage() {
+type Props = {
+  sessionRepository: SessionRepository;
+};
+
+export default function HomePage({ sessionRepository }: Props) {
   const [authenticatedUser] = useAuthenticatedUser();
   const navigate = useNavigate();
-  const sessionRepository = new SessionRepository(sessionStorage);
 
   useEffect(() => {
-    if (authenticatedUser && sessionRepository.isinLoginProcess()) {
+    if (authenticatedUser && sessionRepository.isInLoginProcess()) {
       sessionRepository.resetInLoginProcess();
       navigate(`/${authenticatedUser.userId}/Menu`);
     }
@@ -53,6 +56,21 @@ export default function HomePage() {
               <span>Start</span>
               <span>Jitwin</span>
             </PrimaryButton>
+            {authenticatedUser && (
+              <div className={styles.logoutMessage}>
+                <span>if you are not Sophie Brown, </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    sessionRepository.logoutSession();
+                    global.location.href = '/';
+                  }}
+                >
+                  logout
+                </button>
+                <span> first.</span>
+              </div>
+            )}
           </div>
         </div>
         <div className={styles.vMargin} />

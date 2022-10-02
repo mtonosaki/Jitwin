@@ -5,8 +5,7 @@ import SessionRepository from 'repos/SessionRepository';
 import { RecoilRoot } from 'recoil';
 import { TestIds } from '../tests/TestIds';
 import { useAuthenticatedUser } from '../hooks/useAuthenticatedUser';
-
-jest.mock('repos/SessionRepository');
+import { createSessionRepository } from '../tests/testUtilities';
 
 const mockNavigateSpy = jest.fn();
 jest.mock('react-router-dom', () => ({
@@ -16,7 +15,11 @@ jest.mock('react-router-dom', () => ({
 
 const locationHrefSpy = jest.fn();
 
-function HomePageAuthedWrapper() {
+type WrapperProps = {
+  sessionRepository: SessionRepository;
+};
+
+function HomePageAuthedWrapper({ sessionRepository }: WrapperProps) {
   const [, setAuthenticatedUser] = useAuthenticatedUser();
   useEffect(() => {
     setAuthenticatedUser({
@@ -25,7 +28,7 @@ function HomePageAuthedWrapper() {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  return <HomePage />;
+  return <HomePage sessionRepository={sessionRepository} />;
 }
 
 describe('HomePage', () => {
@@ -47,7 +50,7 @@ describe('HomePage', () => {
         process.env.REACT_APP_NODE_ENV = 'development';
         render(
           <RecoilRoot>
-            <HomePage />
+            <HomePage sessionRepository={createSessionRepository()} />
           </RecoilRoot>
         );
 
@@ -63,7 +66,7 @@ describe('HomePage', () => {
         process.env.REACT_APP_NODE_ENV = 'production';
         render(
           <RecoilRoot>
-            <HomePage />
+            <HomePage sessionRepository={createSessionRepository()} />
           </RecoilRoot>
         );
 
@@ -80,7 +83,7 @@ describe('HomePage', () => {
       it('Show login button', () => {
         render(
           <RecoilRoot>
-            <HomePage />
+            <HomePage sessionRepository={createSessionRepository()} />
           </RecoilRoot>
         );
 
@@ -92,19 +95,17 @@ describe('HomePage', () => {
       });
 
       describe('Before login', () => {
+        const sessionRepository = createSessionRepository();
         beforeEach(() => {
           const stubGetAuthenticatedUser = jest.fn();
-          (SessionRepository as jest.Mock).mockClear();
-          (SessionRepository as jest.Mock).mockImplementation(() => ({
-            getAuthenticatedUser: stubGetAuthenticatedUser,
-          }));
           stubGetAuthenticatedUser.mockReturnValue(undefined);
+          sessionRepository.getAuthenticatedUser = stubGetAuthenticatedUser;
         });
 
         it('Sophie can not see her name', () => {
           render(
             <RecoilRoot>
-              <HomePage />
+              <HomePage sessionRepository={sessionRepository} />
             </RecoilRoot>
           );
           expect(
@@ -114,13 +115,11 @@ describe('HomePage', () => {
 
         it('When click login button, Sophie can see Menu page', () => {
           const spySetInLoginProcess = jest.fn();
-          (SessionRepository as jest.Mock).mockClear();
-          (SessionRepository as jest.Mock).mockImplementation(() => ({
-            setInLoginProcess: spySetInLoginProcess,
-          }));
+          sessionRepository.setInLoginProcess = spySetInLoginProcess;
+
           render(
             <RecoilRoot>
-              <HomePage />
+              <HomePage sessionRepository={sessionRepository} />
             </RecoilRoot>
           );
           expect(spySetInLoginProcess).not.toHaveBeenCalled();
@@ -130,13 +129,26 @@ describe('HomePage', () => {
 
           expect(spySetInLoginProcess).toHaveBeenCalled();
         });
+
+        it('Sophie can not see logout button', () => {
+          render(
+            <RecoilRoot>
+              <HomePage sessionRepository={sessionRepository} />
+            </RecoilRoot>
+          );
+          expect(
+            screen.queryByRole('button', { name: 'logout' })
+          ).not.toBeInTheDocument();
+        });
       });
 
       describe('After login', () => {
         it('Sophie can see her name', () => {
           render(
             <RecoilRoot>
-              <HomePageAuthedWrapper />
+              <HomePageAuthedWrapper
+                sessionRepository={createSessionRepository()}
+              />
             </RecoilRoot>
           );
           expect(
@@ -145,10 +157,48 @@ describe('HomePage', () => {
           expect(screen.getByText('Sophie Brown')).toBeInTheDocument();
         });
 
+        it('Sophie can see logout link', () => {
+          render(
+            <RecoilRoot>
+              <HomePageAuthedWrapper
+                sessionRepository={createSessionRepository()}
+              />
+            </RecoilRoot>
+          );
+          const logoutButton = screen.getByRole('button', { name: 'logout' });
+
+          expect(
+            screen.getByText('if you are not Sophie Brown,')
+          ).toBeInTheDocument();
+          expect(screen.getByText('first.')).toBeInTheDocument();
+          expect(screen.getByText('logout')).toBeInTheDocument();
+          expect(logoutButton).toBeInTheDocument();
+        });
+
+        it('Sophie can logout', () => {
+          const spyLogoutSession = jest.fn();
+          const sessionRepository = createSessionRepository();
+          sessionRepository.logoutSession = spyLogoutSession;
+
+          render(
+            <RecoilRoot>
+              <HomePageAuthedWrapper sessionRepository={sessionRepository} />
+            </RecoilRoot>
+          );
+          const logoutButton = screen.getByRole('button', { name: 'logout' });
+
+          fireEvent.click(logoutButton);
+
+          expect(spyLogoutSession).toHaveBeenCalled();
+          expect(locationHrefSpy).toHaveBeenCalledWith('/');
+        });
+
         it('Sophie can see menu page', () => {
           render(
             <RecoilRoot>
-              <HomePageAuthedWrapper />
+              <HomePageAuthedWrapper
+                sessionRepository={createSessionRepository()}
+              />
             </RecoilRoot>
           );
           const startButton = getLoginButton();
@@ -158,22 +208,23 @@ describe('HomePage', () => {
         });
 
         describe('Sophie sees Menu page automatically', () => {
+          const sessionRepository = createSessionRepository();
           const stubIsinLoginProcess = jest.fn();
           const spyResetInLoginProcess = jest.fn();
+
           beforeEach(() => {
             stubIsinLoginProcess.mockClear();
-            (SessionRepository as jest.Mock).mockClear();
-            (SessionRepository as jest.Mock).mockImplementation(() => ({
-              isinLoginProcess: stubIsinLoginProcess,
-              resetInLoginProcess: spyResetInLoginProcess,
-            }));
+            spyResetInLoginProcess.mockClear();
+            sessionRepository.isInLoginProcess = stubIsinLoginProcess;
+            sessionRepository.resetInLoginProcess = spyResetInLoginProcess;
           });
+
           it('when in login process', () => {
             stubIsinLoginProcess.mockReturnValue(true);
 
             render(
               <RecoilRoot>
-                <HomePageAuthedWrapper />
+                <HomePageAuthedWrapper sessionRepository={sessionRepository} />
               </RecoilRoot>
             );
 
@@ -186,7 +237,7 @@ describe('HomePage', () => {
 
             render(
               <RecoilRoot>
-                <HomePageAuthedWrapper />
+                <HomePageAuthedWrapper sessionRepository={sessionRepository} />
               </RecoilRoot>
             );
 

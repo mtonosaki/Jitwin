@@ -6,12 +6,14 @@ import HttpClientCustom from 'network/HttpClientCustom';
 import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
 import HomePage from 'pages/HomePage';
 import MenuPage from 'pages/MenuPage';
+import SessionRepository from '../repos/SessionRepository';
 
 export default function App() {
   const httpClient = new HttpClientCustom(process.env.REACT_APP_API_HOST!);
   const usersRepository: UsersRepository = new UsersRepositoryBackend(
     httpClient
   );
+  const sessionRepository = new SessionRepository(sessionStorage, httpClient);
   const [, setAuthenticatedUser] = useAuthenticatedUser();
 
   useEffect(() => {
@@ -23,7 +25,10 @@ export default function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
+      <Route
+        path="/"
+        element={<HomePage sessionRepository={sessionRepository} />}
+      />
       <Route path="/:targetOid/menu" element={<MenuPage />} />
     </Routes>
   );
