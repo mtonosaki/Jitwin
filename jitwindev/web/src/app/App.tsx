@@ -6,7 +6,8 @@ import HttpClientCustom from 'network/HttpClientCustom';
 import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
 import HomePage from 'pages/HomePage';
 import MenuPage from 'pages/MenuPage';
-import SessionRepository from '../repos/SessionRepository';
+import SessionRepository from 'repos/SessionRepository';
+import { useAuthenticateStatus } from 'hooks/useAuthenticateStatus';
 
 export default function App() {
   const httpClient = new HttpClientCustom(process.env.REACT_APP_API_HOST!);
@@ -15,11 +16,23 @@ export default function App() {
   );
   const sessionRepository = new SessionRepository(sessionStorage, httpClient);
   const [, setAuthenticatedUser] = useAuthenticatedUser();
+  const [, setAuthenticateStatus] = useAuthenticateStatus();
 
   useEffect(() => {
-    usersRepository.getMe().then((me) => {
-      setAuthenticatedUser(me);
-    });
+    setAuthenticateStatus('waiting');
+
+    usersRepository
+      .getMe()
+      .then((me) => {
+        setAuthenticatedUser(me);
+        setAuthenticateStatus('confirmed');
+      })
+      .catch(() => {
+        setAuthenticatedUser(undefined);
+        setAuthenticateStatus('error');
+      });
+
+    return () => setAuthenticateStatus('beforeConfirm');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

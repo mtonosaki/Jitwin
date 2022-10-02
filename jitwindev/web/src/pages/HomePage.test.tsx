@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import HomePage from 'pages/HomePage';
 import SessionRepository from 'repos/SessionRepository';
 import { RecoilRoot } from 'recoil';
 import { TestIds } from '../tests/TestIds';
 import { useAuthenticatedUser } from '../hooks/useAuthenticatedUser';
 import { createSessionRepository } from '../tests/testUtilities';
+import { useAuthenticateStatus } from '../hooks/useAuthenticateStatus';
 
 const mockNavigateSpy = jest.fn();
 jest.mock('react-router-dom', () => ({
@@ -38,6 +39,40 @@ describe('HomePage', () => {
     window.location = {} as any;
     Object.defineProperty(window.location, 'href', {
       set: locationHrefSpy,
+    });
+  });
+
+  describe('WaitingSpinner', () => {
+    it('Sophie can see waiting spinner', () => {
+      render(
+        <RecoilRoot>
+          <HomePage sessionRepository={createSessionRepository()} />
+        </RecoilRoot>
+      );
+
+      expect(screen.getByTestId(TestIds.WAITING_SPINNER)).toBeInTheDocument();
+    });
+    it('When auth error, hide waiting spinner', async () => {
+      function WrapperAuthErrorHome() {
+        const [, setStatus] = useAuthenticateStatus();
+        useEffect(() => {
+          setStatus('error');
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, []);
+        return <HomePage sessionRepository={createSessionRepository()} />;
+      }
+
+      await act(async () => {
+        await render(
+          <RecoilRoot>
+            <WrapperAuthErrorHome />
+          </RecoilRoot>
+        );
+      });
+
+      expect(
+        screen.queryByTestId(TestIds.WAITING_SPINNER)
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -175,7 +210,7 @@ describe('HomePage', () => {
           expect(logoutButton).toBeInTheDocument();
         });
 
-        it('Sophie can logout', () => {
+        it('Sophie can logout', async () => {
           const spyLogoutSession = jest.fn();
           const sessionRepository = createSessionRepository();
           sessionRepository.logoutSession = spyLogoutSession;
@@ -187,7 +222,9 @@ describe('HomePage', () => {
           );
           const logoutButton = screen.getByRole('button', { name: 'logout' });
 
-          fireEvent.click(logoutButton);
+          await act(async () => {
+            fireEvent.click(logoutButton);
+          });
 
           expect(spyLogoutSession).toHaveBeenCalled();
           expect(locationHrefSpy).toHaveBeenCalledWith('/');

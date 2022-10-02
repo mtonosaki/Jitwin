@@ -6,6 +6,9 @@ import { TestIds } from 'tests/TestIds';
 import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
 import SessionRepository from 'repos/SessionRepository';
 import styles from './HomePage.module.scss';
+import WaitingSpinner from '../Components/WaitingSpinner';
+import { useWaitingSpinner } from '../hooks/useWaitingSpinner';
+import { useAuthenticateStatus } from '../hooks/useAuthenticateStatus';
 
 type Props = {
   sessionRepository: SessionRepository;
@@ -13,7 +16,23 @@ type Props = {
 
 export default function HomePage({ sessionRepository }: Props) {
   const [authenticatedUser] = useAuthenticatedUser();
+  const [authenticateStatus] = useAuthenticateStatus();
+  const [requestToShowWaitingSpinner, requestToHideWaitingSpinner] =
+    useWaitingSpinner();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    requestToShowWaitingSpinner();
+    return () => requestToHideWaitingSpinner();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (authenticateStatus === 'confirmed' || authenticateStatus === 'error') {
+      requestToHideWaitingSpinner();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authenticateStatus]);
 
   useEffect(() => {
     if (authenticatedUser && sessionRepository.isInLoginProcess()) {
@@ -25,6 +44,7 @@ export default function HomePage({ sessionRepository }: Props) {
 
   return (
     <div className={styles.base} data-testid={TestIds.PAGE_HOME}>
+      <WaitingSpinner />
       <div className={styles.container}>
         <div className={styles.vMargin} />
         <div>
@@ -61,8 +81,8 @@ export default function HomePage({ sessionRepository }: Props) {
                 <span>if you are not Sophie Brown, </span>
                 <button
                   type="button"
-                  onClick={() => {
-                    sessionRepository.logoutSession();
+                  onClick={async () => {
+                    await sessionRepository.logoutSession();
                     global.location.href = '/';
                   }}
                 >

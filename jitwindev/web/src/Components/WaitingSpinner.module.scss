@@ -1,0 +1,23 @@
+@use '../variables.module.scss' as *;
+
+.container {
+  background-color: #ffffffcc;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 96px;
+    height: 96px;
+  }
+  p {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: 1rem;
+    color: $jitwin-mocha-600;
+  }
+}

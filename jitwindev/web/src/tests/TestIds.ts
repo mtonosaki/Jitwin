@@ -1,5 +1,6 @@
 export const TestIds = {
   EMPTY_DIV: 'EmptyDiv',
+  WAITING_SPINNER: 'WAITING_SPINNER',
   HEADER: 'Header',
   FOOTER: 'Footer',
   POPUP: 'Popup',
