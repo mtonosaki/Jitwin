@@ -5,7 +5,7 @@ import UsersRepositoryBackend from 'repos/UsersRepositoryBackend';
 import HttpClientCustom from 'network/HttpClientCustom';
 import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
 import HomePage from 'pages/HomePage';
-import MenuPage from 'pages/MenuPage';
+import MainPage from 'pages/MainPage';
 import SessionRepository from 'repos/SessionRepository';
 import { useAuthenticateStatus } from 'hooks/useAuthenticateStatus';
 
@@ -42,7 +42,7 @@ export default function App() {
         path="/"
         element={<HomePage sessionRepository={sessionRepository} />}
       />
-      <Route path="/:targetOid/menu" element={<MenuPage />} />
+      <Route path="/:targetOid/menu" element={<MainPage />} />
     </Routes>
   );
 }
