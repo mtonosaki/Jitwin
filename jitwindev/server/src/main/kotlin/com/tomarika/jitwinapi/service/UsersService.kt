@@ -11,4 +11,9 @@ class UsersService(val usersRepository: UsersRepository) {
         val userDetail = usersRepository.getMe(accessToken)
         return userDetail
     }
+
+    fun getMyPhoto(accessToken: String): ByteArray {
+        val image = usersRepository.getMyPhoto(accessToken)
+        return image
+    }
 }

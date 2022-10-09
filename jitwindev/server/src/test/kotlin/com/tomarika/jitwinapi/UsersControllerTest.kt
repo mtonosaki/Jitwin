@@ -20,6 +20,7 @@ import org.springframework.test.web.client.response.MockRestResponseCreators.wit
 import org.springframework.test.web.client.response.MockRestResponseCreators.withUnauthorizedRequest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.util.Collections
@@ -35,14 +36,41 @@ class UsersControllerTest() {
     @Autowired
     private lateinit var mockGraphApiServer: MockRestServiceServer
 
+    @DisplayName("/me/photo [GET]")
+    @Nested
+    inner class ApiMePhoto {
+        @Test
+        fun `Given login, when collect access, response the photo`() {
+            val sampleImage = byteArrayOf(8, 7, 6, 5, 4, 3, 2, 1)
+            mockGraphApiServer.expect(requestTo("https://graph.microsoft.com/v1.0/me/photos/64x64/${'$'}value"))
+                .andExpect(header("Authorization", "Bearer graph-api-sample-token")).andRespond(
+                    withSuccess(sampleImage, MediaType.IMAGE_JPEG)
+                )
+            // When
+            mockMvc.perform(
+                get("/api/users/me/photo").with(csrf()).with(oauth2Login()).with(
+                    oauth2Client("graph").apply {
+                        accessToken(
+                            OAuth2AccessToken(
+                                BEARER, "graph-api-sample-token", null, null, Collections.singleton("message:read")
+                            )
+                        )
+                    }
+                )
+            )
+                // Then
+                .andExpect(status().isOk).andExpect(content().contentType(MediaType.IMAGE_JPEG))
+                .andExpect(content().bytes(sampleImage))
+        }
+    }
+
     @DisplayName("/me [GET]")
     @Nested
     inner class ApiMe {
         @Test
         fun `Given login, when collect access, response the user`() {
             mockGraphApiServer.expect(requestTo("https://graph.microsoft.com/v1.0/me"))
-                .andExpect(header("Authorization", "Bearer graph-api-sample-token"))
-                .andRespond(
+                .andExpect(header("Authorization", "Bearer graph-api-sample-token")).andRespond(
                     withSuccess(
                         """
                             {
@@ -67,26 +95,18 @@ class UsersControllerTest() {
                 )
             // When
             mockMvc.perform(
-                get("/api/users/me")
-                    .with(csrf())
-                    .with(oauth2Login())
-                    .with(
-                        oauth2Client("graph").apply {
-                            accessToken(
-                                OAuth2AccessToken(
-                                    BEARER,
-                                    "graph-api-sample-token",
-                                    null,
-                                    null,
-                                    Collections.singleton("message:read")
-                                )
+                get("/api/users/me").with(csrf()).with(oauth2Login()).with(
+                    oauth2Client("graph").apply {
+                        accessToken(
+                            OAuth2AccessToken(
+                                BEARER, "graph-api-sample-token", null, null, Collections.singleton("message:read")
                             )
-                        }
-                    )
+                        )
+                    }
+                )
             )
                 // Then
-                .andExpect(status().isOk)
-                .andExpect(jsonPath("$.userId").value("12ac3456-77ab-89cd-abcd-111122223333"))
+                .andExpect(status().isOk).andExpect(jsonPath("$.userId").value("12ac3456-77ab-89cd-abcd-111122223333"))
                 .andExpect(jsonPath("$.displayName").value("Megan Bowen"))
                 .andExpect(jsonPath("$.userPrincipalName").value("meganb@example.onmicrosoft.com"))
         }
@@ -98,22 +118,15 @@ class UsersControllerTest() {
                 .andRespond(withUnauthorizedRequest())
             // When
             mockMvc.perform(
-                get("/api/users/me")
-                    .with(csrf())
-                    .with(oauth2Login())
-                    .with(
-                        oauth2Client("graph").apply {
-                            accessToken(
-                                OAuth2AccessToken(
-                                    BEARER,
-                                    "graph-api-sample-token",
-                                    null,
-                                    null,
-                                    Collections.singleton("message:read")
-                                )
+                get("/api/users/me").with(csrf()).with(oauth2Login()).with(
+                    oauth2Client("graph").apply {
+                        accessToken(
+                            OAuth2AccessToken(
+                                BEARER, "graph-api-sample-token", null, null, Collections.singleton("message:read")
                             )
-                        }
-                    )
+                        )
+                    }
+                )
             )
                 // Then
                 .andExpect(status().isUnauthorized)
@@ -123,8 +136,7 @@ class UsersControllerTest() {
         fun `When not login yet, response 403`() {
             // When
             mockMvc.perform(
-                get("/api/people/me")
-                    .with(csrf())
+                get("/api/people/me").with(csrf())
             )
                 // Then
                 .andExpect(status().isForbidden)

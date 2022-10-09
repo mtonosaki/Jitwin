@@ -29,4 +29,8 @@ class GraphApiClient(restTemplateBuilder: RestTemplateBuilder) {
     fun getMe(accessToken: String): GraphAPIUserResponse {
         return this.get(accessToken, "/me")
     }
+
+    fun getMyPhoto(accessToken: String): ByteArray {
+        return this.get(accessToken, "/me/photos/64x64/${'$'}value")
+    }
 }

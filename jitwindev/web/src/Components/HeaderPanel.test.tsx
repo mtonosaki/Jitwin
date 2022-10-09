@@ -47,4 +47,16 @@ describe('HeaderPanel', () => {
       within(headerPanel).getByText('sophie@tomarika.com')
     ).toBeInTheDocument();
   });
+
+  it('Sophie sees her profile image', () => {
+    render(
+      <RecoilRoot>
+        <HeaderPanelAuthedWrapper />
+      </RecoilRoot>
+    );
+    const headerPanel = screen.getByTestId(TestIds.PANEL_HEADER);
+    expect(
+      within(headerPanel).getByRole('img', { name: 'profile' })
+    ).toBeInTheDocument();
+  });
 });

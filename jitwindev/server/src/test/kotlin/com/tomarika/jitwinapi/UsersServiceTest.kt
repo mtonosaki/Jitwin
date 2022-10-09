@@ -34,4 +34,18 @@ class UsersServiceTest {
         assertThat(me.displayName, equalTo(expectedUser.displayName))
         assertThat(me.userPrincipalName, equalTo(expectedUser.userPrincipalName))
     }
+
+    @Test
+    fun `getMyPhoto returns a user profile from usersRepository`() {
+        // Given
+        val expectedImage = byteArrayOf(1, 2, 3, 11, 22, 33)
+        val expectedAccessToken = "sample-access-token-of-graph-api-here"
+        every { mockUsersRepository.getMyPhoto(expectedAccessToken) } returns expectedImage
+
+        // When
+        val result = service.getMyPhoto(expectedAccessToken)
+
+        // Then
+        assertThat(result, equalTo(expectedImage))
+    }
 }

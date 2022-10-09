@@ -11,9 +11,16 @@ export default function HeaderPanel() {
       <div className={styles.contents}>
         <h1 className={styles.title}>Jitwin</h1>
         {authenticatedUser && (
-          <div className={styles.account}>
-            <div>{authenticatedUser.displayName}</div>
-            <div>{authenticatedUser.userPrincipalName}</div>
+          <div className={styles.accountBlock}>
+            <div className={styles.accountText}>
+              <div>{authenticatedUser.displayName}</div>
+              <div>{authenticatedUser.userPrincipalName}</div>
+            </div>
+            <img
+              className={styles.accountProfileImage}
+              src="/api/users/me/photo"
+              alt="profile"
+            />
           </div>
         )}
       </div>
