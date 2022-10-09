@@ -1,15 +1,25 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { TestIds } from 'tests/TestIds';
+import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
 import styles from './HeaderPanel.module.scss';
-import { useAuthenticatedUser } from '../hooks/useAuthenticatedUser';
 
 export default function HeaderPanel() {
   const [authenticatedUser] = useAuthenticatedUser();
+  const navigate = useNavigate();
 
   return (
     <div data-testid={TestIds.PANEL_HEADER} className={styles.container}>
       <div className={styles.contents}>
-        <h1 className={styles.title}>Jitwin</h1>
+        <button
+          type="button"
+          className={styles.title}
+          onClick={(e) => {
+            navigate('/', { replace: true });
+          }}
+        >
+          Jitwin
+        </button>
         {authenticatedUser && (
           <div className={styles.accountBlock}>
             <div className={styles.accountText}>

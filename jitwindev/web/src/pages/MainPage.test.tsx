@@ -4,6 +4,12 @@ import { TestIds } from 'tests/TestIds';
 import { RecoilRoot } from 'recoil';
 import MainPage from './MainPage';
 
+const mockSpyNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockSpyNavigate,
+}));
+
 describe('MainPage', () => {
   it('Sophie sees Main title', () => {
     render(

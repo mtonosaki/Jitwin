@@ -8,10 +8,10 @@ import { useAuthenticatedUser } from '../hooks/useAuthenticatedUser';
 import { createSessionRepository } from '../tests/testUtilities';
 import { useAuthenticateStatus } from '../hooks/useAuthenticateStatus';
 
-const mockNavigateSpy = jest.fn();
+const mockSpyNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigateSpy,
+  useNavigate: () => mockSpyNavigate,
 }));
 
 const locationHrefSpy = jest.fn();
@@ -242,8 +242,9 @@ describe('HomePage', () => {
           const startButton = getLoginButton();
           fireEvent.click(startButton);
 
-          expect(mockNavigateSpy).toHaveBeenCalledWith(
-            '/2222-test-home-page-3333/Menu'
+          expect(mockSpyNavigate).toHaveBeenCalledWith(
+            '/2222-test-home-page-3333/Menu',
+            { replace: true }
           );
         });
 
@@ -268,8 +269,9 @@ describe('HomePage', () => {
               </RecoilRoot>
             );
 
-            expect(mockNavigateSpy).toHaveBeenCalledWith(
-              '/2222-test-home-page-3333/Menu'
+            expect(mockSpyNavigate).toHaveBeenCalledWith(
+              '/2222-test-home-page-3333/Menu',
+              { replace: true }
             );
             expect(spyResetInLoginProcess).toHaveBeenCalled();
           });
@@ -283,7 +285,7 @@ describe('HomePage', () => {
               </RecoilRoot>
             );
 
-            expect(mockNavigateSpy).not.toHaveBeenCalled();
+            expect(mockSpyNavigate).not.toHaveBeenCalled();
           });
         });
       });

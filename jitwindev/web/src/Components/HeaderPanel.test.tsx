@@ -1,9 +1,15 @@
 import React, { useEffect } from 'react';
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { TestIds } from 'tests/TestIds';
 import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
 import { RecoilRoot } from 'recoil';
 import HeaderPanel from './HeaderPanel';
+
+const mockSpyNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockSpyNavigate,
+}));
 
 function HeaderPanelAuthedWrapper() {
   const [, setAuthenticatedUser] = useAuthenticatedUser();
@@ -25,10 +31,25 @@ describe('HeaderPanel', () => {
         <HeaderPanel />
       </RecoilRoot>
     );
-
     const headerPanel = screen.getByTestId(TestIds.PANEL_HEADER);
-    expect(headerPanel).toBeInTheDocument();
-    expect(within(headerPanel).getByText('Jitwin')).toBeInTheDocument();
+    const logoButton = within(headerPanel).getByRole('button', {
+      name: 'Jitwin',
+    });
+
+    expect(logoButton).toBeInTheDocument();
+  });
+
+  it('When Sophie click Jitwin logo, navigate to Home page', () => {
+    render(
+      <RecoilRoot>
+        <HeaderPanel />
+      </RecoilRoot>
+    );
+    const logoButton = screen.getByRole('button', { name: 'Jitwin' });
+
+    fireEvent.click(logoButton);
+
+    expect(mockSpyNavigate).toHaveBeenCalledWith('/', { replace: true });
   });
 
   it('Sophie sees her account', () => {
