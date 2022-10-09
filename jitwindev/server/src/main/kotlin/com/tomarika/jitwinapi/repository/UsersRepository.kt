@@ -13,6 +13,6 @@ class UsersRepositoryImpl(val graphClient: GraphApiClient) : UsersRepository {
 
     override fun getMe(accessToken: String): UserModel {
         val user = graphClient.getMe(accessToken)
-        return UserModel(displayName = user.displayName, userId = user.id)
+        return UserModel(displayName = user.displayName, userId = user.id, userPrincipalName = user.userPrincipalName)
     }
 }

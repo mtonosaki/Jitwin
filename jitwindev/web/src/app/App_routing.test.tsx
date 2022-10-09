@@ -34,9 +34,9 @@ describe('Routing', () => {
         </MemoryRouter>
       </RecoilRoot>
     );
-    expect(screen.getByTestId(TestIds.PAGE_MENU)).toBeInTheDocument();
+    expect(screen.getByTestId(TestIds.PAGE_MAIN)).toBeInTheDocument();
     expect(
-      screen.getByTestId(`${TestIds.PAGE_MENU}-sample-oid-123`)
+      screen.getByTestId(`${TestIds.PAGE_MAIN}-sample-oid-123`)
     ).toBeInTheDocument();
   });
 });

@@ -10,6 +10,7 @@ describe('Session Repository', () => {
     const expectedUser: User = {
       userId: 'sample-oid',
       displayName: 'sample-display-name',
+      userPrincipalName: 'sophie@tomarika.com',
     };
     repos.setAuthenticatedUser(expectedUser);
     expect(repos.getAuthenticatedUser()).toEqual(expectedUser);

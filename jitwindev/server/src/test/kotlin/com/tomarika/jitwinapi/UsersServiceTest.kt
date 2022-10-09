@@ -22,7 +22,7 @@ class UsersServiceTest {
     @Test
     fun `getMe returns a user from usersRepository`() {
         // Given
-        val expectedUser = UserModel(displayName = "Manabu, Tonosaki/トノサキ マナブ", userId = "1112-1111-9999-1234")
+        val expectedUser = UserModel(displayName = "Hoge Taro/ホゲ 太郎", userId = "1112-1111-9999-1234", userPrincipalName = "thoge@tomarika.onmicrosoft.com")
         val expectedAccessToken = "sample-access-token-of-graph-api-here"
         every { mockUsersRepository.getMe(expectedAccessToken) } returns expectedUser
 
@@ -32,5 +32,6 @@ class UsersServiceTest {
         // Then
         assertThat(me.userId, equalTo(expectedUser.userId))
         assertThat(me.displayName, equalTo(expectedUser.displayName))
+        assertThat(me.userPrincipalName, equalTo(expectedUser.userPrincipalName))
     }
 }

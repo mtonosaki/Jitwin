@@ -24,8 +24,9 @@ function HomePageAuthedWrapper({ sessionRepository }: WrapperProps) {
   const [, setAuthenticatedUser] = useAuthenticatedUser();
   useEffect(() => {
     setAuthenticatedUser({
-      userId: '111-22-333',
+      userId: '2222-test-home-page-3333',
       displayName: 'Sophie Brown',
+      userPrincipalName: 'sophie@tomarika.com',
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -241,7 +242,9 @@ describe('HomePage', () => {
           const startButton = getLoginButton();
           fireEvent.click(startButton);
 
-          expect(mockNavigateSpy).toHaveBeenCalledWith('/111-22-333/Menu');
+          expect(mockNavigateSpy).toHaveBeenCalledWith(
+            '/2222-test-home-page-3333/Menu'
+          );
         });
 
         describe('Sophie sees Menu page automatically', () => {
@@ -265,7 +268,9 @@ describe('HomePage', () => {
               </RecoilRoot>
             );
 
-            expect(mockNavigateSpy).toHaveBeenCalledWith('/111-22-333/Menu');
+            expect(mockNavigateSpy).toHaveBeenCalledWith(
+              '/2222-test-home-page-3333/Menu'
+            );
             expect(spyResetInLoginProcess).toHaveBeenCalled();
           });
 

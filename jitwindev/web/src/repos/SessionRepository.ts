@@ -15,7 +15,11 @@ export default class SessionRepository {
 
   public setAuthenticatedUser(user: User | undefined) {
     if (user) {
-      this.currentUser = { userId: user.userId, displayName: user.displayName };
+      this.currentUser = {
+        userId: user.userId,
+        displayName: user.displayName,
+        userPrincipalName: user.userPrincipalName,
+      };
     } else {
       this.currentUser = undefined;
     }

@@ -20,10 +20,11 @@ class UsersRepositoryImplTest {
 
     @Test
     fun `getMe accesses to me of GraphApi via client`() {
-        every { stubGraphClient.getMe("test-aad-access-token") } returns GraphAPIUserResponse(id = "1111-2222-9999", displayName = "Sophie White")
+        every { stubGraphClient.getMe("test-aad-access-token") } returns GraphAPIUserResponse(id = "1111-2222-9999", displayName = "Sophie White", userPrincipalName = "sophie@tomarika.onmicrosoft.com")
 
         val me = repos.getMe("test-aad-access-token")
         assertEquals(me.userId, "1111-2222-9999")
         assertEquals(me.displayName, "Sophie White")
+        assertEquals(me.userPrincipalName, "sophie@tomarika.onmicrosoft.com")
     }
 }

@@ -9,6 +9,6 @@ class UsersService(val usersRepository: UsersRepository) {
 
     fun getMe(accessToken: String): UserModel {
         val userDetail = usersRepository.getMe(accessToken)
-        return UserModel(displayName = userDetail.displayName, userId = userDetail.userId)
+        return userDetail
     }
 }

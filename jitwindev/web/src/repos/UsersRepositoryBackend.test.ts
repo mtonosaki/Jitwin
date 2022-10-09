@@ -26,6 +26,7 @@ describe('UsersRepositoryBackend', () => {
     const expectedUser: User = {
       userId: '8888-1223-8282',
       displayName: 'Taro Micro',
+      userPrincipalName: 'mtaro@example.com',
     };
     stubSpyGet.mockResolvedValue(expectedUser);
     const repos = new UsersRepositoryBackend(new HttpClientCustom('/dummy'));

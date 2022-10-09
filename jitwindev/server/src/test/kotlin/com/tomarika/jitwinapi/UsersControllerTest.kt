@@ -20,6 +20,7 @@ import org.springframework.test.web.client.response.MockRestResponseCreators.wit
 import org.springframework.test.web.client.response.MockRestResponseCreators.withUnauthorizedRequest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.util.Collections
 
@@ -85,8 +86,9 @@ class UsersControllerTest() {
             )
                 // Then
                 .andExpect(status().isOk)
-            // .andExpect(jsonPath("$.displayName").value("Megan Bowen"))
-            // .andExpect(jsonPath("$.oid").value("12ac3456-77ab-89cd-abcd-111122223333"))
+                .andExpect(jsonPath("$.userId").value("12ac3456-77ab-89cd-abcd-111122223333"))
+                .andExpect(jsonPath("$.displayName").value("Megan Bowen"))
+                .andExpect(jsonPath("$.userPrincipalName").value("meganb@example.onmicrosoft.com"))
         }
 
         @Test
