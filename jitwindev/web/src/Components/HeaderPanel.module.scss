@@ -8,7 +8,6 @@
   top: 4px;
   left: 0.5%;
   background-color: $jitwin-mocha-800;
-  opacity: 0.95;
   color: $jitwin-grey-0;
   box-shadow: #00000044 0px 0px 2px 2px;
   border-radius: 0 0 0 20px;
@@ -34,6 +33,7 @@
   flex-direction: column;
   align-items: flex-end;
   margin-right: 0.25em;
+  white-space: nowrap;
 
   div:nth-child(1) {
     font-size: 14px;
@@ -60,4 +60,5 @@
   text-decoration: unset;
   cursor: pointer;
   font-weight: 800;
+  white-space: nowrap;
 }

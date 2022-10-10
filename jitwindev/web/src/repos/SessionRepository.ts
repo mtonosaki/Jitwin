@@ -18,6 +18,7 @@ export default class SessionRepository {
       this.currentUser = {
         userId: user.userId,
         displayName: user.displayName,
+        givenName: user.givenName,
         userPrincipalName: user.userPrincipalName,
       };
     } else {

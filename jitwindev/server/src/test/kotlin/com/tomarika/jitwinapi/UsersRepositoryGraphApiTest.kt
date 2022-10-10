@@ -1,26 +1,26 @@
 package com.tomarika.jitwinapi
 
 import com.tomarika.jitwinapi.model.GraphAPIUserResponse
-import com.tomarika.jitwinapi.repository.UsersRepositoryImpl
+import com.tomarika.jitwinapi.repository.UsersRepositoryGraphApi
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class UsersRepositoryImplTest {
+class UsersRepositoryGraphApiTest {
 
-    private lateinit var repos: UsersRepositoryImpl
+    private lateinit var repos: UsersRepositoryGraphApi
     private val stubGraphClient = mockk<GraphApiClient>()
 
     @BeforeEach
     fun setup() {
-        repos = UsersRepositoryImpl(stubGraphClient)
+        repos = UsersRepositoryGraphApi(stubGraphClient)
     }
 
     @Test
     fun `getMe accesses to me of GraphApi via client`() {
-        every { stubGraphClient.getMe("test-aad-access-token") } returns GraphAPIUserResponse(id = "1111-2222-9999", displayName = "Sophie White", userPrincipalName = "sophie@tomarika.onmicrosoft.com")
+        every { stubGraphClient.getMe("test-aad-access-token") } returns GraphAPIUserResponse(id = "1111-2222-9999", displayName = "Sophie White", userPrincipalName = "sophie@tomarika.onmicrosoft.com", givenName = "Sophie")
 
         val me = repos.getMe("test-aad-access-token")
 

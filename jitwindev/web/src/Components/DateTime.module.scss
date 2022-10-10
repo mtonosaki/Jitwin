@@ -1,0 +1,29 @@
+@use '../variables.module.scss' as *;
+
+@mixin container {
+  color: #00000066;
+  margin-right: 0.25em;
+  font-size: 13px;
+
+  img {
+    height: 12px;
+    opacity: 0.5;
+  }
+  span:nth-child(3) {
+    font-size: 10px;
+  }
+}
+
+.real {
+  @include container;
+  font-weight: bold;
+  span:nth-child(3) {
+    font-weight: normal;
+  }
+}
+
+.virtual {
+  @include container;
+  font-weight: normal;
+  font-style: italic;
+}

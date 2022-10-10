@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { TestIds } from 'tests/TestIds';
 import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
 import styles from './HeaderPanel.module.scss';
+import MessageBar from './MessageBar';
 
 export default function HeaderPanel() {
   const [authenticatedUser] = useAuthenticatedUser();
@@ -20,6 +21,7 @@ export default function HeaderPanel() {
         >
           Jitwin
         </button>
+        <MessageBar />
         {authenticatedUser && (
           <div className={styles.accountBlock}>
             <div className={styles.accountText}>

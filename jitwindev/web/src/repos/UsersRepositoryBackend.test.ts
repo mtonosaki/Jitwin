@@ -1,6 +1,6 @@
+import { User } from 'models/User';
 import UsersRepositoryBackend from './UsersRepositoryBackend';
 import HttpClientCustom from '../network/HttpClientCustom';
-import { User } from '../models/User';
 
 jest.mock('../network/HttpClientCustom');
 
@@ -26,6 +26,7 @@ describe('UsersRepositoryBackend', () => {
     const expectedUser: User = {
       userId: '8888-1223-8282',
       displayName: 'Taro Micro',
+      givenName: 'Taro',
       userPrincipalName: 'mtaro@example.com',
     };
     stubSpyGet.mockResolvedValue(expectedUser);
@@ -35,5 +36,7 @@ describe('UsersRepositoryBackend', () => {
 
     expect(me.userId).toEqual(expectedUser.userId);
     expect(me.displayName).toEqual(expectedUser.displayName);
+    expect(me.givenName).toEqual(expectedUser.givenName);
+    expect(me.userPrincipalName).toEqual(expectedUser.userPrincipalName);
   });
 });

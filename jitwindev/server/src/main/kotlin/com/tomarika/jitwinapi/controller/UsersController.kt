@@ -21,9 +21,7 @@ class UsersController(val usersService: UsersService, @Autowired val appConfig: 
     fun getMe(@RegisteredOAuth2AuthorizedClient("graph") graphClient: OAuth2AuthorizedClient): UserModel {
         try {
             if (appConfig.activeProfile == "development") {
-                println("===========!!! graph api access token !!!======================")
                 println(graphClient.accessToken.tokenValue)
-                println()
             }
             return usersService.getMe(graphClient.accessToken.tokenValue)
         } catch (e: Exception) {

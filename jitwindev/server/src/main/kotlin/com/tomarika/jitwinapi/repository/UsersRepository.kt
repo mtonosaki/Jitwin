@@ -13,11 +13,11 @@ interface UsersRepository {
 
 @Repository
 @Component
-class UsersRepositoryImpl(val graphClient: GraphApiClient) : UsersRepository {
+class UsersRepositoryGraphApi(val graphClient: GraphApiClient) : UsersRepository {
 
     override fun getMe(accessToken: String): UserModel {
-        val user = graphClient.getMe(accessToken)
-        return UserModel(displayName = user.displayName, userId = user.id, userPrincipalName = user.userPrincipalName)
+        val me = graphClient.getMe(accessToken)
+        return UserModel(displayName = me.displayName, userId = me.id, userPrincipalName = me.userPrincipalName, givenName = me.givenName)
     }
 
     @Cacheable("profile")

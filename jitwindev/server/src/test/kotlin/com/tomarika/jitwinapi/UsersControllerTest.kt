@@ -36,34 +36,6 @@ class UsersControllerTest() {
     @Autowired
     private lateinit var mockGraphApiServer: MockRestServiceServer
 
-    @DisplayName("/me/photo [GET]")
-    @Nested
-    inner class ApiMePhoto {
-        @Test
-        fun `Given login, when collect access, response the photo`() {
-            val sampleImage = byteArrayOf(8, 7, 6, 5, 4, 3, 2, 1)
-            mockGraphApiServer.expect(requestTo("https://graph.microsoft.com/v1.0/me/photos/64x64/${'$'}value"))
-                .andExpect(header("Authorization", "Bearer graph-api-sample-token")).andRespond(
-                    withSuccess(sampleImage, MediaType.IMAGE_JPEG)
-                )
-            // When
-            mockMvc.perform(
-                get("/api/users/me/photo").with(csrf()).with(oauth2Login()).with(
-                    oauth2Client("graph").apply {
-                        accessToken(
-                            OAuth2AccessToken(
-                                BEARER, "graph-api-sample-token", null, null, Collections.singleton("message:read")
-                            )
-                        )
-                    }
-                )
-            )
-                // Then
-                .andExpect(status().isOk).andExpect(content().contentType(MediaType.IMAGE_JPEG))
-                .andExpect(content().bytes(sampleImage))
-        }
-    }
-
     @DisplayName("/me [GET]")
     @Nested
     inner class ApiMe {
@@ -108,7 +80,51 @@ class UsersControllerTest() {
                 // Then
                 .andExpect(status().isOk).andExpect(jsonPath("$.userId").value("12ac3456-77ab-89cd-abcd-111122223333"))
                 .andExpect(jsonPath("$.displayName").value("Megan Bowen"))
+                .andExpect(jsonPath("$.givenName").value("Megan"))
                 .andExpect(jsonPath("$.userPrincipalName").value("meganb@example.onmicrosoft.com"))
+        }
+
+        @Test
+        fun `Some item can be null from GraphAPI`() {
+            mockGraphApiServer.expect(requestTo("https://graph.microsoft.com/v1.0/me"))
+                .andExpect(header("Authorization", "Bearer graph-api-sample-token")).andRespond(
+                    withSuccess(
+                        """
+                            {
+                                "@odata.context": "https://graph.microsoft.com/v1.0/metadata#users/entity",
+                                "businessPhones": [],
+                                "displayName": "ソフィー ブラウン/Sophie Brown",
+                                "givenName": null,
+                                "jobTitle": null,
+                                "mail": null,
+                                "mobilePhone": null,
+                                "officeLocation": null,
+                                "preferredLanguage": null,
+                                "surname": null,
+                                "userPrincipalName": "bsophie@example.onmicrosoft.com",
+                                "id": "12ac3456-77ab-89cd-abcd-111122223333"
+                            }
+                        """.trimIndent(),
+                        MediaType.APPLICATION_JSON
+                    )
+                )
+            // When
+            mockMvc.perform(
+                get("/api/users/me").with(csrf()).with(oauth2Login()).with(
+                    oauth2Client("graph").apply {
+                        accessToken(
+                            OAuth2AccessToken(
+                                BEARER, "graph-api-sample-token", null, null, Collections.singleton("message:read")
+                            )
+                        )
+                    }
+                )
+            )
+                // Then
+                .andExpect(status().isOk).andExpect(jsonPath("$.userId").value("12ac3456-77ab-89cd-abcd-111122223333"))
+                .andExpect(jsonPath("$.displayName").value("ソフィー ブラウン/Sophie Brown"))
+                .andExpect(jsonPath("$.givenName").value(null))
+                .andExpect(jsonPath("$.userPrincipalName").value("bsophie@example.onmicrosoft.com"))
         }
 
         @Test
@@ -140,6 +156,34 @@ class UsersControllerTest() {
             )
                 // Then
                 .andExpect(status().isForbidden)
+        }
+    }
+
+    @DisplayName("/me/photo [GET]")
+    @Nested
+    inner class ApiMePhoto {
+        @Test
+        fun `Given login, when collect access, response the photo`() {
+            val sampleImage = byteArrayOf(8, 7, 6, 5, 4, 3, 2, 1)
+            mockGraphApiServer.expect(requestTo("https://graph.microsoft.com/v1.0/me/photos/64x64/${'$'}value"))
+                .andExpect(header("Authorization", "Bearer graph-api-sample-token")).andRespond(
+                    withSuccess(sampleImage, MediaType.IMAGE_JPEG)
+                )
+            // When
+            mockMvc.perform(
+                get("/api/users/me/photo").with(csrf()).with(oauth2Login()).with(
+                    oauth2Client("graph").apply {
+                        accessToken(
+                            OAuth2AccessToken(
+                                BEARER, "graph-api-sample-token", null, null, Collections.singleton("message:read")
+                            )
+                        )
+                    }
+                )
+            )
+                // Then
+                .andExpect(status().isOk).andExpect(content().contentType(MediaType.IMAGE_JPEG))
+                .andExpect(content().bytes(sampleImage))
         }
     }
 }

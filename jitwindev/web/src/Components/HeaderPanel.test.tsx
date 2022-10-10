@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { fireEvent, render, screen, within } from '@testing-library/react';
-import { TestIds } from 'tests/TestIds';
-import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
 import { RecoilRoot } from 'recoil';
+import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
+import { TestIds } from 'tests/TestIds';
 import HeaderPanel from './HeaderPanel';
 
 const mockSpyNavigate = jest.fn();
@@ -79,5 +79,15 @@ describe('HeaderPanel', () => {
     expect(
       within(headerPanel).getByRole('img', { name: 'profile' })
     ).toBeInTheDocument();
+  });
+
+  it('Sophie sees message bar', () => {
+    render(
+      <RecoilRoot>
+        <HeaderPanelAuthedWrapper />
+      </RecoilRoot>
+    );
+
+    expect(screen.getByTestId(TestIds.MESSAGE_BAR)).toBeInTheDocument();
   });
 });
