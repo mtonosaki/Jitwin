@@ -14,12 +14,13 @@ export default function HeaderPanel() {
       <div className={styles.contents}>
         <button
           type="button"
-          className={styles.title}
+          className={styles.logo}
           onClick={(e) => {
             navigate('/', { replace: true });
           }}
         >
-          Jitwin
+          <span>Jitwin</span>
+          <img src="/img/logoHeader.png" alt="small logo" />
         </button>
         <MessageBar />
         {authenticatedUser && (
