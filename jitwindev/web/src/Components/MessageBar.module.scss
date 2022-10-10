@@ -2,21 +2,27 @@
 
 .container {
   width: 100%;
+  height: 2.85rem;
   background-color: #ccc5a9;
   color: #00000066;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: bold;
   border-radius: 5px;
-  height: 2.7rem;
   padding: 2px 2px 0px 2px;
   line-height: 12px;
-  margin: 0;
+  margin: -2px 0;
   box-shadow: #000000bb 1.25px 1.25px 1.5px 1.5px inset;
   list-style-type: none;
   overflow-y: scroll;
 
   tr {
     vertical-align: top;
+  }
+  td {
+    border-top: solid #00000011 1px;
+  }
+  td:nth-last-child(1) {
+    width: 100%;
   }
 }
 .scrollBar {
@@ -31,5 +37,84 @@
 }
 .scrollBar::-webkit-scrollbar-thumb {
   background-color: #00000088;
-  border-radius: 4px;
+  border-radius: 2px;
+}
+
+.openCloseHandle {
+  display: block;
+  position: absolute;
+  top: 30px;
+  left: 79px;
+  width: 24px;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  @media (max-width: 712px) {
+    left: 11px;
+  }
+}
+
+.spinOpen {
+  animation-name: spinOpenAnimate;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in-out;
+}
+
+.spinClose {
+  animation-name: spinCloseAnimate;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes spinOpenAnimate {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+@keyframes spinCloseAnimate {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.open {
+  animation-name: slideOpenAnimate;
+  animation-duration: 0.25s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+.close {
+  animation-name: slideCloseAnimate;
+  animation-duration: 0.25s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: none;
+}
+
+@keyframes slideOpenAnimate {
+  100% {
+    height: 90vh;
+  }
+}
+@keyframes slideCloseAnimate {
+  0% {
+    height: 90vh;
+  }
+  100% {
+    height: 2.85rem;
+  }
 }

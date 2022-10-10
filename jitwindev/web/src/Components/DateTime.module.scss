@@ -3,11 +3,13 @@
 @mixin container {
   color: #00000066;
   margin-right: 0.25em;
-  font-size: 13px;
+  font-size: 12px;
   white-space: nowrap;
+  line-height: 12px;
 
   img {
-    height: 12px;
+    height: 11px;
+    margin: -8px 0 0 0;
     opacity: 0.5;
   }
   span:nth-child(3) {

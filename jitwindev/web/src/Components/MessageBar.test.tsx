@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { RecoilRoot } from 'recoil';
 import { getVersion } from 'app/AppVersion';
 import MessageBar from './MessageBar';
 import { useMessageRecords } from '../hooks/useMessageRecords';
 import { useAuthenticatedUser } from '../hooks/useAuthenticatedUser';
+import { TestIds } from '../tests/TestIds';
 
 jest.mock('app/AppVersion');
 
@@ -82,5 +83,36 @@ describe('MessageBar', () => {
     expect(screen.getByText(':16')).toBeInTheDocument();
     expect(screen.getByText('New Message !!')).toBeInTheDocument();
     expect(screen.getByText(':26')).toBeInTheDocument();
+  });
+
+  it('Sophie sees open button', () => {
+    render(
+      <RecoilRoot>
+        <MessageBarWrapper givenName="Sophie" />
+      </RecoilRoot>
+    );
+
+    expect(screen.getByRole('img', { name: 'Open/Close' })).toBeInTheDocument();
+  });
+
+  it('Sophie can open message bar with the open button', () => {
+    render(
+      <RecoilRoot>
+        <MessageBarWrapper givenName="Sophie" />
+      </RecoilRoot>
+    );
+    expect(screen.getByTestId(TestIds.MESSAGE_BAR)).toBeInTheDocument();
+    expect(screen.getByTestId(TestIds.MESSAGE_BAR)).not.toHaveClass('open');
+    expect(screen.getByTestId(TestIds.MESSAGE_BAR)).not.toHaveClass('close'); // expecting close is not contain at start timing to disable animation.
+
+    fireEvent.click(screen.getByTestId(TestIds.MESSAGE_OPEN_CLOSE_HANDLE));
+
+    expect(screen.getByTestId(TestIds.MESSAGE_BAR)).toHaveClass('open');
+    expect(screen.getByTestId(TestIds.MESSAGE_BAR)).not.toHaveClass('close');
+
+    fireEvent.click(screen.getByTestId(TestIds.MESSAGE_OPEN_CLOSE_HANDLE));
+
+    expect(screen.getByTestId(TestIds.MESSAGE_BAR)).not.toHaveClass('open');
+    expect(screen.getByTestId(TestIds.MESSAGE_BAR)).toHaveClass('close');
   });
 });

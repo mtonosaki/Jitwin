@@ -32,7 +32,9 @@ describe('HeaderPanel', () => {
       </RecoilRoot>
     );
     const headerPanel = screen.getByTestId(TestIds.PANEL_HEADER);
-    const logoButton = within(headerPanel).getByRole('button');
+    const logoButton = within(headerPanel).getByRole('button', {
+      name: /Jitwin/,
+    });
 
     expect(logoButton).toBeInTheDocument();
   });
@@ -43,7 +45,7 @@ describe('HeaderPanel', () => {
         <HeaderPanel />
       </RecoilRoot>
     );
-    const logoButton = screen.getByRole('button');
+    const logoButton = screen.getByRole('button', { name: /Jitwin/ });
 
     fireEvent.click(logoButton);
 
