@@ -3,6 +3,7 @@ import { TestIds } from 'tests/TestIds';
 import { newMessage, useMessageRecords } from 'hooks/useMessageRecords';
 import { getVersion } from 'app/AppVersion';
 import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
+import classNames from 'classnames';
 import DateTimeTwin from './DateTimeTwin';
 import styles from './MessageBar.module.scss';
 
@@ -26,18 +27,29 @@ export default function MessageBar() {
   }, [user]);
 
   return (
-    <ul data-testid={TestIds.MESSAGE_BAR} className={styles.container}>
-      {messageRecords.map((record, key) => (
-        <li
-          key={`message-record-${key + 1}-${
-            record.message
-          }-${record.dateTimeReal.getTime()}`}
-          data-testid={`test-id-message-record-${key + 1}`}
-        >
-          <DateTimeTwin vr="Real" value={record.dateTimeReal.getTime()} />
-          <span>{record.message}</span>
-        </li>
-      ))}
-    </ul>
+    <div
+      data-testid={TestIds.MESSAGE_BAR}
+      className={classNames(styles.container, styles.scrollBar)}
+    >
+      <table>
+        <tbody>
+          {messageRecords.map((record, key) => (
+            <tr
+              key={`message-record-${key + 1}-${
+                record.message
+              }-${record.dateTimeReal.getTime()}`}
+              data-testid={`test-id-message-record-${key + 1}`}
+            >
+              <td>
+                <DateTimeTwin vr="Real" value={record.dateTimeReal.getTime()} />
+              </td>
+              <td>
+                <span>{record.message}</span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

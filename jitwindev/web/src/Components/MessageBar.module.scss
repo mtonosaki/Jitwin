@@ -8,9 +8,28 @@
   font-weight: bold;
   border-radius: 5px;
   height: 2.7rem;
-  padding: 2px 6px 2px 8px;
-  margin: 0 0;
+  padding: 2px 2px 0px 2px;
+  line-height: 12px;
+  margin: 0;
   box-shadow: #000000bb 1.25px 1.25px 1.5px 1.5px inset;
   list-style-type: none;
-  overflow: hidden;
+  overflow-y: scroll;
+
+  tr {
+    vertical-align: top;
+  }
+}
+.scrollBar {
+  overflow-y: scroll;
+}
+
+.scrollBar::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollBar::-webkit-scrollbar-track {
+  background-color: #ffffff44;
+}
+.scrollBar::-webkit-scrollbar-thumb {
+  background-color: #00000088;
+  border-radius: 4px;
 }
