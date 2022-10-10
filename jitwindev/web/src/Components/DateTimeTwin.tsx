@@ -6,7 +6,7 @@ type Props = {
   vr: 'Virtual' | 'Real';
 };
 
-export default function DateTime({ value, vr }: Props) {
+export default function DateTimeTwin({ value, vr }: Props) {
   const dateTime = new Date(value);
   const style = vr === 'Real' ? styles.real : styles.virtual;
 
