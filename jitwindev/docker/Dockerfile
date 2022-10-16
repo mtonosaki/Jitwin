@@ -5,9 +5,7 @@ ARG REACT_APP_NODE_ENV
 
 WORKDIR /tmp
 COPY .eslintrc.global.json .eslintrc.global.json
-COPY ./addin ./addin
 COPY ./web ./web
-WORKDIR /tmp/addin
 RUN yarn install
 RUN yarn build:docker
 WORKDIR /tmp/web

@@ -21,12 +21,23 @@
 }
 
 .accountBlock {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-left: 0.75rem;
-  margin-right: 0.25rem;
-  flex-wrap: nowrap;
+  margin-top: 4px;
+
+  button {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    margin-left: 0.75rem;
+    margin-right: 0.25rem;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #ff880022;
+    }
+  }
 
   @media (max-width: 712px) {
     margin-left: 2px;
@@ -98,6 +109,37 @@
       visibility: visible;
       border: none;
       cursor: pointer;
+    }
+  }
+}
+
+.accountMenu {
+  background-color: $jitwin-mocha-800;
+  color: $jitwin-grey-0;
+  box-shadow: #00000044 1px 1px 1px 1px;
+  padding: 0.5em;
+  display: block;
+  position: absolute;
+  top: 3em;
+  right: 2px;
+
+  button {
+    white-space: nowrap;
+    background-color: transparent;
+    border: none;
+    color: $jitwin-grey-0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 1em;
+      height: 1em;
+      margin-right: 0.5em;
+    }
+
+    &:hover {
+      background-color: #ff880022;
     }
   }
 }

@@ -42,7 +42,10 @@ export default function App() {
         path="/"
         element={<HomePage sessionRepository={sessionRepository} />}
       />
-      <Route path="/:targetOid/menu" element={<MainPage />} />
+      <Route
+        path="/:targetOid/menu"
+        element={<MainPage sessionRepository={sessionRepository} />}
+      />
     </Routes>
   );
 }

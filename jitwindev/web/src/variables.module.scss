@@ -46,3 +46,15 @@ $font-main: 'M PLUS Rounded 1c', sans-serif; // support weight 100, 400, 700, 90
   font-size: 36px;
   font-weight: 900;
 }
+
+.modalBackground {
+  display: block;
+  position: absolute;
+  background-color: $jitwin-mocha-800;
+  opacity: 0.5;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
