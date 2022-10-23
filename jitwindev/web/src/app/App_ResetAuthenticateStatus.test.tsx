@@ -8,7 +8,7 @@ import { MemoryRouter } from 'react-router-dom';
 import App from './App';
 
 jest.mock('repos/UsersRepositoryBackend');
-jest.mock('Pages/HomePage');
+jest.mock('pages/HomePage');
 jest.mock('hooks/useAuthenticateStatus');
 
 describe('Authenticate Status', () => {

@@ -9,7 +9,7 @@ import HomePage from 'pages/HomePage';
 import { useAuthenticateStatus } from 'hooks/useAuthenticateStatus';
 
 jest.mock('repos/UsersRepositoryBackend');
-jest.mock('Pages/HomePage');
+jest.mock('pages/HomePage');
 
 const expectedUser = {
   oid: 'oid-1111-2222-xxxx',
