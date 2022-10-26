@@ -7,9 +7,9 @@
   height: 3em;
   top: 4px;
   left: 0.5%;
-  background-color: $jitwin-mocha-800;
+  background-color: $primary-800;
   color: $jitwin-grey-0;
-  box-shadow: #00000044 0px 0px 2px 2px;
+  box-shadow: #00000044 0 0 2px 2px;
   border-radius: 0 0 0 20px;
 }
 
@@ -57,11 +57,11 @@
 
   div:nth-child(1) {
     font-size: 14px;
-    color: $jitwin-mocha-200;
+    color: $primary-200;
   }
   div:nth-child(2) {
     font-size: 10px;
-    color: $jitwin-mocha-400;
+    color: $primary-400;
   }
 }
 
@@ -114,7 +114,7 @@
 }
 
 .accountMenu {
-  background-color: $jitwin-mocha-800;
+  background-color: $primary-800;
   color: $jitwin-grey-0;
   box-shadow: #00000044 1px 1px 1px 1px;
   padding: 0.5em;

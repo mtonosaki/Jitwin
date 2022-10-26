@@ -1,8 +1,8 @@
 import { User } from 'models/User';
+import HttpClientCustom from 'network/HttpClientCustom';
 import UsersRepositoryBackend from './UsersRepositoryBackend';
-import HttpClientCustom from '../network/HttpClientCustom';
 
-jest.mock('../network/HttpClientCustom');
+jest.mock('network/HttpClientCustom');
 
 describe('UsersRepositoryBackend', () => {
   const stubSpyGet = jest.fn();

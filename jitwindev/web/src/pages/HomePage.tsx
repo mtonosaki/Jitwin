@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PrimaryButton from 'Components/PrimaryButton';
+import PrimaryButton from 'components/PrimaryButton';
 import { Config } from 'app/Config';
 import { TestIds } from 'tests/TestIds';
 import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
 import SessionRepository from 'repos/SessionRepository';
+import WaitingSpinner from 'components/WaitingSpinner';
+import { useWaitingSpinner } from 'hooks/useWaitingSpinner';
+import { useAuthenticateStatus } from 'hooks/useAuthenticateStatus';
 import styles from './HomePage.module.scss';
-import WaitingSpinner from '../Components/WaitingSpinner';
-import { useWaitingSpinner } from '../hooks/useWaitingSpinner';
-import { useAuthenticateStatus } from '../hooks/useAuthenticateStatus';
 
 type Props = {
   sessionRepository: SessionRepository;

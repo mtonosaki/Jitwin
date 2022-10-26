@@ -15,12 +15,13 @@ interface UsersRepository {
 @Component
 class UsersRepositoryGraphApi(val graphClient: GraphApiClient) : UsersRepository {
 
+    @Cacheable("meProfile")
     override fun getMe(accessToken: String): UserModel {
         val me = graphClient.getMe(accessToken)
         return UserModel(displayName = me.displayName, userId = me.id, userPrincipalName = me.userPrincipalName, givenName = me.givenName)
     }
 
-    @Cacheable("profile")
+    @Cacheable("mePhoto")
     override fun getMyPhoto(accessToken: String): ByteArray {
         val image = graphClient.getMyPhoto(accessToken)
         return image

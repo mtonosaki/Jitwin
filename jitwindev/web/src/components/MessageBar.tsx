@@ -4,8 +4,8 @@ import { newMessage, useMessageRecords } from 'hooks/useMessageRecords';
 import { getVersion } from 'app/AppVersion';
 import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
 import classNames from 'classnames';
-import DateTimeTwin from './DateTimeTwin';
 import styles from './MessageBar.module.scss';
+import DateTimeTwin from './DateTimeTwin';
 
 function makeOpacityValue(isBarOpen: boolean, key: number): number {
   if (isBarOpen) {

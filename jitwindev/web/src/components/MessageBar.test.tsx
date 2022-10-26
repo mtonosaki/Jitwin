@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { RecoilRoot } from 'recoil';
 import { getVersion } from 'app/AppVersion';
-import MessageBar from './MessageBar';
 import { useMessageRecords } from '../hooks/useMessageRecords';
 import { useAuthenticatedUser } from '../hooks/useAuthenticatedUser';
 import { TestIds } from '../tests/TestIds';
+import MessageBar from './MessageBar';
 
 jest.mock('app/AppVersion');
 

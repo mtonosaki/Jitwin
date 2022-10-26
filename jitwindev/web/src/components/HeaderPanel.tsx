@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { TestIds } from 'tests/TestIds';
 import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
 import styles from './HeaderPanel.module.scss';
-import MessageBar from './MessageBar';
 import SessionRepository from '../repos/SessionRepository';
+import MessageBar from './MessageBar';
 
 type Props = {
   sessionRepository: SessionRepository;

@@ -87,7 +87,7 @@ class UsersControllerTest() {
         @Test
         fun `Some item can be null from GraphAPI`() {
             mockGraphApiServer.expect(requestTo("https://graph.microsoft.com/v1.0/me"))
-                .andExpect(header("Authorization", "Bearer graph-api-sample-token")).andRespond(
+                .andExpect(header("Authorization", "Bearer graph-api-sample-token-001")).andRespond(
                     withSuccess(
                         """
                             {
@@ -114,7 +114,7 @@ class UsersControllerTest() {
                     oauth2Client("graph").apply {
                         accessToken(
                             OAuth2AccessToken(
-                                BEARER, "graph-api-sample-token", null, null, Collections.singleton("message:read")
+                                BEARER, "graph-api-sample-token-001", null, null, Collections.singleton("message:read")
                             )
                         )
                     }
@@ -125,6 +125,68 @@ class UsersControllerTest() {
                 .andExpect(jsonPath("$.displayName").value("ソフィー ブラウン/Sophie Brown"))
                 .andExpect(jsonPath("$.givenName").value(null))
                 .andExpect(jsonPath("$.userPrincipalName").value("bsophie@example.onmicrosoft.com"))
+        }
+
+        @Test
+        fun `user data should be cached by accessToken`() {
+            // Given
+            mockGraphApiServer.expect(requestTo("https://graph.microsoft.com/v1.0/me"))
+                .andExpect(header("Authorization", "Bearer graph-api-sample-token-132")).andRespond(
+                    withSuccess(
+                        """
+                            {
+                                "@odata.context": "https://graph.microsoft.com/v1.0/metadata#users/entity",
+                                "displayName": "Megan Bowen",
+                                "userPrincipalName": "meganb@example.onmicrosoft.com",
+                                "id": "12ac3456-77ab-89cd-abcd-111122223333"
+                            }
+                        """.trimIndent(),
+                        MediaType.APPLICATION_JSON
+                    )
+                )
+            mockGraphApiServer.expect(requestTo("https://graph.microsoft.com/v1.0/me"))
+                .andExpect(header("Authorization", "Bearer graph-api-sample-token-132")).andRespond(
+                    withSuccess(
+                        """
+                            {
+                                "@odata.context": "https://graph.microsoft.com/v1.0/metadata#users/entity",
+                                "displayName": "Hideyoshi Toyotomi",
+                                "userPrincipalName": "htoyotomi@example.onmicrosoft.com",
+                                "id": "12ac3456-77ab-89cd-abcd-111122223333"
+                            }
+                        """.trimIndent(),
+                        MediaType.APPLICATION_JSON
+                    )
+                )
+
+            // When/Then - 1
+            mockMvc.perform(
+                get("/api/users/me").with(csrf()).with(oauth2Login()).with(
+                    oauth2Client("graph").apply {
+                        accessToken(
+                            OAuth2AccessToken(
+                                BEARER, "graph-api-sample-token-132", null, null, Collections.singleton("message:read")
+                            )
+                        )
+                    }
+                )
+            )
+                .andExpect(jsonPath("$.displayName").value("Megan Bowen"))
+
+            // When/Then - 2
+            mockMvc.perform(
+                get("/api/users/me").with(csrf()).with(oauth2Login()).with(
+                    oauth2Client("graph").apply {
+                        accessToken(
+                            OAuth2AccessToken(
+                                BEARER, "graph-api-sample-token-132", null, null, Collections.singleton("message:read")
+                            )
+                        )
+                    }
+                )
+            )
+                // Then
+                .andExpect(jsonPath("$.displayName").value("Megan Bowen"))
         }
 
         @Test
@@ -184,6 +246,49 @@ class UsersControllerTest() {
                 // Then
                 .andExpect(status().isOk).andExpect(content().contentType(MediaType.IMAGE_JPEG))
                 .andExpect(content().bytes(sampleImage))
+        }
+        @Test
+        fun `photo should be cached by accessToken`() {
+            mockGraphApiServer.expect(requestTo("https://graph.microsoft.com/v1.0/me/photos/64x64/${'$'}value"))
+                .andExpect(header("Authorization", "Bearer graph-api-sample-token-001")).andRespond(
+                    withSuccess(byteArrayOf(8, 7, 6, 5, 4, 3, 2, 1), MediaType.IMAGE_JPEG)
+                )
+            mockGraphApiServer.expect(requestTo("https://graph.microsoft.com/v1.0/me/photos/64x64/${'$'}value"))
+                .andExpect(header("Authorization", "Bearer graph-api-sample-token-001")).andRespond(
+                    withSuccess(byteArrayOf(18, 17, 16, 15, 14, 13, 12, 11), MediaType.IMAGE_JPEG)
+                )
+
+            // When - 1
+            mockMvc.perform(
+                get("/api/users/me/photo").with(csrf()).with(oauth2Login()).with(
+                    oauth2Client("graph").apply {
+                        accessToken(
+                            OAuth2AccessToken(
+                                BEARER, "graph-api-sample-token-001", null, null, Collections.singleton("message:read")
+                            )
+                        )
+                    }
+                )
+            )
+                // Then
+                .andExpect(status().isOk).andExpect(content().contentType(MediaType.IMAGE_JPEG))
+                .andExpect(content().bytes(byteArrayOf(8, 7, 6, 5, 4, 3, 2, 1)))
+
+            // When - 2
+            mockMvc.perform(
+                get("/api/users/me/photo").with(csrf()).with(oauth2Login()).with(
+                    oauth2Client("graph").apply {
+                        accessToken(
+                            OAuth2AccessToken(
+                                BEARER, "graph-api-sample-token-001", null, null, Collections.singleton("message:read")
+                            )
+                        )
+                    }
+                )
+            )
+                // Then
+                .andExpect(status().isOk).andExpect(content().contentType(MediaType.IMAGE_JPEG))
+                .andExpect(content().bytes(byteArrayOf(8, 7, 6, 5, 4, 3, 2, 1)))
         }
     }
 }

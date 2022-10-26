@@ -5,7 +5,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: $jitwin-mocha-600;
+  background-color: $primary-600;
 }
 
 .container {
@@ -15,12 +15,11 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  justify-content: center;
   row-gap: 8rem;
 }
 
 .vMargin {
-  background-color: $jitwin-mocha-0;
+  background-color: $primary-0;
   height: 100%;
   width: 100%;
 }
@@ -33,7 +32,7 @@
 
 .welcomeName {
   height: 1.75em;
-  color: $jitwin-mocha-600;
+  color: $primary-600;
 
   span:nth-child(2) {
     font-weight: bold;
@@ -46,32 +45,32 @@
 .loginButton {
   span:nth-last-child(2) {
     font-size: medium;
-    color: $jitwin-mocha-200;
+    color: $primary-200;
   }
   span:nth-last-child(1) {
     font-size: xx-large;
     margin-left: 0.25rem;
     font-weight: 800;
-    color: $jitwin-mocha-0;
+    color: $primary-0;
   }
 }
 
 .logoutMessage {
   margin-top: 1rem;
-  color: $jitwin-mocha-400;
+  color: $primary-400;
   font-size: 12px;
   button {
     background-color: transparent;
     border: 0;
     font-size: 12px;
-    color: $jitwin-mocha-400;
+    color: $primary-400;
     margin: 0;
     padding: 0;
     text-decoration: underline;
     cursor: pointer;
 
     &:hover {
-      color: $jitwin-mocha-600;
+      color: $primary-600;
     }
   }
 }

@@ -1,5 +1,5 @@
 import { User } from 'models/User';
-import HttpClientCustom from '../network/HttpClientCustom';
+import HttpClientCustom from 'network/HttpClientCustom';
 
 export default class SessionRepository {
   private storage: Storage; // Need blank line below : Expected blank line between class members lines-between-class-members
