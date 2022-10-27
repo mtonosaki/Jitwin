@@ -4,6 +4,7 @@ import { TestIds } from 'tests/TestIds';
 import HeaderPanel from 'components/HeaderPanel';
 import SessionRepository from 'repos/SessionRepository';
 import styles from './MainPage.module.scss';
+import JitStage from '../stage/JitStage';
 
 type Props = {
   sessionRepository: SessionRepository;
@@ -18,7 +19,7 @@ export default function MainPage({ sessionRepository }: Props) {
       <div className={styles.container}>
         <HeaderPanel sessionRepository={sessionRepository} />
         <div className={styles.vMargin}>
-          <h1>Main</h1>
+          <JitStage />
         </div>
       </div>
     </div>

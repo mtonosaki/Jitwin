@@ -29,4 +29,13 @@ describe('MainPage', () => {
     );
     expect(screen.getByTestId(TestIds.PANEL_HEADER)).toBeInTheDocument();
   });
+
+  it( 'Sophie feels JitStage is shown', () => {
+    render(
+      <RecoilRoot>
+        <MainPage sessionRepository={mockSessionRepository} />
+      </RecoilRoot>
+    );
+    expect(screen.getByTestId(TestIds.JIT_STAGE)).toBeInTheDocument();
+  });
 });
