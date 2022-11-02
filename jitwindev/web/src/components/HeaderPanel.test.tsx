@@ -4,7 +4,8 @@ import { RecoilRoot } from 'recoil';
 import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
 import { TestIds } from 'tests/TestIds';
 import HeaderPanel from './HeaderPanel';
-import { createSessionRepository } from '../tests/testUtilities';
+import { makeMockSessionRepository } from '../tests/testUtilities';
+import SessionRepository from '../repos/SessionRepository';
 
 const mockSpyNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
@@ -12,9 +13,10 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockSpyNavigate,
 }));
 
-const mockSessionRepository = createSessionRepository();
-
-function HeaderPanelAuthedWrapper() {
+type Props = {
+  sessionRepository: SessionRepository;
+};
+function HeaderPanelAuthedWrapper({ sessionRepository }: Props) {
   const [, setAuthenticatedUser] = useAuthenticatedUser();
   useEffect(() => {
     setAuthenticatedUser({
@@ -24,14 +26,14 @@ function HeaderPanelAuthedWrapper() {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  return <HeaderPanel sessionRepository={mockSessionRepository} />;
+  return <HeaderPanel sessionRepository={sessionRepository} />;
 }
 
 describe('HeaderPanel', () => {
   it('Sophie sees Jitwin logo', () => {
     render(
       <RecoilRoot>
-        <HeaderPanel sessionRepository={mockSessionRepository} />
+        <HeaderPanel sessionRepository={makeMockSessionRepository()} />
       </RecoilRoot>
     );
     const headerPanel = screen.getByTestId(TestIds.PANEL_HEADER);
@@ -45,7 +47,7 @@ describe('HeaderPanel', () => {
   it('When Sophie click Jitwin logo, navigate to Home page', () => {
     render(
       <RecoilRoot>
-        <HeaderPanel sessionRepository={mockSessionRepository} />
+        <HeaderPanel sessionRepository={makeMockSessionRepository()} />
       </RecoilRoot>
     );
     const logoButton = screen.getByRole('button', { name: /Jitwin/ });
@@ -58,7 +60,9 @@ describe('HeaderPanel', () => {
   it('Sophie sees her account', () => {
     render(
       <RecoilRoot>
-        <HeaderPanelAuthedWrapper />
+        <HeaderPanelAuthedWrapper
+          sessionRepository={makeMockSessionRepository()}
+        />
       </RecoilRoot>
     );
 
@@ -75,7 +79,9 @@ describe('HeaderPanel', () => {
   it('Sophie sees her profile image', () => {
     render(
       <RecoilRoot>
-        <HeaderPanelAuthedWrapper />
+        <HeaderPanelAuthedWrapper
+          sessionRepository={makeMockSessionRepository()}
+        />
       </RecoilRoot>
     );
     const headerPanel = screen.getByTestId(TestIds.PANEL_HEADER);
@@ -87,7 +93,9 @@ describe('HeaderPanel', () => {
   it('Sophie sees message bar', () => {
     render(
       <RecoilRoot>
-        <HeaderPanelAuthedWrapper />
+        <HeaderPanelAuthedWrapper
+          sessionRepository={makeMockSessionRepository()}
+        />
       </RecoilRoot>
     );
 
@@ -97,7 +105,9 @@ describe('HeaderPanel', () => {
   it('Sophie can click account info to open menu', () => {
     render(
       <RecoilRoot>
-        <HeaderPanelAuthedWrapper />
+        <HeaderPanelAuthedWrapper
+          sessionRepository={makeMockSessionRepository()}
+        />
       </RecoilRoot>
     );
 
@@ -128,7 +138,9 @@ describe('HeaderPanel', () => {
   it('Account menu can close when Sophie clicks dark screen', () => {
     render(
       <RecoilRoot>
-        <HeaderPanelAuthedWrapper />
+        <HeaderPanelAuthedWrapper
+          sessionRepository={makeMockSessionRepository()}
+        />
       </RecoilRoot>
     );
     const accountArea = within(
@@ -154,7 +166,9 @@ describe('HeaderPanel', () => {
     // GIVEN
     render(
       <RecoilRoot>
-        <HeaderPanelAuthedWrapper />
+        <HeaderPanelAuthedWrapper
+          sessionRepository={makeMockSessionRepository()}
+        />
       </RecoilRoot>
     );
     const accountArea = within(
@@ -181,10 +195,11 @@ describe('HeaderPanel', () => {
       set: locationHrefSpy,
     });
     const spyLogoutSession = jest.fn();
+    const mockSessionRepository = makeMockSessionRepository();
     mockSessionRepository.logoutSession = spyLogoutSession;
     render(
       <RecoilRoot>
-        <HeaderPanelAuthedWrapper />
+        <HeaderPanelAuthedWrapper sessionRepository={mockSessionRepository} />
       </RecoilRoot>
     );
     const accountArea = within(

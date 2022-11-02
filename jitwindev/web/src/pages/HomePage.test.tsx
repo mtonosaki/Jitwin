@@ -5,8 +5,8 @@ import SessionRepository from 'repos/SessionRepository';
 import { RecoilRoot } from 'recoil';
 import { TestIds } from '../tests/TestIds';
 import { useAuthenticatedUser } from '../hooks/useAuthenticatedUser';
-import { createSessionRepository } from '../tests/testUtilities';
 import { useAuthenticateStatus } from '../hooks/useAuthenticateStatus';
+import { makeMockSessionRepository } from '../tests/testUtilities';
 
 const mockSpyNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
@@ -47,7 +47,7 @@ describe('HomePage', () => {
     it('Sophie can see waiting spinner', () => {
       render(
         <RecoilRoot>
-          <HomePage sessionRepository={createSessionRepository()} />
+          <HomePage sessionRepository={makeMockSessionRepository()} />
         </RecoilRoot>
       );
 
@@ -60,7 +60,7 @@ describe('HomePage', () => {
           setStatus('error');
           // eslint-disable-next-line react-hooks/exhaustive-deps
         }, []);
-        return <HomePage sessionRepository={createSessionRepository()} />;
+        return <HomePage sessionRepository={makeMockSessionRepository()} />;
       }
 
       await act(async () => {
@@ -86,7 +86,7 @@ describe('HomePage', () => {
         process.env.REACT_APP_NODE_ENV = 'development';
         render(
           <RecoilRoot>
-            <HomePage sessionRepository={createSessionRepository()} />
+            <HomePage sessionRepository={makeMockSessionRepository()} />
           </RecoilRoot>
         );
 
@@ -102,7 +102,7 @@ describe('HomePage', () => {
         process.env.REACT_APP_NODE_ENV = 'production';
         render(
           <RecoilRoot>
-            <HomePage sessionRepository={createSessionRepository()} />
+            <HomePage sessionRepository={makeMockSessionRepository()} />
           </RecoilRoot>
         );
 
@@ -119,7 +119,7 @@ describe('HomePage', () => {
       it('Show login button', () => {
         render(
           <RecoilRoot>
-            <HomePage sessionRepository={createSessionRepository()} />
+            <HomePage sessionRepository={makeMockSessionRepository()} />
           </RecoilRoot>
         );
 
@@ -131,7 +131,7 @@ describe('HomePage', () => {
       });
 
       describe('Before login', () => {
-        const sessionRepository = createSessionRepository();
+        const sessionRepository = makeMockSessionRepository();
         beforeEach(() => {
           const stubGetAuthenticatedUser = jest.fn();
           stubGetAuthenticatedUser.mockReturnValue(undefined);
@@ -183,7 +183,7 @@ describe('HomePage', () => {
           render(
             <RecoilRoot>
               <HomePageAuthedWrapper
-                sessionRepository={createSessionRepository()}
+                sessionRepository={makeMockSessionRepository()}
               />
             </RecoilRoot>
           );
@@ -197,7 +197,7 @@ describe('HomePage', () => {
           render(
             <RecoilRoot>
               <HomePageAuthedWrapper
-                sessionRepository={createSessionRepository()}
+                sessionRepository={makeMockSessionRepository()}
               />
             </RecoilRoot>
           );
@@ -213,7 +213,7 @@ describe('HomePage', () => {
 
         it('Sophie can logout', async () => {
           const spyLogoutSession = jest.fn();
-          const sessionRepository = createSessionRepository();
+          const sessionRepository = makeMockSessionRepository();
           sessionRepository.logoutSession = spyLogoutSession;
 
           render(
@@ -235,7 +235,7 @@ describe('HomePage', () => {
           render(
             <RecoilRoot>
               <HomePageAuthedWrapper
-                sessionRepository={createSessionRepository()}
+                sessionRepository={makeMockSessionRepository()}
               />
             </RecoilRoot>
           );
@@ -249,7 +249,7 @@ describe('HomePage', () => {
         });
 
         describe('Sophie sees Menu page automatically', () => {
-          const sessionRepository = createSessionRepository();
+          const sessionRepository = makeMockSessionRepository();
           const stubIsinLoginProcess = jest.fn();
           const spyResetInLoginProcess = jest.fn();
 

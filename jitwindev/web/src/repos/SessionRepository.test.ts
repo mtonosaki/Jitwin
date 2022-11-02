@@ -1,12 +1,11 @@
-import SessionRepository from 'repos/SessionRepository';
 import { User } from 'models/User';
 import { spyOn } from 'jest-mock';
-import { createSessionRepository } from 'tests/testUtilities';
-import HttpClientCustom from 'network/HttpClientCustom';
+import SessionRepositoryNetwork from './SessionRepositoryNetwork';
+import { fakeHttpClient } from '../tests/testUtilities';
 
 describe('Session Repository', () => {
   it('getAuthenticatedUser result is same with setAuthenticatedUser', () => {
-    const repos = createSessionRepository();
+    const repos = new SessionRepositoryNetwork(sessionStorage, fakeHttpClient);
     const expectedUser: User = {
       userId: 'sample-oid',
       displayName: 'sample-display-name',
@@ -18,7 +17,7 @@ describe('Session Repository', () => {
   });
 
   it('isLoginProcess returns setInLoginProcess value', () => {
-    const repos = createSessionRepository();
+    const repos = new SessionRepositoryNetwork(sessionStorage, fakeHttpClient);
     expect(repos.isInLoginProcess()).toBeFalsy();
 
     repos.setInLoginProcess();
@@ -27,7 +26,7 @@ describe('Session Repository', () => {
   });
 
   it('isLoginProcess returns false when resetInLoginProcess', () => {
-    const repos = createSessionRepository();
+    const repos = new SessionRepositoryNetwork(sessionStorage, fakeHttpClient);
 
     repos.setInLoginProcess();
     repos.resetInLoginProcess();
@@ -41,7 +40,7 @@ describe('Session Repository', () => {
     spyOn(sessionStorageProto, 'getItem');
     spyOn(sessionStorageProto, 'removeItem');
 
-    const repos = createSessionRepository();
+    const repos = new SessionRepositoryNetwork(sessionStorage, fakeHttpClient);
     repos.setInLoginProcess();
     expect(sessionStorageProto.setItem).toHaveBeenCalledWith(
       'InLoginProcess',
@@ -61,18 +60,11 @@ describe('Session Repository', () => {
   });
 
   it('logoutSession post blank to logout of backend', () => {
-    const spyPost = jest.fn();
-    const spyClient: HttpClientCustom = {
-      host: 'dummy-host-session-repos-test',
-      post: spyPost,
-      get: jest.fn(),
-      delete: jest.fn(),
-      patch: jest.fn(),
-    };
-    const sessionRepository = new SessionRepository(sessionStorage, spyClient);
-
+    const sessionRepository = new SessionRepositoryNetwork(
+      sessionStorage,
+      fakeHttpClient
+    );
     sessionRepository.logoutSession();
-
-    expect(spyPost).toHaveBeenCalledWith('/logout');
+    expect(fakeHttpClient.post).toHaveBeenCalledWith('/logout');
   });
 });

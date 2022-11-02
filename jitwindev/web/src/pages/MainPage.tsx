@@ -20,6 +20,7 @@ export default function MainPage({ sessionRepository }: Props) {
         <HeaderPanel sessionRepository={sessionRepository} />
         <div className={styles.vMargin}>
           <JitStage />
+          <div>{targetOid}</div>
         </div>
       </div>
     </div>
