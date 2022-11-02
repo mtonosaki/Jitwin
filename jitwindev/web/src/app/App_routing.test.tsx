@@ -29,7 +29,7 @@ describe('Routing', () => {
     mockStubUseParams.mockReturnValue({ targetOid: 'sample-oid-123' });
     render(
       <RecoilRoot>
-        <MemoryRouter initialEntries={['/*/menu']}>
+        <MemoryRouter initialEntries={['/*/stage']}>
           <App />
         </MemoryRouter>
       </RecoilRoot>

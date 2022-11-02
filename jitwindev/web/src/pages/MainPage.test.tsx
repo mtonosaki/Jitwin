@@ -13,14 +13,6 @@ jest.mock('react-router-dom', () => ({
 const mockSessionRepository = createSessionRepository();
 
 describe('MainPage', () => {
-  it('Sophie sees Main title', () => {
-    render(
-      <RecoilRoot>
-        <MainPage sessionRepository={mockSessionRepository} />
-      </RecoilRoot>
-    );
-    expect(screen.getByRole('heading', { name: 'Main' })).toBeInTheDocument();
-  });
   it('Sophie sees Header', () => {
     render(
       <RecoilRoot>

@@ -243,7 +243,7 @@ describe('HomePage', () => {
           fireEvent.click(startButton);
 
           expect(mockSpyNavigate).toHaveBeenCalledWith(
-            '/2222-test-home-page-3333/Menu',
+            '/2222-test-home-page-3333/stage',
             { replace: true }
           );
         });

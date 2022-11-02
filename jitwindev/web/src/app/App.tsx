@@ -43,7 +43,7 @@ export default function App() {
         element={<HomePage sessionRepository={sessionRepository} />}
       />
       <Route
-        path="/:targetOid/menu"
+        path="/:targetOid/stage"
         element={<MainPage sessionRepository={sessionRepository} />}
       />
     </Routes>

@@ -65,7 +65,7 @@ export default function HomePage({ sessionRepository }: Props) {
               icon="login"
               onClick={() => {
                 if (authenticatedUser) {
-                  navigate(`/${authenticatedUser.userId}/Menu`, {
+                  navigate(`/${authenticatedUser.userId}/stage`, {
                     replace: true,
                   });
                 } else {
