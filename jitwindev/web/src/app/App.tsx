@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { UsersRepository } from 'repos/UsersRepository';
 import UsersRepositoryBackend from 'repos/UsersRepositoryBackend';
+import SessionRepositoryNetwork from 'repos/SessionRepositoryNetwork';
 import HttpClientCustom from 'network/HttpClientCustom';
 import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
 import { useAuthenticateStatus } from 'hooks/useAuthenticateStatus';
 import HomePage from 'pages/HomePage';
 import MainPage from 'pages/MainPage';
-import SessionRepositoryNetwork from '../repos/SessionRepositoryNetwork';
 
 export default function App() {
   const httpClient = new HttpClientCustom(process.env.REACT_APP_API_HOST!);

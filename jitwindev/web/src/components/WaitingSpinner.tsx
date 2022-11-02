@@ -1,7 +1,7 @@
 import React from 'react';
 import { useWaitingSpinner } from 'hooks/useWaitingSpinner';
+import { TestIds } from 'tests/TestIds';
 import styles from './WaitingSpinner.module.scss';
-import { TestIds } from '../tests/TestIds';
 
 export default function WaitingSpinner() {
   const [, , isShowLoadingSpinner] = useWaitingSpinner();

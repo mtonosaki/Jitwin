@@ -1,5 +1,5 @@
 import React from 'react';
-import { TestIds } from '../tests/TestIds';
+import { TestIds } from 'tests/TestIds';
 import styles from './JitStage.module.scss';
 
 export default function JitStage() {

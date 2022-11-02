@@ -3,9 +3,9 @@ import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { RecoilRoot } from 'recoil';
 import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
 import { TestIds } from 'tests/TestIds';
+import { makeMockSessionRepository } from 'tests/testUtilities';
+import SessionRepository from 'repos/SessionRepository';
 import HeaderPanel from './HeaderPanel';
-import { makeMockSessionRepository } from '../tests/testUtilities';
-import SessionRepository from '../repos/SessionRepository';
 
 const mockSpyNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({

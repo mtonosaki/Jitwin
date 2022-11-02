@@ -1,7 +1,7 @@
 import { User } from 'models/User';
 import { spyOn } from 'jest-mock';
+import { fakeHttpClient } from 'tests/testUtilities';
 import SessionRepositoryNetwork from './SessionRepositoryNetwork';
-import { fakeHttpClient } from '../tests/testUtilities';
 
 describe('Session Repository', () => {
   it('getAuthenticatedUser result is same with setAuthenticatedUser', () => {

@@ -3,10 +3,10 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import HomePage from 'pages/HomePage';
 import SessionRepository from 'repos/SessionRepository';
 import { RecoilRoot } from 'recoil';
-import { TestIds } from '../tests/TestIds';
-import { useAuthenticatedUser } from '../hooks/useAuthenticatedUser';
-import { useAuthenticateStatus } from '../hooks/useAuthenticateStatus';
-import { makeMockSessionRepository } from '../tests/testUtilities';
+import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
+import { useAuthenticateStatus } from 'hooks/useAuthenticateStatus';
+import { TestIds } from 'tests/TestIds';
+import { makeMockSessionRepository } from 'tests/testUtilities';
 
 const mockSpyNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({

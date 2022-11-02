@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TestIds } from 'tests/TestIds';
 import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
-import styles from './HeaderPanel.module.scss';
-import SessionRepository from '../repos/SessionRepository';
+import SessionRepository from 'repos/SessionRepository';
 import MessageBar from './MessageBar';
+import styles from './HeaderPanel.module.scss';
 
 type Props = {
   sessionRepository: SessionRepository;

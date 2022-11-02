@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
+import { TestIds } from 'tests/TestIds';
+import { useWaitingSpinner } from 'hooks/useWaitingSpinner';
 import WaitingSpinner from './WaitingSpinner';
-import { TestIds } from '../tests/TestIds';
-import { useWaitingSpinner } from '../hooks/useWaitingSpinner';
 
 type WrapperProps = {
   isLoading: boolean;
