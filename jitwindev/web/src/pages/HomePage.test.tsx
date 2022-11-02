@@ -131,17 +131,17 @@ describe('HomePage', () => {
       });
 
       describe('Before login', () => {
-        const sessionRepository = makeMockSessionRepository();
-        beforeEach(() => {
-          const stubGetAuthenticatedUser = jest.fn();
-          stubGetAuthenticatedUser.mockReturnValue(undefined);
-          sessionRepository.getAuthenticatedUser = stubGetAuthenticatedUser;
-        });
-
         it('Sophie can not see her name', () => {
+          function CustomDraw() {
+            const [, setAuthenticatedUser] = useAuthenticatedUser();
+            useEffect(() => {
+              setAuthenticatedUser(undefined);
+            }, [setAuthenticatedUser]);
+            return <HomePage sessionRepository={makeMockSessionRepository()} />;
+          }
           render(
             <RecoilRoot>
-              <HomePage sessionRepository={sessionRepository} />
+              <CustomDraw />
             </RecoilRoot>
           );
           expect(
@@ -150,6 +150,7 @@ describe('HomePage', () => {
         });
 
         it('When click login button, Sophie can see Menu page', () => {
+          const sessionRepository = makeMockSessionRepository();
           const spySetInLoginProcess = jest.fn();
           sessionRepository.setInLoginProcess = spySetInLoginProcess;
 
@@ -169,7 +170,7 @@ describe('HomePage', () => {
         it('Sophie can not see logout button', () => {
           render(
             <RecoilRoot>
-              <HomePage sessionRepository={sessionRepository} />
+              <HomePage sessionRepository={makeMockSessionRepository()} />
             </RecoilRoot>
           );
           expect(
