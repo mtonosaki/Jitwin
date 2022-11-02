@@ -37,7 +37,7 @@ export default function HomePage({ sessionRepository }: Props) {
   useEffect(() => {
     if (authenticatedUser && sessionRepository.isInLoginProcess()) {
       sessionRepository.resetInLoginProcess();
-      navigate(`/${authenticatedUser.userId}/Menu`, { replace: true });
+      navigate(`/${authenticatedUser.userId}/stage`, { replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authenticatedUser]);

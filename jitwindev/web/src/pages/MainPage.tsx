@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { TestIds } from 'tests/TestIds';
 import HeaderPanel from 'components/HeaderPanel';
 import SessionRepository from 'repos/SessionRepository';
+import JitStage from 'stage/JitStage';
+import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
 import styles from './MainPage.module.scss';
-import JitStage from '../stage/JitStage';
 
 type Props = {
   sessionRepository: SessionRepository;
@@ -12,6 +13,12 @@ type Props = {
 
 export default function MainPage({ sessionRepository }: Props) {
   const { targetOid } = useParams();
+  const [isReadonly, setIsReadonly] = useState(true);
+  const [authenticatedUser] = useAuthenticatedUser();
+
+  useEffect(() => {
+    setIsReadonly(authenticatedUser?.userId !== targetOid);
+  }, [targetOid, authenticatedUser]);
 
   return (
     <div className={styles.base} data-testid={TestIds.PAGE_MAIN}>
@@ -19,8 +26,7 @@ export default function MainPage({ sessionRepository }: Props) {
       <div className={styles.container}>
         <HeaderPanel sessionRepository={sessionRepository} />
         <div className={styles.vMargin}>
-          <JitStage />
-          <div>{targetOid}</div>
+          <JitStage isReadonly={isReadonly} />
         </div>
       </div>
     </div>

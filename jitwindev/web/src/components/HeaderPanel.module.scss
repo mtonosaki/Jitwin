@@ -1,6 +1,7 @@
 @use 'src/variables.module' as *;
 
 .container {
+  z-index: 100;
   display: block;
   position: absolute;
   width: 99.5%;
