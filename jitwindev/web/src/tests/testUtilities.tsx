@@ -11,8 +11,6 @@ export const fakeHttpClient: HttpClientCustom = {
 
 export function makeMockSessionRepository(): SessionRepository {
   return {
-    setAuthenticatedUser: jest.fn(),
-    getAuthenticatedUser: jest.fn(),
     setInLoginProcess: jest.fn(),
     resetInLoginProcess: jest.fn(),
     isInLoginProcess: jest.fn(),
