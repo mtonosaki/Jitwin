@@ -6,6 +6,7 @@ import { MemoryRouter, useParams } from 'react-router-dom';
 import { mocked } from 'jest-mock';
 import App from './App';
 
+HTMLCanvasElement.prototype.getContext = jest.fn();
 const mockStubUseParams = mocked(useParams);
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PrimaryButton from 'components/PrimaryButton';
 import { Config } from 'app/Config';
@@ -17,6 +17,7 @@ type Props = {
 export default function HomePage({ sessionRepository }: Props) {
   const [authenticatedUser] = useAuthenticatedUser();
   const [authenticateStatus] = useAuthenticateStatus();
+  const [stateWaveStyle, setStateWaveStyle] = useState('');
   const [requestToShowWaitingSpinner, requestToHideWaitingSpinner] =
     useWaitingSpinner();
   const navigate = useNavigate();
@@ -25,6 +26,21 @@ export default function HomePage({ sessionRepository }: Props) {
     requestToShowWaitingSpinner();
     return () => requestToHideWaitingSpinner();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    let z = 0;
+    let x = 100;
+    const handler = setInterval(() => {
+      z += 0.1;
+      x = (x + 99.5) % 100;
+      setStateWaveStyle(
+        `url(/img/wave.svg) left ${x}% top 50%  / auto ${
+          Math.cos(z) * 2 + 120
+        }px repeat-x #ece5d9`
+      );
+    }, 1000 / 29.7);
+    return () => clearInterval(handler);
   }, []);
 
   useEffect(() => {
@@ -45,7 +61,7 @@ export default function HomePage({ sessionRepository }: Props) {
   return (
     <div className={styles.base} data-testid={TestIds.PAGE_HOME}>
       <WaitingSpinner />
-      <div className={styles.container}>
+      <div className={styles.container} style={{ background: stateWaveStyle }}>
         <div className={styles.vMargin} />
         <div>
           <div className={styles.mainContent}>
