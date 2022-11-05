@@ -13,8 +13,10 @@ export default function JitStage({ isReadonly }: Props) {
       <GuiView className={styles.canvas} />
       {isReadonly && (
         <div className={styles.readonlyBar}>
-          <img src="/icons/readonly.svg" alt="locked" />
-          <span>readonly mode</span>
+          <div>
+            <img src="/icons/readonly.svg" alt="locked" />
+            <span>readonly mode</span>
+          </div>
         </div>
       )}
     </div>

@@ -26,8 +26,26 @@
   display: flex;
   align-items: center;
 
+  div {
+    overflow: hidden;
+    white-space: nowrap;
+    animation-name: expandHorz;
+    animation-duration: .5s;
+    width: 120px;
+    display: flex;
+    justify-content: center; }
+
   img {
     height: 1em;
     margin-right: 0.5em;
+  }
+}
+
+@keyframes expandHorz {
+  from {
+    width: 0;
+  }
+  to {
+    width: 120px;
   }
 }

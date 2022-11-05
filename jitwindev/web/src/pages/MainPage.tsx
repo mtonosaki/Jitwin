@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { TestIds } from 'tests/TestIds';
 import HeaderPanel from 'components/HeaderPanel';
 import SessionRepository from 'repos/SessionRepository';
-import JitStage from 'stage/JitStage';
+import JitStage from 'jit/JitStage';
 import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
 import styles from './MainPage.module.scss';
 
