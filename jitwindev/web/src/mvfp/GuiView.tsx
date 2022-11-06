@@ -1,39 +1,57 @@
 import React, { useEffect, useRef } from 'react';
-import { drawCircle, drawRectangle } from './drawSet';
+import { TestIds } from './tests/TestIds';
+import GuiFeature from './GuiFeature';
+import { FEATURE_EXECUTION_SPAN_MSEC } from './MvfpParameters';
 
 type Props = {
-  className: string;
+  className?: string;
+  features?: GuiFeature[];
+  'data-testid'?: string;
 };
 
-export default function GuiView({ className }: Props) {
+export default function GuiView({
+  className,
+  features,
+  'data-testid': dataTestId = TestIds.MVFP_VIEW_CANVAS,
+}: Props) {
   const refCanvas = useRef<HTMLCanvasElement | null>(null);
+  const refIsBeforeFinished = useRef<GuiFeature[]>([]);
 
-  const drawParts = (canvas: HTMLCanvasElement | null) => {
-    const g = canvas?.getContext('2d');
-    if (!g) return;
-
-    g.canvas.width = g.canvas.clientWidth;
-    g.canvas.height = g.canvas.clientHeight;
-    g.clearRect(0, 0, g.canvas.width, g.canvas.height);
-    drawCircle(g, 300, 300, 50, 0.3);
-    drawRectangle(g, 300, 300, 50, 50, 0.0);
-    drawRectangle(g, 300, 300, 50, 50, 0.3);
-    drawRectangle(g, 300, 300, 50, 50, 0.6);
+  const featuresBeforeRun = () => {
+    flatFeatures(features)
+      .filter((feature) => feature.enabled)
+      .filter((feature) => !refIsBeforeFinished.current.includes(feature))
+      .forEach((feature) => {
+        feature.beforeRun();
+        refIsBeforeFinished.current.push(feature);
+      });
   };
 
-  const onResizeWindow = () => {
-    drawParts(refCanvas.current);
+  const onIntervalEvent = () => {
+    featuresBeforeRun();
   };
 
+  // Feature Mechanism
   useEffect(() => {
-    window.addEventListener('resize', onResizeWindow);
-    drawParts(refCanvas.current);
+    featuresBeforeRun();
+
+    const hTimer = setInterval(onIntervalEvent, FEATURE_EXECUTION_SPAN_MSEC);
 
     return () => {
-      window.removeEventListener('resize', onResizeWindow);
+      clearInterval(hTimer);
     };
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <canvas ref={refCanvas} className={className} />;
+  return (
+    <canvas ref={refCanvas} className={className} data-testid={dataTestId} />
+  );
 }
+
+const flatFeatures = (root?: GuiFeature[]) => {
+  if (root) {
+    return root;
+  }
+  return [];
+};

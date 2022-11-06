@@ -41,16 +41,10 @@
         ]
       }
     ],
-    "react/function-component-definition": "off",
-    "react/prop-types": "off",
     "react/require-default-props": "off",
     "testing-library/no-unnecessary-act": "off",
     "import/prefer-default-export": "off",
-    "import/no-relative-packages": "off",
-    "jsx-a11y/label-has-associated-control": "off",
-    "no-shadow": "off",
-    "@typescript-eslint/no-shadow": "error",
-    "testing-library/no-node-access": "off",
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "max-classes-per-file": "off"
   }
 }

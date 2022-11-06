@@ -25,15 +25,17 @@
   padding: 4px 16px 4px 16px;
   display: flex;
   align-items: center;
+  cursor: default;
 
   div {
     overflow: hidden;
     white-space: nowrap;
     animation-name: expandHorz;
-    animation-duration: .5s;
+    animation-duration: 0.5s;
     width: 120px;
     display: flex;
-    justify-content: center; }
+    justify-content: center;
+  }
 
   img {
     height: 1em;
