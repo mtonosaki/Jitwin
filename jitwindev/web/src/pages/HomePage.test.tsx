@@ -28,8 +28,7 @@ function HomePageAuthedWrapper({ sessionRepository }: WrapperProps) {
       displayName: 'Sophie Brown',
       userPrincipalName: 'sophie@tomarika.com',
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   return <HomePage sessionRepository={sessionRepository} />;
 }
 
@@ -58,8 +57,7 @@ describe('HomePage', () => {
         const [, setStatus] = useAuthenticateStatus();
         useEffect(() => {
           setStatus('error');
-          // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, []);
+        }, []); // eslint-disable-line react-hooks/exhaustive-deps
         return <HomePage sessionRepository={makeMockSessionRepository()} />;
       }
 

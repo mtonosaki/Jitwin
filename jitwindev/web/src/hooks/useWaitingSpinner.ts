@@ -15,13 +15,11 @@ export const useWaitingSpinner: () => readonly [
 
   const requestToShowWaitingSpinner = useCallback(() => {
     setShowingCounter(showingCounter + 1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const requestToHideWaitingSpinner = useCallback(() => {
     setShowingCounter(Math.max(0, showingCounter - 1));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return [
     requestToShowWaitingSpinner,

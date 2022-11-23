@@ -25,8 +25,7 @@ export default function HomePage({ sessionRepository }: Props) {
   useEffect(() => {
     requestToShowWaitingSpinner();
     return () => requestToHideWaitingSpinner();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     let z = 0;
@@ -47,16 +46,14 @@ export default function HomePage({ sessionRepository }: Props) {
     if (authenticateStatus === 'confirmed' || authenticateStatus === 'error') {
       requestToHideWaitingSpinner();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authenticateStatus]);
+  }, [authenticateStatus]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (authenticatedUser && sessionRepository.isInLoginProcess()) {
       sessionRepository.resetInLoginProcess();
       navigate(`/${authenticatedUser.userId}/stage`, { replace: true });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authenticatedUser]);
+  }, [authenticatedUser]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className={styles.base} data-testid={TestIds.PAGE_HOME}>

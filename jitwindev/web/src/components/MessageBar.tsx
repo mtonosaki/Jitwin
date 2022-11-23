@@ -33,8 +33,7 @@ export default function MessageBar() {
         addMessage(newMessage(`Welcome to Jitwin version ${getVersion()}`));
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>

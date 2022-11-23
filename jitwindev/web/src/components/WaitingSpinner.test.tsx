@@ -21,9 +21,7 @@ function WrapperWaitingSpinner({ isLoading }: WrapperProps) {
       };
     }
     return () => {};
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading]);
+  }, [isLoading]); // eslint-disable-line react-hooks/exhaustive-deps
   return <WaitingSpinner />;
 }
 

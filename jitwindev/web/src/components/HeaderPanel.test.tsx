@@ -24,8 +24,7 @@ function HeaderPanelAuthedWrapper({ sessionRepository }: Props) {
       displayName: 'ソフィー ブラウン/Sophie Brown',
       userPrincipalName: 'sophie@tomarika.com',
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   return <HeaderPanel sessionRepository={sessionRepository} />;
 }
 

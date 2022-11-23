@@ -1,23 +1,22 @@
 import { randomUUID } from 'crypto';
+import { dummyPartsCollection, GuiPartsCollection } from './GuiPartsCollection';
 
-export default class GuiFeature {
+export class GuiFeature {
   public readonly id: string = 'n/a';
 
   public enabled: boolean = true;
+
+  protected parts: GuiPartsCollection = dummyPartsCollection;
 
   constructor(id?: string) {
     this.id = id || randomUUID();
   }
 
-  beforeRun(): void {
-    // eslint-disable-next-line no-console
-    console.log(`dummy beforeRun called of ${this.toString()}`);
-  }
+  // eslint-disable-next-line class-methods-use-this
+  beforeRun(): void {}
 
-  run(): void {
-    // eslint-disable-next-line no-console
-    console.log(`dummy run called of ${this.toString()}`);
-  }
+  // eslint-disable-next-line class-methods-use-this
+  run(): void {}
 
   getName(): string {
     return this.constructor.name;

@@ -10,7 +10,10 @@ type Props = {
 export default function JitStage({ isReadonly }: Props) {
   return (
     <div className={styles.container} data-testid={TestIds.JIT_STAGE}>
-      <GuiView className={styles.canvas} />
+      <GuiView
+        data-testid={TestIds.JIT_STAGE_GUI_VIEW}
+        className={styles.canvas}
+      />
       {isReadonly && (
         <div className={styles.readonlyBar}>
           <div>

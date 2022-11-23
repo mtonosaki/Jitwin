@@ -22,8 +22,7 @@ export const useMessageRecords: () => [
     if (newRecord) {
       setMessageRecords([newRecord, ...messageRecords]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [newRecord]);
+  }, [newRecord]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return [addMessage, messageRecords];
 };

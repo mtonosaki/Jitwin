@@ -53,8 +53,7 @@ describe('Sophie`s Main Page', () => {
             givenName: 'Michael',
             userPrincipalName: 'mturner@example.com',
           });
-          // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, []);
+        }, []); // eslint-disable-line react-hooks/exhaustive-deps
         return <MainPage sessionRepository={makeMockSessionRepository()} />;
       }
       render(
@@ -81,8 +80,7 @@ describe('Sophie`s Main Page', () => {
             givenName: 'Michael',
             userPrincipalName: 'mturner@example.com',
           });
-          // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, []);
+        }, []); // eslint-disable-line react-hooks/exhaustive-deps
         return <MainPage sessionRepository={makeMockSessionRepository()} />;
       }
       render(
