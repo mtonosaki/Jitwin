@@ -1,17 +1,17 @@
-import { GuiPartsCollectionImpl } from './GuiPartsCollection';
 import { FakePart } from './tests/FakePart';
+import { GuiPartsCollection } from './GuiPartsCollection';
 
 describe('General', () => {
   it('Collection count and contains check', () => {
-    const parts = new GuiPartsCollectionImpl();
+    const parts: GuiPartsCollection = [];
     const fakePartA = new FakePart();
     const fakePartB = new FakePart();
 
-    parts.add(fakePartA);
-    parts.add(fakePartB);
+    parts.push(fakePartA);
+    parts.push(fakePartB);
 
-    expect(parts.getCount()).toBe(2);
-    expect(parts.contains(fakePartA)).toBeTruthy();
-    expect(parts.contains(fakePartB)).toBeTruthy();
+    expect(parts).toHaveLength(2);
+    expect(parts).toContain(fakePartA);
+    expect(parts).toContain(fakePartB);
   });
 });

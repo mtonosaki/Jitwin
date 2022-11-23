@@ -4,10 +4,10 @@ import { act, render, screen } from '@testing-library/react';
 import GuiView from './GuiView';
 import { TestIds } from './tests/TestIds';
 import { FEATURE_EXECUTION_SPAN_MSEC } from './MvfpParameters';
-import { GuiFeature } from './GuiFeature';
 import SpyFeature from './tests/SpyFeature';
 import { FakePart } from './tests/FakePart';
-import { GuiPartsCollectionImpl } from './GuiPartsCollection';
+import { GuiPartsCollection } from './GuiPartsCollection';
+import FakeFeature from './tests/FakeFeature';
 
 HTMLCanvasElement.prototype.getContext = jest.fn();
 
@@ -15,7 +15,7 @@ const testInitFeatureCycle = () => {
   jest.useFakeTimers();
 };
 
-const testNextFeatureCycleAsync = async () =>
+const testNextCycleAsync = async () =>
   act(async () => {
     jest.advanceTimersByTime(FEATURE_EXECUTION_SPAN_MSEC);
   });
@@ -36,8 +36,8 @@ describe('Custom html class', () => {
   });
 });
 
-describe('BeforeRun', () => {
-  it('GuiView initialize features', () => {
+describe('feature.beforeRun', () => {
+  it('is kicked from GuiView for feature initializing', () => {
     const feature1 = new SpyFeature();
     const feature2 = new SpyFeature();
 
@@ -49,7 +49,7 @@ describe('BeforeRun', () => {
     expect(feature2.run).not.toHaveBeenCalled();
   });
 
-  it('Executes if enabled', () => {
+  it('is executed if enabled', () => {
     const feature1 = new SpyFeature();
     const feature2 = new SpyFeature();
     feature2.enabled = false;
@@ -60,7 +60,7 @@ describe('BeforeRun', () => {
     expect(feature2.beforeRun).not.toHaveBeenCalled();
   });
 
-  it('Executes when switched from disabled to enabled', async () => {
+  it('is executed when switched from disabled to enabled', async () => {
     // GIVEN -1
     testInitFeatureCycle();
     const feature1 = new SpyFeature();
@@ -76,24 +76,24 @@ describe('BeforeRun', () => {
     feature1.enabled = true;
 
     // WHEN - 2
-    await testNextFeatureCycleAsync();
+    await testNextCycleAsync();
 
     // THEN - 2
     expect(feature1.beforeRun).toHaveBeenCalledTimes(1);
 
     // WHEN - 3
-    await testNextFeatureCycleAsync();
+    await testNextCycleAsync();
 
     // THEN - 3
     expect(feature1.beforeRun).toHaveBeenCalledTimes(1);
 
     // GIVEN - 4
     feature1.enabled = false;
-    await testNextFeatureCycleAsync();
+    await testNextCycleAsync();
     feature1.enabled = true;
 
     // WHEN - 4
-    await testNextFeatureCycleAsync();
+    await testNextCycleAsync();
 
     // THEN - 4
     expect(feature1.beforeRun).toHaveBeenCalledTimes(1);
@@ -103,33 +103,43 @@ describe('BeforeRun', () => {
 describe('Parts system', () => {
   it('Features can be injected parts collection', () => {
     // GIVEN
-    const spyPartsCollection = new GuiPartsCollectionImpl();
+    const spyPartsCollection: GuiPartsCollection = [];
     const dummyPartA = new FakePart();
     const dummyPartB = new FakePart();
-    class FakeFeatureA extends GuiFeature {
-      override beforeRun() {
-        super.beforeRun();
-        this.parts.add(dummyPartA);
-      }
-    }
-    class FakeFeatureB extends GuiFeature {
-      override beforeRun() {
-        super.beforeRun();
-        this.parts.add(dummyPartB);
-      }
-    }
+    const fakeFeatureA = new FakeFeature([dummyPartA]);
+    const fakeFeatureB = new FakeFeature([dummyPartB]);
 
     // WHEN
     render(
       <GuiView
-        features={[new FakeFeatureA(), new FakeFeatureB()]}
+        features={[fakeFeatureA, fakeFeatureB]}
         parts={spyPartsCollection}
       />
     );
 
     // THEN
-    expect(spyPartsCollection.getCount()).toBe(2);
-    expect(spyPartsCollection.contains(dummyPartA)).toBeTruthy();
-    expect(spyPartsCollection.contains(dummyPartB)).toBeTruthy();
+    expect(spyPartsCollection).toHaveLength(2);
+    expect(spyPartsCollection).toContain(dummyPartA);
+    expect(spyPartsCollection).toContain(dummyPartB);
+  });
+});
+
+describe('Parts drawing system', () => {
+  it('parts.draw have been called', async () => {
+    // GIVEN
+    testInitFeatureCycle();
+    const spyPart = new FakePart();
+    spyPart.draw = jest.fn();
+
+    // WHEN
+    render(<GuiView features={[new FakeFeature([spyPart])]} parts={[]} />);
+    await testNextCycleAsync();
+
+    // THEN
+    expect(spyPart.draw).toHaveBeenCalled();
+  });
+
+  it('parts draws to canvas context', () => {
+    // TODO: implement here
   });
 });

@@ -1,1 +1,3 @@
-export interface GuiPart {}
+export interface GuiPart {
+  draw: () => void;
+}

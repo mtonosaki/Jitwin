@@ -11,9 +11,15 @@ type Props = {
   'data-testid'?: string;
 };
 
-class GuiFeatureInitializer extends GuiFeature {
+class GuiFeatureHandler extends GuiFeature {
   setPartsCollection(parts: GuiPartsCollection) {
     this.parts = parts;
+  }
+
+  drawParts() {
+    this.parts.forEach((part) => {
+      part.draw();
+    });
   }
 }
 
@@ -27,19 +33,21 @@ export default function GuiView({
   const refIsBeforeFinished = useRef<GuiFeature[]>([]);
 
   const prepareFeature = () => {
+    (GuiFeature.prototype as any).setPartsCollection =
+      GuiFeatureHandler.prototype.setPartsCollection;
+
+    (GuiFeature.prototype as any).drawParts =
+      GuiFeatureHandler.prototype.drawParts;
+
     if (parts) {
-      (GuiFeature.prototype as any).setPartsCollection =
-        GuiFeatureInitializer.prototype.setPartsCollection;
       flatFeatures(features).forEach((feature) => {
-        (feature as GuiFeatureInitializer).setPartsCollection(parts);
+        (feature as GuiFeatureHandler).setPartsCollection(parts);
       });
-      (GuiFeature.prototype as any).setPartsCollection = undefined;
     }
   };
 
   const featuresBeforeRun = () => {
-    flatFeatures(features)
-      .filter((feature) => feature.enabled)
+    enabledFeatures(features)
       .filter((feature) => !refIsBeforeFinished.current.includes(feature))
       .forEach((feature) => {
         feature.beforeRun();
@@ -47,8 +55,15 @@ export default function GuiView({
       });
   };
 
+  const drawParts = () => {
+    enabledFeatures(features).forEach((feature) => {
+      (feature as GuiFeatureHandler).drawParts();
+    });
+  };
+
   const onIntervalEvent = () => {
     featuresBeforeRun();
+    drawParts();
   };
 
   // Feature Mechanism
@@ -72,3 +87,6 @@ const flatFeatures = (root?: GuiFeature[]) => {
   }
   return [];
 };
+
+const enabledFeatures = (root?: GuiFeature[]) =>
+  flatFeatures(root).filter((f) => f.enabled);
