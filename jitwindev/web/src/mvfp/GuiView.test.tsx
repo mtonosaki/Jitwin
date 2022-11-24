@@ -8,8 +8,8 @@ import SpyFeature from './tests/SpyFeature';
 import { FakePart } from './tests/FakePart';
 import { GuiPartsCollection } from './GuiPartsCollection';
 import FakeFeature from './tests/FakeFeature';
-
-HTMLCanvasElement.prototype.getContext = jest.fn();
+import { GuiPart } from './GuiPart';
+import { drawRectangle } from './drawSet';
 
 const testInitFeatureCycle = () => {
   jest.useFakeTimers();
@@ -62,6 +62,9 @@ describe('feature.beforeRun', () => {
 
   it('is executed when switched from disabled to enabled', async () => {
     // GIVEN -1
+    jest
+      .spyOn(HTMLCanvasElement.prototype, 'getContext')
+      .mockReturnValue({} as RenderingContext);
     testInitFeatureCycle();
     const feature1 = new SpyFeature();
     feature1.enabled = false;
@@ -127,19 +130,40 @@ describe('Parts system', () => {
 describe('Parts drawing system', () => {
   it('parts.draw have been called', async () => {
     // GIVEN
+    jest
+      .spyOn(HTMLCanvasElement.prototype, 'getContext')
+      .mockReturnValue({} as RenderingContext);
     testInitFeatureCycle();
     const spyPart = new FakePart();
     spyPart.draw = jest.fn();
 
     // WHEN
-    render(<GuiView features={[new FakeFeature([spyPart])]} parts={[]} />);
+    render(<GuiView features={[new FakeFeature([spyPart])]} />);
     await testNextCycleAsync();
 
     // THEN
     expect(spyPart.draw).toHaveBeenCalled();
   });
 
-  it('parts draws to canvas context', () => {
-    // TODO: implement here
+  it('parts draws to canvas context', async () => {
+    // GIVEN
+    class FakeDrawPart implements GuiPart {
+      draw(g: CanvasRenderingContext2D): void {
+        drawRectangle(g, 100, 200, 300, 400);
+      }
+    }
+    testInitFeatureCycle();
+    const spyStrokeRect = jest.fn();
+    jest.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({
+      translate: jest.fn(),
+      strokeRect: spyStrokeRect,
+    } as any);
+
+    // WHEN
+    render(<GuiView features={[new FakeFeature([new FakeDrawPart()])]} />);
+    await testNextCycleAsync();
+
+    // THEN
+    expect(spyStrokeRect).toHaveBeenCalled();
   });
 });

@@ -11,42 +11,34 @@ type Props = {
   'data-testid'?: string;
 };
 
-class GuiFeatureHandler extends GuiFeature {
-  setPartsCollection(parts: GuiPartsCollection) {
-    this.parts = parts;
-  }
-
-  drawParts() {
-    this.parts.forEach((part) => {
-      part.draw();
-    });
-  }
-}
-
 export default function GuiView({
   className,
-  features,
-  parts,
+  features = [],
+  parts = [],
   'data-testid': dataTestId = TestIds.MVFP_VIEW_CANVAS,
 }: Props) {
   const refCanvas = useRef<HTMLCanvasElement | null>(null);
   const refIsBeforeFinished = useRef<GuiFeature[]>([]);
 
+  // Feature Mechanism
+  useEffect(() => {
+    prepareFeature();
+    executeFeaturesBeforeRun();
+    const hTimer = setInterval(intervalEvent, FEATURE_EXECUTION_SPAN_MSEC);
+    return () => {
+      clearInterval(hTimer);
+    };
+  }, []); // eslint-disable-line
+
   const prepareFeature = () => {
-    (GuiFeature.prototype as any).setPartsCollection =
-      GuiFeatureHandler.prototype.setPartsCollection;
+    FeatureHandler.initialize();
 
-    (GuiFeature.prototype as any).drawParts =
-      GuiFeatureHandler.prototype.drawParts;
-
-    if (parts) {
-      flatFeatures(features).forEach((feature) => {
-        (feature as GuiFeatureHandler).setPartsCollection(parts);
-      });
-    }
+    flatFeatures(features).forEach((feature) => {
+      feature.setPartsCollection(parts!);
+    });
   };
 
-  const featuresBeforeRun = () => {
+  const executeFeaturesBeforeRun = () => {
     enabledFeatures(features)
       .filter((feature) => !refIsBeforeFinished.current.includes(feature))
       .forEach((feature) => {
@@ -55,38 +47,48 @@ export default function GuiView({
       });
   };
 
-  const drawParts = () => {
+  const intervalEvent = () => {
+    // follow disabled->enabled timing beforeRun()
+    executeFeaturesBeforeRun();
+
+    // Draw Parts
     enabledFeatures(features).forEach((feature) => {
-      (feature as GuiFeatureHandler).drawParts();
+      if (refCanvas.current) {
+        feature.drawParts(refCanvas.current);
+      }
     });
   };
-
-  const onIntervalEvent = () => {
-    featuresBeforeRun();
-    drawParts();
-  };
-
-  // Feature Mechanism
-  useEffect(() => {
-    prepareFeature();
-    featuresBeforeRun();
-    const hTimer = setInterval(onIntervalEvent, FEATURE_EXECUTION_SPAN_MSEC);
-    return () => {
-      clearInterval(hTimer);
-    };
-  }, []); // eslint-disable-line
 
   return (
     <canvas ref={refCanvas} className={className} data-testid={dataTestId} />
   );
 }
 
-const flatFeatures = (root?: GuiFeature[]) => {
-  if (root) {
-    return root;
-  }
-  return [];
-};
+const flatFeatures = (root?: GuiFeature[]) =>
+  root!.map((it) => it as FeatureHandler);
 
 const enabledFeatures = (root?: GuiFeature[]) =>
-  flatFeatures(root).filter((f) => f.enabled);
+  flatFeatures(root).filter((it) => it.enabled);
+
+class FeatureHandler extends GuiFeature {
+  static initialize() {
+    (GuiFeature.prototype as any).setPartsCollection =
+      FeatureHandler.prototype.setPartsCollection;
+
+    (GuiFeature.prototype as any).drawParts =
+      FeatureHandler.prototype.drawParts;
+  }
+
+  setPartsCollection(parts: GuiPartsCollection) {
+    this.parts = parts;
+  }
+
+  drawParts(canvas: HTMLCanvasElement) {
+    const context = canvas.getContext('2d');
+    if (!context) return;
+
+    this.parts.forEach((part) => {
+      part.draw(context);
+    });
+  }
+}

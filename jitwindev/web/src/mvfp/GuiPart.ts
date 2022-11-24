@@ -1,3 +1,3 @@
 export interface GuiPart {
-  draw: () => void;
+  draw: (g: CanvasRenderingContext2D) => void;
 }

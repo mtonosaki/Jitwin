@@ -12,10 +12,8 @@ export class GuiFeature {
     this.id = id || randomUUID();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   beforeRun(): void {}
 
-  // eslint-disable-next-line class-methods-use-this
   run(): void {}
 
   getName(): string {

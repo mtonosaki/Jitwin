@@ -45,6 +45,7 @@
     "testing-library/no-unnecessary-act": "off",
     "import/prefer-default-export": "off",
     "no-param-reassign": "off",
-    "max-classes-per-file": "off"
+    "max-classes-per-file": "off",
+    "class-methods-use-this": "off"
   }
 }
