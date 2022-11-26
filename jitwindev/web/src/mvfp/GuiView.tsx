@@ -3,10 +3,11 @@ import { TestIds } from './tests/TestIds';
 import { GuiFeature } from './GuiFeature';
 import { FEATURE_EXECUTION_SPAN_MSEC } from './MvfpParameters';
 import { GuiPartsCollection } from './GuiPartsCollection';
+import { GuiFeatureCollection } from './GuiFeatureCollection';
 
 type Props = {
   className?: string;
-  features?: GuiFeature[];
+  features?: GuiFeatureCollection;
   parts?: GuiPartsCollection;
   'data-testid'?: string;
 };
@@ -18,7 +19,7 @@ export default function GuiView({
   'data-testid': dataTestId = TestIds.MVFP_VIEW_CANVAS,
 }: Props) {
   const refCanvas = useRef<HTMLCanvasElement | null>(null);
-  const refIsBeforeFinished = useRef<GuiFeature[]>([]);
+  const refIsBeforeFinished = useRef<GuiFeatureCollection>([]);
 
   // Feature Mechanism
   useEffect(() => {
@@ -64,10 +65,10 @@ export default function GuiView({
   );
 }
 
-const flatFeatures = (root?: GuiFeature[]) =>
+const flatFeatures = (root?: GuiFeatureCollection) =>
   root!.map((it) => it as FeatureHandler);
 
-const enabledFeatures = (root?: GuiFeature[]) =>
+const enabledFeatures = (root?: GuiFeatureCollection) =>
   flatFeatures(root).filter((it) => it.enabled);
 
 class FeatureHandler extends GuiFeature {

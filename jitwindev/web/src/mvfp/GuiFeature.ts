@@ -1,15 +1,15 @@
-import { randomUUID } from 'crypto';
-import { dummyPartsCollection, GuiPartsCollection } from './GuiPartsCollection';
+import { GuiPartsCollection } from './GuiPartsCollection';
+import { makeNewUuid } from './utils/uuid';
 
 export class GuiFeature {
   public readonly id: string = 'n/a';
 
   public enabled: boolean = true;
 
-  protected parts: GuiPartsCollection = dummyPartsCollection;
+  protected parts: GuiPartsCollection = [];
 
   constructor(id?: string) {
-    this.id = id || randomUUID();
+    this.id = id || makeNewUuid();
   }
 
   beforeRun(): void {}

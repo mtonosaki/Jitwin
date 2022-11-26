@@ -1,13 +1,15 @@
 import React from 'react';
 import { TestIds } from 'tests/TestIds';
+import GuiView from 'mvfp/GuiView';
+import { GuiFeatureCollection } from 'mvfp/GuiFeatureCollection';
 import styles from './JitStage.module.scss';
-import GuiView from '../mvfp/GuiView';
 
 type Props = {
   isReadonly: boolean;
+  features: GuiFeatureCollection;
 };
 
-export default function JitStage({ isReadonly }: Props) {
+export default function JitStage({ isReadonly, features }: Props) {
   return (
     <div className={styles.container} data-testid={TestIds.JIT_STAGE}>
       <GuiView

@@ -26,7 +26,7 @@ export default function MainPage({ sessionRepository }: Props) {
       <div className={styles.container}>
         <HeaderPanel sessionRepository={sessionRepository} />
         <div className={styles.vMargin}>
-          <JitStage isReadonly={isReadonly} />
+          <JitStage isReadonly={isReadonly} features={[]} />
         </div>
       </div>
     </div>
