@@ -8,7 +8,6 @@ import { mocked } from 'jest-mock';
 import MainPage from './MainPage';
 import { useAuthenticatedUser } from '../hooks/useAuthenticatedUser';
 
-HTMLCanvasElement.prototype.getContext = jest.fn();
 const mockSpyNavigate = jest.fn();
 const mockStubUseParams = mocked(useParams);
 jest.mock('react-router-dom', () => ({

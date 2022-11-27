@@ -6,7 +6,6 @@ import { MemoryRouter, useParams } from 'react-router-dom';
 import { mocked } from 'jest-mock';
 import App from './App';
 
-HTMLCanvasElement.prototype.getContext = jest.fn();
 const mockStubUseParams = mocked(useParams);
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -27,7 +26,10 @@ describe('Routing', () => {
   });
 
   it('can render MenuPage', () => {
+    // GIVEN
     mockStubUseParams.mockReturnValue({ targetOid: 'sample-oid-123' });
+
+    // WHEN
     render(
       <RecoilRoot>
         <MemoryRouter initialEntries={['/*/stage']}>
@@ -35,6 +37,8 @@ describe('Routing', () => {
         </MemoryRouter>
       </RecoilRoot>
     );
+
+    // THEN
     expect(screen.getByTestId(TestIds.PAGE_MAIN)).toBeInTheDocument();
     expect(
       screen.getByTestId(`${TestIds.PAGE_MAIN}-sample-oid-123`)
