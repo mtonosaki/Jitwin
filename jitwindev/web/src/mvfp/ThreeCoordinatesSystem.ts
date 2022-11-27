@@ -42,9 +42,19 @@ export type LayoutPosition = {
   y: LayoutY;
 };
 
+export const layoutPosition0: LayoutPosition = {
+  x: { layout: 0 },
+  y: { layout: 0 },
+};
+
 export type LayoutSize = {
   width: LayoutX;
   height: LayoutY;
+};
+
+export const layoutSize0: LayoutSize = {
+  width: { layout: 0 },
+  height: { layout: 0 },
 };
 
 export type LayoutRectangle = {
@@ -52,9 +62,19 @@ export type LayoutRectangle = {
   size: LayoutSize;
 };
 
+export const layoutRectangle0: LayoutRectangle = {
+  position: layoutPosition0,
+  size: layoutSize0,
+};
+
 export type ScreenPosition = {
   x: ScreenX;
   y: ScreenY;
+};
+
+export const screenPosition0: ScreenPosition = {
+  x: { screen: 0 },
+  y: { screen: 0 },
 };
 
 export type ScreenSize = {
@@ -62,14 +82,24 @@ export type ScreenSize = {
   height: ScreenY;
 };
 
+export const screenSize0: ScreenSize = {
+  width: { screen: 0 },
+  height: { screen: 0 },
+};
+
 export type ScreenRectangle = {
   position: ScreenPosition;
   size: ScreenSize;
 };
 
+export const screenRectangle0 = {
+  position: screenPosition0,
+  size: screenSize0,
+};
+
 export type ConverterCodeToLayout = {
-  convertX: (value: any) => LayoutX;
-  convertY: (value: any) => LayoutY;
+  convertX: (codeValueX: any) => LayoutX;
+  convertY: (codeValueY: any) => LayoutY;
 };
 
 export type ConverterLayoutToScreen = {
@@ -83,6 +113,6 @@ export type ConverterScreenToLayout = {
 };
 
 export type ConverterLayoutToCode = {
-  convertX: (value: LayoutX) => any;
-  convertY: (value: LayoutY) => any;
+  convertX: (value: LayoutX) => any; // any is CodeX<T>
+  convertY: (value: LayoutY) => any; // any is CodeY<T>
 };

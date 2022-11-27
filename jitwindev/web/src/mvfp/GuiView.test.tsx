@@ -15,9 +15,13 @@ import { DrawProps, GuiPart, GuiPartBase } from './GuiPart';
 import { drawRectangle } from './drawSet';
 import { GuiFeature } from './GuiFeature';
 import {
+  CodePosition,
+  CodeX,
+  CodeY,
+  layoutPosition0,
   LayoutX,
   LayoutY,
-  ScreenPosition,
+  screenPosition0,
   ScreenX,
   ScreenY,
 } from './ThreeCoordinatesSystem';
@@ -138,12 +142,6 @@ describe('Parts system', () => {
   });
 });
 
-describe('three coordinate system', () => {
-  it('can convert from code to layout coordinate', () => {
-    // GIVEN
-  });
-});
-
 describe('Parts drawing system', () => {
   const spyStrokeRect = jest.fn();
   beforeEach(() => {
@@ -186,13 +184,22 @@ describe('Parts drawing system', () => {
   });
 
   describe('three coordinate system', () => {
-    it('code position can be converted to screen position.', async () => {
+    it('code position can be converted to/from screen position.', async () => {
       testInitFeatureCycle();
       let lx: LayoutX = { layout: 0 };
       let ly: LayoutY = { layout: 0 };
       let sx: ScreenX = { screen: 0 };
       let sy: ScreenY = { screen: 0 };
-      let spos: ScreenPosition = { x: { screen: 0 }, y: { screen: 0 } };
+      let cx: CodeX<string> = { code: 'n/a' };
+      let cy: CodeY<number> = { code: 0 };
+      let screenPosition = screenPosition0;
+      let layoutPosition = layoutPosition0;
+      let codePositionS: CodePosition<string, number> = {
+        x: { code: 'n/a' },
+        y: { code: 0 },
+      };
+      let codePositionL = codePositionS;
+
       class PositionConvertTestPart extends GuiPartBase<string, number> {
         override draw(dp: DrawProps): void {
           if (!this.codePosition) return;
@@ -200,16 +207,31 @@ describe('Parts drawing system', () => {
           ly = dp.codeToLayout.convertY(this.codePosition.y);
           sx = dp.layoutToScreen.convertX(lx);
           sy = dp.layoutToScreen.convertY(ly);
-          spos = this.getScreenPosition(dp);
+          screenPosition = this.getScreenPosition(dp);
+          layoutPosition = this.getLayoutPosition(dp, screenPosition);
+          codePositionL = this.getCodePosition(dp, layoutPosition);
+          codePositionS = this.getCodePositionFromScreen(dp, screenPosition);
+          const lx2 = dp.screenToLayout.convertX(sx);
+          const ly2 = dp.screenToLayout.convertY(sy);
+          cx = dp.layoutToCode.convertX(lx2);
+          cy = dp.layoutToCode.convertY(ly2);
         }
       }
+
       const testPart = new PositionConvertTestPart();
-      testPart.codePosition = { x: { code: 'one' }, y: { code: 2 } };
+      const expectedCodeX = 'one';
+      const expectedCodeY = 2;
+      testPart.codePosition = {
+        x: { code: expectedCodeX },
+        y: { code: expectedCodeY },
+      };
+
       class MockFeature extends GuiFeature {
         override beforeRun() {
           this.partsLayers.get(0)?.push(testPart);
         }
       }
+
       function mockCodeToLayoutX(value: any): LayoutX {
         switch (value.code) {
           case 'one':
@@ -240,6 +262,31 @@ describe('Parts drawing system', () => {
           return { screen: value.layout * 1000 };
         },
       };
+      layer.screenToLayout = {
+        convertX(value) {
+          return { layout: value.screen / 100 };
+        },
+        convertY(value) {
+          return { layout: value.screen / 1000 };
+        },
+      };
+      layer.layoutToCode = {
+        convertX(value) {
+          switch (value.layout) {
+            case 1:
+              return { code: 'one' };
+            case 2:
+              return { code: 'two' };
+            case 3:
+              return { code: 'three' };
+            default:
+              return { code: 'n/a' };
+          }
+        },
+        convertY(value) {
+          return { code: value.layout / 2 };
+        },
+      };
 
       // WHEN
       render(<GuiView features={[new MockFeature()]} partsLayers={layers} />);
@@ -250,8 +297,16 @@ describe('Parts drawing system', () => {
       expect(ly.layout).toBe(4);
       expect(sx.screen).toBe(100);
       expect(sy.screen).toBe(4000);
-      expect(spos.x.screen).toBe(100);
-      expect(spos.y.screen).toBe(4000);
+      expect(screenPosition.x.screen).toBe(100);
+      expect(screenPosition.y.screen).toBe(4000);
+      expect(layoutPosition.x.layout).toBe(1);
+      expect(layoutPosition.y.layout).toBe(4);
+      expect(codePositionS.x.code).toBe(expectedCodeX);
+      expect(codePositionS.y.code).toBe(expectedCodeY);
+      expect(codePositionL.x.code).toBe(expectedCodeX);
+      expect(codePositionL.y.code).toBe(expectedCodeY);
+      expect(cx.code).toBe(expectedCodeX);
+      expect(cy.code).toBe(expectedCodeY);
     });
   });
 });

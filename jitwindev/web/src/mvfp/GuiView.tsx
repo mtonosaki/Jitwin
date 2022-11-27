@@ -95,6 +95,8 @@ class FeatureHandler extends GuiFeature {
           g: context,
           codeToLayout: layer.codeToLayout,
           layoutToScreen: layer.layoutToScreen,
+          screenToLayout: layer.screenToLayout,
+          layoutToCode: layer.layoutToCode,
         });
       });
     });
