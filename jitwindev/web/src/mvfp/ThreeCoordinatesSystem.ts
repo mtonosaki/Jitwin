@@ -66,3 +66,23 @@ export type ScreenRectangle = {
   position: ScreenPosition;
   size: ScreenSize;
 };
+
+export type ConverterCodeToLayout = {
+  convertX: (value: any) => LayoutX;
+  convertY: (value: any) => LayoutY;
+};
+
+export type ConverterLayoutToScreen = {
+  convertX: (value: LayoutX) => ScreenX;
+  convertY: (value: LayoutY) => ScreenY;
+};
+
+export type ConverterScreenToLayout = {
+  convertX: (value: ScreenX) => LayoutX;
+  convertY: (value: ScreenY) => LayoutY;
+};
+
+export type ConverterLayoutToCode = {
+  convertX: (value: LayoutX) => any;
+  convertY: (value: LayoutY) => any;
+};

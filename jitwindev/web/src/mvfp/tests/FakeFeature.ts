@@ -1,5 +1,6 @@
 import { GuiFeature } from '../GuiFeature';
 import { GuiPart } from '../GuiPart';
+import { GuiPartsCollection } from '../GuiPartsCollection';
 
 export default class FakeFeature extends GuiFeature {
   public mockParts: GuiPart[];
@@ -10,9 +11,11 @@ export default class FakeFeature extends GuiFeature {
   }
 
   override beforeRun() {
-    super.beforeRun();
+    if (!this.partsLayers.has(0)) {
+      this.partsLayers.set(0, new GuiPartsCollection());
+    }
     this.mockParts.forEach((part) => {
-      this.parts.push(part);
+      this.partsLayers.get(0)?.push(part);
     });
   }
 }

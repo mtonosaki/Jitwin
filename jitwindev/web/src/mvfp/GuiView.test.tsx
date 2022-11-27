@@ -6,10 +6,21 @@ import { TestIds } from './tests/TestIds';
 import { FEATURE_EXECUTION_SPAN_MSEC } from './MvfpParameters';
 import SpyFeature from './tests/SpyFeature';
 import { FakePart } from './tests/FakePart';
-import { GuiPartsCollection } from './GuiPartsCollection';
+import {
+  GuiPartsCollection,
+  GuiPartsLayerCollection,
+} from './GuiPartsCollection';
 import FakeFeature from './tests/FakeFeature';
-import { GuiPart } from './GuiPart';
+import { DrawProps, GuiPart, GuiPartBase } from './GuiPart';
 import { drawRectangle } from './drawSet';
+import { GuiFeature } from './GuiFeature';
+import {
+  LayoutX,
+  LayoutY,
+  ScreenPosition,
+  ScreenX,
+  ScreenY,
+} from './ThreeCoordinatesSystem';
 
 const testInitFeatureCycle = () => {
   jest.useFakeTimers();
@@ -104,9 +115,9 @@ describe('feature.beforeRun', () => {
 });
 
 describe('Parts system', () => {
-  it('Features can be injected parts collection', () => {
+  it('Features must have the same parts collection', () => {
     // GIVEN
-    const spyPartsCollection: GuiPartsCollection = [];
+    const spyPartsLayersCollection: GuiPartsLayerCollection = new Map();
     const dummyPartA = new FakePart();
     const dummyPartB = new FakePart();
     const fakeFeatureA = new FakeFeature([dummyPartA]);
@@ -116,23 +127,34 @@ describe('Parts system', () => {
     render(
       <GuiView
         features={[fakeFeatureA, fakeFeatureB]}
-        parts={spyPartsCollection}
+        partsLayers={spyPartsLayersCollection}
       />
     );
 
     // THEN
-    expect(spyPartsCollection).toHaveLength(2);
-    expect(spyPartsCollection).toContain(dummyPartA);
-    expect(spyPartsCollection).toContain(dummyPartB);
+    expect(spyPartsLayersCollection.get(0)).toHaveLength(2);
+    expect(spyPartsLayersCollection.get(0)).toContain(dummyPartA);
+    expect(spyPartsLayersCollection.get(0)).toContain(dummyPartB);
+  });
+});
+
+describe('three coordinate system', () => {
+  it('can convert from code to layout coordinate', () => {
+    // GIVEN
   });
 });
 
 describe('Parts drawing system', () => {
+  const spyStrokeRect = jest.fn();
+  beforeEach(() => {
+    spyStrokeRect.mockReset();
+    jest.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({
+      translate: jest.fn(),
+      strokeRect: spyStrokeRect,
+    } as any);
+  });
   it('parts.draw have been called', async () => {
     // GIVEN
-    jest
-      .spyOn(HTMLCanvasElement.prototype, 'getContext')
-      .mockReturnValue({} as RenderingContext);
     testInitFeatureCycle();
     const spyPart = new FakePart();
     spyPart.draw = jest.fn();
@@ -147,17 +169,13 @@ describe('Parts drawing system', () => {
 
   it('parts draws to canvas context', async () => {
     // GIVEN
+    testInitFeatureCycle();
+
     class FakeDrawPart implements GuiPart {
-      draw(g: CanvasRenderingContext2D): void {
+      draw({ g }: DrawProps): void {
         drawRectangle(g, 100, 200, 300, 400);
       }
     }
-    testInitFeatureCycle();
-    const spyStrokeRect = jest.fn();
-    jest.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({
-      translate: jest.fn(),
-      strokeRect: spyStrokeRect,
-    } as any);
 
     // WHEN
     render(<GuiView features={[new FakeFeature([new FakeDrawPart()])]} />);
@@ -165,5 +183,75 @@ describe('Parts drawing system', () => {
 
     // THEN
     expect(spyStrokeRect).toHaveBeenCalled();
+  });
+
+  describe('three coordinate system', () => {
+    it('code position can be converted to screen position.', async () => {
+      testInitFeatureCycle();
+      let lx: LayoutX = { layout: 0 };
+      let ly: LayoutY = { layout: 0 };
+      let sx: ScreenX = { screen: 0 };
+      let sy: ScreenY = { screen: 0 };
+      let spos: ScreenPosition = { x: { screen: 0 }, y: { screen: 0 } };
+      class PositionConvertTestPart extends GuiPartBase<string, number> {
+        override draw(dp: DrawProps): void {
+          if (!this.codePosition) return;
+          lx = dp.codeToLayout.convertX(this.codePosition.x);
+          ly = dp.codeToLayout.convertY(this.codePosition.y);
+          sx = dp.layoutToScreen.convertX(lx);
+          sy = dp.layoutToScreen.convertY(ly);
+          spos = this.getScreenPosition(dp);
+        }
+      }
+      const testPart = new PositionConvertTestPart();
+      testPart.codePosition = { x: { code: 'one' }, y: { code: 2 } };
+      class MockFeature extends GuiFeature {
+        override beforeRun() {
+          this.partsLayers.get(0)?.push(testPart);
+        }
+      }
+      function mockCodeToLayoutX(value: any): LayoutX {
+        switch (value.code) {
+          case 'one':
+            return { layout: 1 };
+          case 'two':
+            return { layout: 2 };
+          case 'three':
+            return { layout: 3 };
+          default:
+            return { layout: 0 };
+        }
+      }
+
+      const layers: GuiPartsLayerCollection = new Map();
+      layers.set(0, new GuiPartsCollection());
+      const layer = layers.get(0)!;
+      layer.codeToLayout = {
+        convertX: mockCodeToLayoutX,
+        convertY(value) {
+          return { layout: (value.code as number) * 2 };
+        },
+      };
+      layer.layoutToScreen = {
+        convertX(value) {
+          return { screen: value.layout * 100 };
+        },
+        convertY(value) {
+          return { screen: value.layout * 1000 };
+        },
+      };
+
+      // WHEN
+      render(<GuiView features={[new MockFeature()]} partsLayers={layers} />);
+      await testNextCycleAsync();
+
+      // THEN
+      expect(lx.layout).toBe(1);
+      expect(ly.layout).toBe(4);
+      expect(sx.screen).toBe(100);
+      expect(sy.screen).toBe(4000);
+      expect(spos.x.screen).toBe(100);
+      expect(spos.y.screen).toBe(4000);
+    });
   });
 });

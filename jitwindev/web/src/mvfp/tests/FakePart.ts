@@ -1,5 +1,5 @@
-import { GuiPart } from '../GuiPart';
+import { DrawProps, GuiPartBase } from '../GuiPart';
 
-export class FakePart implements GuiPart {
-  draw(): void {}
+export class FakePart extends GuiPartBase<number, number> {
+  draw({ g }: DrawProps): void {}
 }

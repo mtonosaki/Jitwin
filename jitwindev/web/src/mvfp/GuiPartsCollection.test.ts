@@ -3,7 +3,7 @@ import { GuiPartsCollection } from './GuiPartsCollection';
 
 describe('General', () => {
   it('Collection count and contains check', () => {
-    const parts: GuiPartsCollection = [];
+    const parts = new GuiPartsCollection();
     const fakePartA = new FakePart();
     const fakePartB = new FakePart();
 

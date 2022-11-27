@@ -2,20 +2,20 @@ import React, { useEffect, useRef } from 'react';
 import { TestIds } from './tests/TestIds';
 import { GuiFeature } from './GuiFeature';
 import { FEATURE_EXECUTION_SPAN_MSEC } from './MvfpParameters';
-import { GuiPartsCollection } from './GuiPartsCollection';
+import { GuiPartsLayerCollection } from './GuiPartsCollection';
 import { GuiFeatureCollection } from './GuiFeatureCollection';
 
 type Props = {
   className?: string;
   features?: GuiFeatureCollection;
-  parts?: GuiPartsCollection;
+  partsLayers?: GuiPartsLayerCollection;
   'data-testid'?: string;
 };
 
 export default function GuiView({
   className,
   features = [],
-  parts = [],
+  partsLayers = new Map(),
   'data-testid': dataTestId = TestIds.MVFP_VIEW_CANVAS,
 }: Props) {
   const refCanvas = useRef<HTMLCanvasElement | null>(null);
@@ -35,7 +35,7 @@ export default function GuiView({
     FeatureHandler.initialize();
 
     flatFeatures(features).forEach((feature) => {
-      feature.setPartsCollection(parts!);
+      feature.setPartsLayerCollection(partsLayers!);
     });
   };
 
@@ -71,25 +71,32 @@ const flatFeatures = (root?: GuiFeatureCollection) =>
 const enabledFeatures = (root?: GuiFeatureCollection) =>
   flatFeatures(root).filter((it) => it.enabled);
 
+// Partial class of GuiFeature for internal GuiView.
 class FeatureHandler extends GuiFeature {
   static initialize() {
-    (GuiFeature.prototype as any).setPartsCollection =
-      FeatureHandler.prototype.setPartsCollection;
+    (GuiFeature.prototype as any).setPartsLayerCollection =
+      FeatureHandler.prototype.setPartsLayerCollection;
 
     (GuiFeature.prototype as any).drawParts =
       FeatureHandler.prototype.drawParts;
   }
 
-  setPartsCollection(parts: GuiPartsCollection) {
-    this.parts = parts;
+  setPartsLayerCollection(partsLayers: GuiPartsLayerCollection) {
+    this.partsLayers = partsLayers;
   }
 
   drawParts(canvas: HTMLCanvasElement) {
     const context = canvas.getContext('2d');
     if (!context) return;
 
-    this.parts.forEach((part) => {
-      part.draw(context);
+    this.partsLayers.forEach((layer) => {
+      layer.forEach((part) => {
+        part.draw({
+          g: context,
+          codeToLayout: layer.codeToLayout,
+          layoutToScreen: layer.layoutToScreen,
+        });
+      });
     });
   }
 }

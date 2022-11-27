@@ -32,7 +32,7 @@ export default function HomePage({ sessionRepository }: Props) {
     let x = 100;
     const handler = setInterval(() => {
       z += 0.1;
-      x = (x + 99.5) % 100;
+      x = (x + 99.8) % 100;
       setStateWaveStyle(
         `url(/img/wave.svg) left ${x}% top 50%  / auto ${
           Math.cos(z) * 2 + 120

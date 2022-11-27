@@ -1,4 +1,4 @@
-import { GuiPartsCollection } from './GuiPartsCollection';
+import { GuiPartsLayerCollection } from './GuiPartsCollection';
 import { makeNewUuid } from './utils/uuid';
 
 export class GuiFeature {
@@ -6,7 +6,9 @@ export class GuiFeature {
 
   public enabled: boolean = true;
 
-  protected parts: GuiPartsCollection = [];
+  // A shared layer collection automatically set by the GuiView.
+  // Do not use this instance except for testing.
+  protected partsLayers: GuiPartsLayerCollection = new Map();
 
   constructor(id?: string) {
     this.id = id || makeNewUuid();

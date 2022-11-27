@@ -1,10 +1,5 @@
-import { GuiPart, GuiPartPosition } from '../GuiPart';
-import { CodePosition, CodeSize } from '../ThreeCoordinatesSystem';
+import { DrawProps, GuiPartBase } from '../GuiPart';
 
-export class PartRectangle<TX, TY> implements GuiPart, GuiPartPosition<TX, TY> {
-  codePosition?: CodePosition<TX, TY>;
-
-  codeSize?: CodeSize<TX, TY>;
-
-  draw(g: CanvasRenderingContext2D): void {}
+export class PartRectangle<TX, TY> extends GuiPartBase<TX, TY> {
+  draw({ g }: DrawProps): void {}
 }
