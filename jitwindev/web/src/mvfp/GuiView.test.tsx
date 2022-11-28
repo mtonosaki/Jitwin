@@ -9,7 +9,12 @@ import { GuiPartsLayerCollection } from './GuiPartsCollection';
 import FakeFeature from './tests/FakeFeature';
 import { DrawProps, GuiPart } from './GuiPart';
 import { drawRectangle } from './drawSet';
-import { testInitFeatureCycle, testNextCycleAsync } from './tests/Utilities';
+import {
+  mvfpRender,
+  testInitFeatureCycle,
+  testNextCycleAsync,
+  view,
+} from './tests/mvfpTestUtils.test';
 
 describe('Custom html class', () => {
   it('default', () => {
@@ -32,7 +37,8 @@ describe('feature.beforeRun', () => {
     const feature1 = new SpyFeature();
     const feature2 = new SpyFeature();
 
-    render(<GuiView features={[feature1, feature2]} />);
+    mvfpRender(<GuiView features={[feature1, feature2]} />);
+    expect(view.features).toHaveLength(2);
 
     expect(feature1.beforeRun).toHaveBeenCalledTimes(1);
     expect(feature2.beforeRun).toHaveBeenCalledTimes(1);

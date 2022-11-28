@@ -23,3 +23,10 @@ describe('She sees GuiView of MVFP', () => {
     expect(screen.getByTestId(TestIds.JIT_STAGE_GUI_VIEW)).toBeInTheDocument();
   });
 });
+
+describe('Sample', () => {
+  it('She sees a first PROCESS on the View', () => {
+    render(<JitStage isReadonly={false} features={[]} />);
+    expect(screen.getByTestId(TestIds.JIT_STAGE_GUI_VIEW)).toBeInTheDocument();
+  });
+});
