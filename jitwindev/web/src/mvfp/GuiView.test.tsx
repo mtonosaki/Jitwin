@@ -7,7 +7,7 @@ import SpyFeature from './tests/SpyFeature';
 import { FakePart } from './tests/FakePart';
 import { GuiPartsLayerCollection } from './GuiPartsCollection';
 import FakeFeature from './tests/FakeFeature';
-import { DrawProps, GuiPart } from './GuiPart';
+import { Converters, DrawProps, GuiPart } from './GuiPart';
 import { drawRectangle } from './drawSet';
 import { view } from './tests/View';
 import {
@@ -15,6 +15,7 @@ import {
   testInitFeatureCycle,
   testNextCycleAsync,
 } from './tests/mvfpRender.test';
+import { ScreenPosition, screenPosition0 } from './ThreeCoordinatesSystem';
 
 describe('Custom html class', () => {
   it('default', () => {
@@ -143,6 +144,10 @@ describe('Parts drawing system', () => {
 
       draw({ g }: DrawProps): void {
         drawRectangle(g, 100, 200, 300, 400);
+      }
+
+      getScreenPosition(converters: Converters): ScreenPosition {
+        return screenPosition0;
       }
     }
 
