@@ -2,32 +2,32 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import GuiView from './GuiView';
-import { TestIds } from './tests/TestIds';
+import { MvfpTestIds } from './tests/MvfpTestIds';
 import SpyFeature from './tests/SpyFeature';
 import { FakePart } from './tests/FakePart';
 import { GuiPartsLayerCollection } from './GuiPartsCollection';
 import FakeFeature from './tests/FakeFeature';
 import { DrawProps, GuiPart } from './GuiPart';
 import { drawRectangle } from './drawSet';
+import { view } from './tests/View';
 import {
   mvfpRender,
   testInitFeatureCycle,
   testNextCycleAsync,
-  view,
-} from './tests/mvfpTestUtils.test';
+} from './tests/mvfpRender.test';
 
 describe('Custom html class', () => {
   it('default', () => {
     render(<GuiView />);
 
-    const canvas = screen.getByTestId(TestIds.MVFP_VIEW_CANVAS);
+    const canvas = screen.getByTestId(MvfpTestIds.VIEW_CANVAS);
     expect(canvas.className).toBe('');
   });
 
   it('set', () => {
     render(<GuiView className="test-class" />);
 
-    const canvas = screen.getByTestId(TestIds.MVFP_VIEW_CANVAS);
+    const canvas = screen.getByTestId(MvfpTestIds.VIEW_CANVAS);
     expect(canvas).toHaveClass('test-class');
   });
 });
@@ -139,6 +139,8 @@ describe('Parts drawing system', () => {
   it('parts draws to canvas context', async () => {
     // GIVEN
     class FakeDrawPart implements GuiPart {
+      testId: string | undefined;
+
       draw({ g }: DrawProps): void {
         drawRectangle(g, 100, 200, 300, 400);
       }

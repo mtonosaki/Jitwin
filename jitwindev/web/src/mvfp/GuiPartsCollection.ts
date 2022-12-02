@@ -1,4 +1,4 @@
-import { GuiPart } from './GuiPart';
+import { Converters, GuiPart } from './GuiPart';
 import {
   ConverterCodeToLayout,
   ConverterLayoutToCode,
@@ -31,34 +31,44 @@ import {
 //   }
 // }
 export class GuiPartsCollection extends Array<GuiPart> {
+  getConverters(): Converters {
+    return {
+      codeToLayout: this.codeToLayout,
+      layoutToScreen: this.layoutToScreen,
+      screenToLayout: this.screenToLayout,
+      layoutToCode: this.layoutToCode,
+    };
+  }
+
   codeToLayout: ConverterCodeToLayout = {
     convertX(codeValue) {
-      return { layout: 0 };
+      return { layout: 0 }; // dummy
     },
     convertY(codeValue) {
-      return { layout: 0 };
+      return { layout: 0 }; // dummy
     },
   };
 
   layoutToScreen: ConverterLayoutToScreen = {
     convertX(value) {
-      return { screen: 0 };
+      return { screen: 0 }; // dummy
     },
     convertY(value) {
-      return { screen: 0 };
+      return { screen: 0 }; // dummy
     },
   };
 
   screenToLayout: ConverterScreenToLayout = {
     convertX(value) {
-      return { layout: 0 };
+      return { layout: 0 }; // dummy
     },
     convertY(value) {
-      return { layout: 0 };
+      return { layout: 0 }; // dummy
     },
   };
 
   layoutToCode: ConverterLayoutToCode = {
+    // dummy
     convertX: (value) => undefined, // return type is CodeX<T>
     convertY: (value) => undefined, // return type is CodeY<T>
   };

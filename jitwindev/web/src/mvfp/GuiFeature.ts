@@ -1,7 +1,10 @@
-import { GuiPartsLayerCollection } from './GuiPartsCollection';
+import {
+  GuiPartsCollection,
+  GuiPartsLayerCollection,
+} from './GuiPartsCollection';
 import { makeNewUuid } from './utils/uuid';
 
-export class GuiFeature {
+export abstract class GuiFeature {
   public readonly id: string = 'n/a';
 
   public enabled: boolean = true;
@@ -14,15 +17,31 @@ export class GuiFeature {
     this.id = id || makeNewUuid();
   }
 
-  beforeRun(): void {}
+  protected layer(
+    layerNo: number,
+    defaultInstanciater?: () => GuiPartsCollection
+  ) {
+    const parts = this.partsLayers.get(layerNo);
+    if (parts) {
+      return parts;
+    }
+    if (!parts && defaultInstanciater) {
+      const newParts = defaultInstanciater();
+      this.partsLayers.set(layerNo, newParts);
+      return newParts;
+    }
+    return undefined;
+  }
 
-  run(): void {}
+  public beforeRun(): void {}
 
-  getName(): string {
+  public run(): void {}
+
+  public getName(): string {
     return this.constructor.name;
   }
 
-  toString(): string {
+  public toString(): string {
     return `${this.getName()} id=${this.id} ${
       this.enabled ? 'enabled' : 'disabled'
     }`;

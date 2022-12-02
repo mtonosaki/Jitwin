@@ -15,63 +15,72 @@ export interface GuiPartPosition<TX, TY> {
   codeSize?: CodeSize<TX, TY>;
 }
 
-export type DrawProps = {
-  g: CanvasRenderingContext2D;
+export type Converters = {
   codeToLayout: ConverterCodeToLayout;
   layoutToScreen: ConverterLayoutToScreen;
   screenToLayout: ConverterScreenToLayout;
   layoutToCode: ConverterLayoutToCode;
 };
 
+export type DrawProps = {
+  g: CanvasRenderingContext2D;
+  converters: Converters;
+};
+
 export interface GuiPart {
+  testId: string | undefined;
   draw(dp: DrawProps): void;
+  getScreenPosition(converters: Converters): ScreenPosition;
 }
 
 export abstract class GuiPartBase<TX, TY>
   implements GuiPart, GuiPartPosition<TX, TY>
 {
-  codePosition?: CodePosition<TX, TY>;
+  public testId: string | undefined;
 
-  codeSize?: CodeSize<TX, TY>;
+  public codePosition?: CodePosition<TX, TY>;
 
-  abstract draw(dp: DrawProps): void;
+  public abstract draw(dp: DrawProps): void;
 
-  getScreenPosition(dp: DrawProps): ScreenPosition {
+  public getScreenPosition(converters: Converters): ScreenPosition {
     if (!this.codePosition)
       throw new GuiUndefinedException('GuiParts.getScreenPosition');
 
-    const lx = dp.codeToLayout.convertX(this.codePosition.x);
-    const ly = dp.codeToLayout.convertY(this.codePosition.y);
-    const sx = dp.layoutToScreen.convertX(lx);
-    const sy = dp.layoutToScreen.convertY(ly);
+    const lx = converters.codeToLayout.convertX(this.codePosition.x);
+    const ly = converters.codeToLayout.convertY(this.codePosition.y);
+    const sx = converters.layoutToScreen.convertX(lx);
+    const sy = converters.layoutToScreen.convertY(ly);
     return { x: sx, y: sy };
   }
 
-  getLayoutPosition(dp: DrawProps, spos: ScreenPosition): LayoutPosition {
+  protected getLayoutPosition(
+    converters: Converters,
+    spos: ScreenPosition
+  ): LayoutPosition {
     return {
-      x: dp.screenToLayout.convertX(spos.x),
-      y: dp.screenToLayout.convertY(spos.y),
+      x: converters.screenToLayout.convertX(spos.x),
+      y: converters.screenToLayout.convertY(spos.y),
     };
   }
 
   getCodePosition(
-    dp: DrawProps,
+    converters: Converters,
     layoutPos: LayoutPosition
   ): CodePosition<TX, TY> {
     return {
-      x: dp.layoutToCode.convertX(layoutPos.x),
-      y: dp.layoutToCode.convertY(layoutPos.y),
+      x: converters.layoutToCode.convertX(layoutPos.x),
+      y: converters.layoutToCode.convertY(layoutPos.y),
     };
   }
 
   getCodePositionFromScreen(
-    dp: DrawProps,
+    converters: Converters,
     spos: ScreenPosition
   ): CodePosition<TX, TY> {
-    const layoutPos = this.getLayoutPosition(dp, spos);
+    const layoutPos = this.getLayoutPosition(converters, spos);
     return {
-      x: dp.layoutToCode.convertX(layoutPos.x),
-      y: dp.layoutToCode.convertY(layoutPos.y),
+      x: converters.layoutToCode.convertX(layoutPos.x),
+      y: converters.layoutToCode.convertY(layoutPos.y),
     };
   }
 }

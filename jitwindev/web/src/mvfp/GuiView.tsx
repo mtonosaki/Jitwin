@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { TestIds } from './tests/TestIds';
+import { MvfpTestIds } from './tests/MvfpTestIds';
 import { GuiFeature } from './GuiFeature';
 import { FEATURE_EXECUTION_SPAN_MSEC } from './MvfpParameters';
 import { GuiPartsLayerCollection } from './GuiPartsCollection';
@@ -16,10 +16,23 @@ export default function GuiView({
   className,
   features = [],
   partsLayers = new Map(),
-  'data-testid': dataTestId = TestIds.MVFP_VIEW_CANVAS,
+  'data-testid': dataTestId = MvfpTestIds.VIEW_CANVAS,
 }: Props) {
   const refCanvas = useRef<HTMLCanvasElement | null>(null);
   const refIsBeforeFinished = useRef<GuiFeatureCollection>([]);
+  const refDrawnParts = useRef<any[]>([]);
+
+  // for Testing
+  Object.defineProperty(global, 'mvfpViewParameter', {
+    value: {
+      isBeforeFinished: refIsBeforeFinished.current,
+      features,
+      partsLayers,
+      refDrawnParts,
+    },
+    writable: true,
+    configurable: true,
+  });
 
   // Feature Mechanism
   useEffect(() => {
@@ -29,7 +42,7 @@ export default function GuiView({
     return () => {
       clearInterval(hTimer);
     };
-  }, []); // eslint-disable-line
+  }, [features]); // eslint-disable-line
 
   const prepareFeature = () => {
     FeatureHandler.initialize();
@@ -55,7 +68,7 @@ export default function GuiView({
     // Draw Parts
     enabledFeatures(features).forEach((feature) => {
       if (refCanvas.current) {
-        feature.drawParts(refCanvas.current);
+        feature.drawParts(refCanvas.current, refDrawnParts);
       }
     });
   };
@@ -85,19 +98,22 @@ class FeatureHandler extends GuiFeature {
     this.partsLayers = partsLayers;
   }
 
-  drawParts(canvas: HTMLCanvasElement) {
+  drawParts(
+    canvas: HTMLCanvasElement,
+    drawnParts: React.MutableRefObject<any[]>
+  ) {
+    drawnParts.current.splice(0);
     const context = canvas.getContext('2d');
     if (!context) return;
 
     this.partsLayers.forEach((layer) => {
       layer.forEach((part) => {
+        const converters = layer.getConverters();
         part.draw({
           g: context,
-          codeToLayout: layer.codeToLayout,
-          layoutToScreen: layer.layoutToScreen,
-          screenToLayout: layer.screenToLayout,
-          layoutToCode: layer.layoutToCode,
+          converters,
         });
+        drawnParts.current.push(part);
       });
     });
   }

@@ -12,7 +12,7 @@ import GuiView from './GuiView';
 import {
   testInitFeatureCycle,
   testNextCycleAsync,
-} from './tests/mvfpTestUtils.test';
+} from './tests/mvfpRender.test';
 
 describe('three coordinate system', () => {
   it('code position can be converted to/from screen position.', async () => {
@@ -26,11 +26,10 @@ describe('three coordinate system', () => {
 
       public verifyBetweenCodeAndLayout(): void {
         if (!this.codePosition) return;
-
-        const lx = this.dp!.codeToLayout.convertX({ code: 'one' });
-        const ly = this.dp!.codeToLayout.convertY({ code: 2 });
-        const cx = this.dp!.layoutToCode.convertX(lx);
-        const cy = this.dp!.layoutToCode.convertY(ly);
+        const lx = this.dp!.converters.codeToLayout.convertX({ code: 'one' });
+        const ly = this.dp!.converters.codeToLayout.convertY({ code: 2 });
+        const cx = this.dp!.converters.layoutToCode.convertX(lx);
+        const cy = this.dp!.converters.layoutToCode.convertY(ly);
 
         expect(lx.layout).toBe(1);
         expect(ly.layout).toBe(4);
@@ -39,10 +38,10 @@ describe('three coordinate system', () => {
       }
 
       public verifyBetweenLayoutAndScreen(): void {
-        const sx = this.dp!.layoutToScreen.convertX({ layout: 1 });
-        const sy = this.dp!.layoutToScreen.convertY({ layout: 4 });
-        const lx = this.dp!.screenToLayout.convertX(sx);
-        const ly = this.dp!.screenToLayout.convertY(sy);
+        const sx = this.dp!.converters.layoutToScreen.convertX({ layout: 1 });
+        const sy = this.dp!.converters.layoutToScreen.convertY({ layout: 4 });
+        const lx = this.dp!.converters.screenToLayout.convertX(sx);
+        const ly = this.dp!.converters.screenToLayout.convertY(sy);
 
         expect(sx.screen).toBe(100);
         expect(sy.screen).toBe(4000);
@@ -51,23 +50,26 @@ describe('three coordinate system', () => {
       }
 
       public verifyGetHogePosition(): void {
-        const screenPosition = this.getScreenPosition(this.dp!);
+        const screenPosition = this.getScreenPosition(this.dp!.converters);
         expect(screenPosition.x.screen).toBe(100);
         expect(screenPosition.y.screen).toBe(4000);
 
-        const layoutPosition = this.getLayoutPosition(this.dp!, screenPosition);
+        const layoutPosition = this.getLayoutPosition(
+          this.dp!.converters,
+          screenPosition
+        );
         expect(layoutPosition.x.layout).toBe(1);
         expect(layoutPosition.y.layout).toBe(4);
 
         const codePositionFromLayout = this.getCodePosition(
-          this.dp!,
+          this.dp!.converters,
           layoutPosition
         );
         expect(codePositionFromLayout.x.code).toBe('one');
         expect(codePositionFromLayout.y.code).toBe(2);
 
         const codePositionFromScreen = this.getCodePositionFromScreen(
-          this.dp!,
+          this.dp!.converters,
           screenPosition
         );
         expect(codePositionFromScreen.x.code).toBe('one');
