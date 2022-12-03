@@ -1,6 +1,10 @@
 import deepEqual from 'deep-equal';
 import { MvfpXxxByResult, view } from './View';
-import { CodePosition, ScreenPosition } from '../ThreeCoordinatesSystem';
+import {
+  CodePosition,
+  LayoutPosition,
+  ScreenPosition,
+} from '../ThreeCoordinatesSystem';
 
 export function toBeInTheView(actual: any): jest.CustomMatcherResult {
   const res = actual as MvfpXxxByResult;
@@ -16,6 +20,13 @@ export function toBeInTheView(actual: any): jest.CustomMatcherResult {
     pass: false,
   };
 }
+
+const ifLayoutPosition = (pos: any): LayoutPosition | undefined => {
+  if ('x' in pos && 'layout' in pos.x) {
+    return pos as LayoutPosition;
+  }
+  return undefined;
+};
 
 const ifScreenPosition = (pos: any): ScreenPosition | undefined => {
   if ('x' in pos && 'screen' in pos.x) {
@@ -38,6 +49,31 @@ export function toHaveBeenDrawnAt(
   const res = actual as MvfpXxxByResult;
   if (res.foundParts && res.foundLayer) {
     if (view.refDrawnParts?.current.includes(res.foundParts)) {
+      const expectLayoutPosition = ifLayoutPosition(expect);
+      if (expectLayoutPosition) {
+        const c2l = res.foundLayer.getConverters().codeToLayout;
+        const actualCodePosition = res.foundParts.peekCodePositionAsAny();
+        const actualLayoutPosition: LayoutPosition = {
+          x: { layout: c2l.convertX(actualCodePosition.x).layout },
+          y: { layout: c2l.convertY(actualCodePosition.y).layout },
+        };
+        if (
+          actualLayoutPosition.x.layout === expectLayoutPosition.x.layout &&
+          actualLayoutPosition.y.layout === expectLayoutPosition.y.layout
+        ) {
+          return {
+            message: () =>
+              `expecting not same layout position (${expectLayoutPosition.x.layout}, ${expectLayoutPosition.y.layout}) but it is same.`,
+            pass: true,
+          };
+        }
+        return {
+          message: () =>
+            `layout position expect(${expectLayoutPosition.x.layout}, ${expectLayoutPosition.y.layout}) not equals to actual(${actualLayoutPosition.x.layout}, ${actualLayoutPosition.y.layout}) of ${res.filterName}`,
+          pass: false,
+        };
+      }
+
       const expectScreenPosition = ifScreenPosition(expect);
       if (expectScreenPosition) {
         const actualScreenPosition = res.foundParts.getScreenPosition(
@@ -94,7 +130,7 @@ export function toHaveBeenDrawnAt(
 
       return {
         message: () =>
-          `expected position type should be code, layout and screen only: ${res.filterName}`,
+          'executable position type should be code, layout or screen only',
         pass: false,
       };
     }

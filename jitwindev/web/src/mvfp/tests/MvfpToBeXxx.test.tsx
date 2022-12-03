@@ -34,7 +34,7 @@ describe('Custom test methods', () => {
     expect(view.queryPartByTestId('test-part-id')).not.toBeInTheView();
   });
 
-  it('.toHaveBeenDrawnAt(screen position)', async () => {
+  it('.toHaveBeenDrawnAt {three-coordinate}', async () => {
     // GIVEN
     type TestCodeX = { hoge: { fuga: string } };
 
@@ -110,6 +110,10 @@ describe('Custom test methods', () => {
     expect(testPart).toHaveBeenDrawnAt({
       x: { code: 10 },
       y: { code: { hoge: { fuga: 'piyo' } } },
+    });
+    expect(testPart).toHaveBeenDrawnAt({
+      x: { layout: 20 },
+      y: { layout: 100 },
     });
     expect(testPart).toHaveBeenDrawnAt({
       x: { screen: 100 },

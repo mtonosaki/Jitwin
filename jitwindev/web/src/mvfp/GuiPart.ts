@@ -34,6 +34,11 @@ export interface GuiPart {
 
   getScreenPosition(converters: Converters): ScreenPosition;
 
+  getLayoutPosition(
+    converters: Converters,
+    screenPosition: ScreenPosition
+  ): LayoutPosition;
+
   peekCodePositionAsAny(): CodePosition<any, any>;
 }
 
@@ -64,13 +69,13 @@ export abstract class GuiPartBase<TX, TY>
     return { x: sx, y: sy };
   }
 
-  protected getLayoutPosition(
+  public getLayoutPosition(
     converters: Converters,
-    spos: ScreenPosition
+    screenPosition: ScreenPosition
   ): LayoutPosition {
     return {
-      x: converters.screenToLayout.convertX(spos.x),
-      y: converters.screenToLayout.convertY(spos.y),
+      x: converters.screenToLayout.convertX(screenPosition.x),
+      y: converters.screenToLayout.convertY(screenPosition.y),
     };
   }
 
