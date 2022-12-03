@@ -9,10 +9,7 @@ import {
   GuiPartsLayerCollection,
 } from './GuiPartsCollection';
 import GuiView from './GuiView';
-import {
-  testInitFeatureCycle,
-  testNextCycleAsync,
-} from './tests/mvfpRender.test';
+import { testInitFeatureCycle, testNextCycleAsync } from './tests/mvfpRender';
 
 describe('three coordinate system', () => {
   it('code position can be converted to/from screen position.', async () => {

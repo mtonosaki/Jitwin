@@ -10,12 +10,12 @@ import FakeFeature from './tests/FakeFeature';
 import { Converters, DrawProps, GuiPart } from './GuiPart';
 import { drawRectangle } from './drawSet';
 import { view } from './tests/View';
+import { ScreenPosition, screenPosition0 } from './ThreeCoordinatesSystem';
 import {
   mvfpRender,
   testInitFeatureCycle,
   testNextCycleAsync,
-} from './tests/mvfpRender.test';
-import { ScreenPosition, screenPosition0 } from './ThreeCoordinatesSystem';
+} from './tests/mvfpRender';
 
 describe('Custom html class', () => {
   it('default', () => {

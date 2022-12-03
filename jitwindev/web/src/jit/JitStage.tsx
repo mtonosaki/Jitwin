@@ -17,7 +17,6 @@ export default function JitStage({ isReadonly, features }: Props) {
 
   useEffect(() => {
     const featureProcess = new FeatureJitProcess();
-
     setStageFeatures([...features, featureProcess]);
   }, [features]);
 

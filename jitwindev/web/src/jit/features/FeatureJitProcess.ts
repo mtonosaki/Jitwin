@@ -19,7 +19,7 @@ export class FeatureJitProcess extends GuiFeature {
     super.beforeRun();
     const process = Object.assign(new PartProcess(), {
       testId: JitTestIds.SAMPLE_JIT_PROCESS,
-      codePosition: { x: { code: { m: 100 } }, y: { code: { m: 100 } } },
+      codePosition: { x: { code: { m: 10 } }, y: { code: { m: 10 } } },
     });
     const layer = this.layer(LayerIds.JIT_PROCESS, () =>
       makeLayerForJitProcess()

@@ -8,7 +8,7 @@ import {
   mvfpRender,
   testInitFeatureCycle,
   testNextCycleAsync,
-} from '../mvfp/tests/mvfpRender.test';
+} from '../mvfp/tests/mvfpRender';
 
 describe('Edit mode', () => {
   it('When readonly mode, she sees readonly mode message', () => {
@@ -41,8 +41,8 @@ describe('Sample', () => {
     const samplePart = view.getPartByTestId(JitTestIds.SAMPLE_JIT_PROCESS);
     expect(samplePart).toBeInTheView();
     expect(samplePart).toHaveBeenDrawnAt({
-      x: { screen: 10000 },
-      y: { screen: 10000 },
+      x: { screen: 200 },
+      y: { screen: 200 },
     });
   });
 });

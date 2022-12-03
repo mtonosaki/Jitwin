@@ -29,8 +29,12 @@ export type DrawProps = {
 
 export interface GuiPart {
   testId: string | undefined;
+
   draw(dp: DrawProps): void;
+
   getScreenPosition(converters: Converters): ScreenPosition;
+
+  peekCodePositionAsAny(): CodePosition<any, any>;
 }
 
 export abstract class GuiPartBase<TX, TY>
@@ -41,6 +45,13 @@ export abstract class GuiPartBase<TX, TY>
   public codePosition?: CodePosition<TX, TY>;
 
   public abstract draw(dp: DrawProps): void;
+
+  public peekCodePositionAsAny(): CodePosition<any, any> {
+    return {
+      x: { code: this.codePosition?.x.code },
+      y: { code: this.codePosition?.y.code },
+    };
+  }
 
   public getScreenPosition(converters: Converters): ScreenPosition {
     if (!this.codePosition)
