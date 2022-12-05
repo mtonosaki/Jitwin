@@ -178,10 +178,12 @@ describe('Parts drawing system', () => {
     render(<GuiView features={[new FakeFeature([new FakeDrawPart()])]} />);
     await testNextCycleAsync();
 
-    // THEN
-    expect(spyStrokeRect).toHaveBeenCalledWith(100, 200, 300, 400);
-    expect(spyClearRect).toHaveBeenCalledWith(0, 0, 111, 222);
+    // THEN set canvas size to fix resolution properly.
     expect(spyWidthValue).toHaveBeenCalledWith(111);
     expect(spyHeightValue).toHaveBeenCalledWith(222);
+    // AND THEN clear canvas before drawing
+    expect(spyClearRect).toHaveBeenCalledWith(0, 0, 111, 222);
+    // AND THEN draw parts design
+    expect(spyStrokeRect).toHaveBeenCalledWith(100, 200, 300, 400);
   });
 });
