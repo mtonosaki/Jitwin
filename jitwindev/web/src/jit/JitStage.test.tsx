@@ -42,7 +42,7 @@ describe('Sample', () => {
     expect(samplePart).toBeInTheView();
     expect(samplePart).toHaveBeenDrawnAt({
       x: { screen: 200 },
-      y: { screen: 200 },
+      y: { screen: 100 },
     });
   });
 });

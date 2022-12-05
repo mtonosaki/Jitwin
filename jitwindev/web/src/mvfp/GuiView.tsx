@@ -70,6 +70,15 @@ export default function GuiView({
     const context = refCanvas.current?.getContext('2d');
     if (!context) return;
 
+    context.canvas.width = context.canvas.clientWidth;
+    context.canvas.height = context.canvas.clientHeight;
+    context.clearRect(
+      0,
+      0,
+      context.canvas.clientWidth,
+      context.canvas.clientHeight
+    );
+
     partsLayers.forEach((layer) => {
       layer.forEach((part) => {
         const converters = layer.getConverters();

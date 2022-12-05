@@ -1,9 +1,9 @@
-export type CodeX<TX> = {
-  code: TX;
+export type CodeX<TCodeX> = {
+  code: TCodeX;
 };
 
-export type CodeY<TY> = {
-  code: TY;
+export type CodeY<TCodeY> = {
+  code: TCodeY;
 };
 
 export type LayoutX = {
@@ -22,19 +22,19 @@ export type ScreenY = {
   screen: number;
 };
 
-export type CodePosition<TX, TY> = {
-  x: CodeX<TX>;
-  y: CodeY<TY>;
+export type CodePosition<TCodeX, TCodeY> = {
+  x: CodeX<TCodeX>;
+  y: CodeY<TCodeY>;
 };
 
-export type CodeSize<TX, TY> = {
-  width: CodeX<TX>;
-  height: CodeY<TY>;
+export type CodeSize<TCodeX, TCodeY> = {
+  width: CodeX<TCodeX>;
+  height: CodeY<TCodeY>;
 };
 
-export type CodeRectangle<TX, TY> = {
-  position: CodePosition<TX, TY>;
-  size: CodeSize<TX, TY>;
+export type CodeRectangle<TCodeX, TCodeY> = {
+  position: CodePosition<TCodeX, TCodeY>;
+  size: CodeSize<TCodeX, TCodeY>;
 };
 
 export type LayoutPosition = {
@@ -113,6 +113,6 @@ export type ConverterScreenToLayout = {
 };
 
 export type ConverterLayoutToCode = {
-  convertX: (value: LayoutX) => any; // any is CodeX<T>
-  convertY: (value: LayoutY) => any; // any is CodeY<T>
+  convertX: (value: LayoutX) => any; // any is CodeX<TCodeX>
+  convertY: (value: LayoutY) => any; // any is CodeY<TCodeY>
 };

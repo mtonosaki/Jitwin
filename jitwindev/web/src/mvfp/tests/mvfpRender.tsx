@@ -11,10 +11,6 @@ expect.extend({
   toHaveBeenDrawnAt,
 });
 
-export type TestInitResult = {
-  spyStrokeRect: jest.Mock;
-};
-
 export const mvfpRender = (ui: React.ReactElement): RenderResult => {
   const utils = render(<RecoilRoot>{ui}</RecoilRoot>);
   view.features = (global as any).mvfpViewParameter.features;
@@ -23,16 +19,27 @@ export const mvfpRender = (ui: React.ReactElement): RenderResult => {
   return utils;
 };
 
+export type TestInitResult = {
+  stubCanvas: jest.Mock;
+  spyStrokeRect: jest.Mock;
+  spyClearRect: jest.Mock;
+};
+
 export function testInitFeatureCycle(): TestInitResult {
   const spyStrokeRect = jest.fn();
+  const spyClearRect = jest.fn();
+  const stubCanvas = jest.fn();
 
   jest.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({
     translate: jest.fn(),
+    clearRect: spyClearRect,
     strokeRect: spyStrokeRect,
+    canvas: stubCanvas,
   } as any);
+
   jest.useFakeTimers();
 
-  return { spyStrokeRect };
+  return { spyStrokeRect, spyClearRect, stubCanvas };
 }
 
 export const testNextCycleAsync = async () =>

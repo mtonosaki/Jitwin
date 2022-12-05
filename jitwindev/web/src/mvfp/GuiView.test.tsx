@@ -8,9 +8,13 @@ import { FakePart } from './tests/FakePart';
 import { GuiPartsLayerCollection } from './GuiPartsCollection';
 import FakeFeature from './tests/FakeFeature';
 import { Converters, DrawProps, GuiPart } from './GuiPart';
-import { drawRectangle } from './drawSet';
 import { view } from './tests/View';
-import { ScreenPosition, screenPosition0 } from './ThreeCoordinatesSystem';
+import {
+  CodePosition,
+  LayoutPosition,
+  ScreenPosition,
+  screenPosition0,
+} from './ThreeCoordinatesSystem';
 import {
   mvfpRender,
   testInitFeatureCycle,
@@ -143,20 +147,41 @@ describe('Parts drawing system', () => {
       testId: string | undefined;
 
       draw({ g }: DrawProps): void {
-        drawRectangle(g, 100, 200, 300, 400);
+        g.strokeStyle = 'rgb(1,2,3)';
+        g.strokeRect(100, 200, 300, 400);
       }
 
       getScreenPosition(converters: Converters): ScreenPosition {
         return screenPosition0;
       }
+
+      getLayoutPosition(
+        converters: Converters,
+        screenPosition: ScreenPosition
+      ): LayoutPosition {
+        return { x: { layout: 0 }, y: { layout: 0 } };
+      }
+
+      peekCodePositionAsAny(): CodePosition<any, any> {
+        return { x: { code: 0 }, y: { code: 0 } };
+      }
     }
+    const { stubCanvas, spyStrokeRect, spyClearRect } = testInitFeatureCycle();
+    const spyWidthValue = jest.fn();
+    const spyHeightValue = jest.fn();
+    Object.defineProperty(stubCanvas, 'clientWidth', { get: () => 111 });
+    Object.defineProperty(stubCanvas, 'width', { set: spyWidthValue });
+    Object.defineProperty(stubCanvas, 'clientHeight', { get: () => 222 });
+    Object.defineProperty(stubCanvas, 'height', { set: spyHeightValue });
 
     // WHEN
-    const { spyStrokeRect } = testInitFeatureCycle();
     render(<GuiView features={[new FakeFeature([new FakeDrawPart()])]} />);
     await testNextCycleAsync();
 
     // THEN
-    expect(spyStrokeRect).toHaveBeenCalled();
+    expect(spyStrokeRect).toHaveBeenCalledWith(100, 200, 300, 400);
+    expect(spyClearRect).toHaveBeenCalledWith(0, 0, 111, 222);
+    expect(spyWidthValue).toHaveBeenCalledWith(111);
+    expect(spyHeightValue).toHaveBeenCalledWith(222);
   });
 });
