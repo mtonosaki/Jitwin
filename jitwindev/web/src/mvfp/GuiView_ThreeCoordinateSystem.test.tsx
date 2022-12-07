@@ -1,8 +1,9 @@
 // eslint max-classes-per-file: 0
 import React from 'react';
 import { render } from '@testing-library/react';
+import { GuiPartBase } from 'mvfp/GuiPart';
+import { DrawProps } from 'mvfp/GuiTypes';
 import { LayoutX } from './ThreeCoordinatesSystem';
-import { DrawProps, GuiPartBase } from './GuiPart';
 import { GuiFeature } from './GuiFeature';
 import {
   GuiPartsCollection,

@@ -1,7 +1,7 @@
-import { GuiFeature } from '../../mvfp/GuiFeature';
+import { GuiFeature } from 'mvfp/GuiFeature';
+import { GuiPartsCollection } from 'mvfp/GuiPartsCollection';
 import { PartProcess } from '../parts/PartProcess';
 import { LayerIds } from '../LayerIds';
-import { GuiPartsCollection } from '../../mvfp/GuiPartsCollection';
 import {
   codeToLayoutLogicalSpaceX,
   codeToLayoutLogicalSpaceY,
@@ -17,6 +17,7 @@ import { JitTestIds } from '../tests/JitTestIds';
 export class FeatureJitProcess extends GuiFeature {
   override beforeRun() {
     super.beforeRun();
+
     const process = Object.assign(new PartProcess(), {
       testId: JitTestIds.SAMPLE_JIT_PROCESS,
       codePosition: { x: { code: { m: 10 } }, y: { code: { m: 5 } } },

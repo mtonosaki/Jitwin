@@ -1,10 +1,7 @@
+import { Converters, DrawProps } from 'mvfp/GuiTypes';
 import {
   CodePosition,
   CodeSize,
-  ConverterCodeToLayout,
-  ConverterLayoutToCode,
-  ConverterLayoutToScreen,
-  ConverterScreenToLayout,
   LayoutPosition,
   ScreenPosition,
   ScreenSize,
@@ -15,18 +12,6 @@ export interface GuiPartPosition<TCodeX, TCodeY> {
   codePosition?: CodePosition<TCodeX, TCodeY>;
   codeSize?: CodeSize<TCodeX, TCodeY>;
 }
-
-export type Converters = {
-  codeToLayout: ConverterCodeToLayout;
-  layoutToScreen: ConverterLayoutToScreen;
-  screenToLayout: ConverterScreenToLayout;
-  layoutToCode: ConverterLayoutToCode;
-};
-
-export type DrawProps = {
-  g: CanvasRenderingContext2D;
-  converters: Converters;
-};
 
 export interface GuiPart {
   testId: string | undefined;

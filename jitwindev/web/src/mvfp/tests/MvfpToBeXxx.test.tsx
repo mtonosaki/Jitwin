@@ -1,4 +1,5 @@
 import React from 'react';
+import { DrawProps } from 'mvfp/GuiTypes';
 import { FakePart } from './FakePart';
 import {
   GuiPartsCollection,
@@ -11,7 +12,7 @@ import {
 } from './mvfpRender';
 import GuiView from '../GuiView';
 import { view } from './View';
-import { DrawProps, GuiPartBase } from '../GuiPart';
+import { GuiPartBase } from '../GuiPart';
 
 describe('Custom test methods', () => {
   it('.toBeInTheView()', () => {

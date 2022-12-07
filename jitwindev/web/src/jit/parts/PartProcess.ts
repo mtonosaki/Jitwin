@@ -1,12 +1,14 @@
-import { DrawProps, GuiPartBase } from '../../mvfp/GuiPart';
+import { CodeSize } from 'mvfp/ThreeCoordinatesSystem';
+import { DrawProps } from 'mvfp/GuiTypes';
+import { GuiPartBase } from 'mvfp/GuiPart';
 import { UnitDistance } from '../SimulationUnit';
-import { CodeSize } from '../../mvfp/ThreeCoordinatesSystem';
 
 export class PartProcess extends GuiPartBase<UnitDistance, UnitDistance> {
   public codeSize: CodeSize<UnitDistance, UnitDistance>;
 
   constructor() {
     super();
+
     this.codeSize = {
       width: { code: { m: 1 } },
       height: { code: { m: 1 } },

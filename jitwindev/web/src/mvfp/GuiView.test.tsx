@@ -1,13 +1,14 @@
 // eslint max-classes-per-file: 0
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { GuiPart } from 'mvfp/GuiPart';
+import { Converters, DrawProps } from 'mvfp/GuiTypes';
 import GuiView from './GuiView';
+import { GuiPartsLayerCollection } from './GuiPartsCollection';
 import { MvfpTestIds } from './tests/MvfpTestIds';
 import SpyFeature from './tests/SpyFeature';
 import { FakePart } from './tests/FakePart';
-import { GuiPartsLayerCollection } from './GuiPartsCollection';
 import FakeFeature from './tests/FakeFeature';
-import { Converters, DrawProps, GuiPart } from './GuiPart';
 import { view } from './tests/View';
 import {
   CodePosition,
