@@ -1,10 +1,14 @@
 // eslint max-classes-per-file: 0
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { GuiPart } from 'mvfp/GuiPart';
+import { GuiPart, GuiPartBase } from 'mvfp/GuiPart';
 import { Converters, DrawProps } from 'mvfp/GuiTypes';
+import { GuiFeature } from 'mvfp/GuiFeature';
 import GuiView from './GuiView';
-import { GuiPartsLayerCollection } from './GuiPartsCollection';
+import {
+  GuiPartsCollection,
+  GuiPartsLayerCollection,
+} from './GuiPartsCollection';
 import { MvfpTestIds } from './tests/MvfpTestIds';
 import SpyFeature from './tests/SpyFeature';
 import { FakePart } from './tests/FakePart';
@@ -167,6 +171,7 @@ describe('Parts drawing system', () => {
         return { x: { code: 0 }, y: { code: 0 } };
       }
     }
+
     const { stubCanvas, spyStrokeRect, spyClearRect } = testInitFeatureCycle();
     const spyWidthValue = jest.fn();
     const spyHeightValue = jest.fn();
@@ -186,5 +191,80 @@ describe('Parts drawing system', () => {
     expect(spyClearRect).toHaveBeenCalledWith(0, 0, 111, 222);
     // AND THEN draw parts design
     expect(spyStrokeRect).toHaveBeenCalledWith(100, 200, 300, 400);
+  });
+});
+
+describe('Scroll System', () => {
+  it('View can scroll', async () => {
+    // GIVEN
+    const { stubCanvas } = testInitFeatureCycle();
+    Object.defineProperty(stubCanvas, 'clientWidth', { get: () => 111 });
+    Object.defineProperty(stubCanvas, 'clientHeight', { get: () => 222 });
+    const layers: GuiPartsLayerCollection = new Map();
+    const layer = new GuiPartsCollection();
+    layers.set(33, layer);
+    layer.codeToLayout = {
+      convertX(value) {
+        return { layout: parseInt(value.code, 16) };
+      },
+      convertY(value) {
+        return { layout: parseInt(value.code, 16) };
+      },
+    };
+    layer.layoutToCode = {
+      convertX(value) {
+        return { code: value.layout.toString(16) };
+      },
+      convertY(value) {
+        return { code: value.layout.toString(16) };
+      },
+    };
+    layer.layoutToScreen = {
+      convertX(value) {
+        return { screen: value.layout * 3 };
+      },
+      convertY(value) {
+        return { screen: value.layout * 2 };
+      },
+    };
+    layer.screenToLayout = {
+      convertX(value) {
+        return { layout: value.screen / 3 };
+      },
+      convertY(value) {
+        return { layout: value.screen / 2 };
+      },
+    };
+
+    class FakeHappyPart extends GuiPartBase<string, string> {
+      draw(dp: DrawProps): void {}
+    }
+
+    class FakeHappyFeature extends GuiFeature {
+      override beforeRun() {
+        const part = new FakeHappyPart();
+        part.testId = 'happy-parts';
+        part.codePosition = {
+          x: { code: 'a' }, // = 10
+          y: { code: 'c' }, // = 12
+        };
+        this.partsLayers.get(33)?.push(part);
+      }
+    }
+
+    // WHEN
+    mvfpRender(
+      <GuiView features={[new FakeHappyFeature()]} partsLayers={layers} />
+    );
+    await testNextCycleAsync();
+
+    // THEN - Step1  Scroll 0,0
+    const samplePart = view.getPartByTestId('happy-parts');
+    expect(samplePart).toHaveBeenDrawnAt({
+      x: { screen: 30 },
+      y: { screen: 24 },
+    });
+
+    // TODO: change scroll position and verify new parts location
   });
 });

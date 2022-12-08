@@ -45,9 +45,9 @@ describe('Sample', () => {
     const samplePart = view.getPartByTestId(JitTestIds.SAMPLE_JIT_PROCESS);
     expect(samplePart).toBeInTheView();
     expect(samplePart).toHaveBeenDrawnAt({
-      // center position. width=20px, height=20px
-      x: { screen: 45.5 },
-      y: { screen: 101 },
+      // center x,y width=20px, height=20px
+      x: { screen: 45.5 }, // = 111 / 2 - 20/2
+      y: { screen: 101 }, // = 222 / 2 - 20/2
     });
   });
 });
