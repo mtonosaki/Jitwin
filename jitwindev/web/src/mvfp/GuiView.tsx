@@ -1,9 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { MvfpTestIds } from './tests/MvfpTestIds';
 import { GuiFeature } from './GuiFeature';
 import { FEATURE_EXECUTION_SPAN_MSEC } from './MvfpParameters';
 import { GuiPartsLayerCollection } from './GuiPartsCollection';
 import { GuiFeatureCollection } from './GuiFeatureCollection';
+import { screenPosition0 } from './ThreeCoordinatesSystem';
+import { PaneState } from './GuiTypes';
 
 type Props = {
   className?: string;
@@ -21,18 +23,21 @@ export default function GuiView({
   const refCanvas = useRef<HTMLCanvasElement | null>(null);
   const refIsBeforeFinished = useRef<GuiFeatureCollection>([]);
   const refDrawnParts = useRef<any[]>([]);
+  const [paneState] = useState<PaneState>({ scroll: screenPosition0 });
 
-  // for Testing
-  Object.defineProperty(global, 'mvfpViewParameter', {
-    value: {
-      isBeforeFinished: refIsBeforeFinished.current,
-      features,
-      partsLayers,
-      refDrawnParts,
-    },
-    writable: true,
-    configurable: true,
-  });
+  useEffect(() => {
+    // for Testing
+    Object.defineProperty(global, 'mvfpViewParameter', {
+      value: {
+        isBeforeFinished: refIsBeforeFinished.current,
+        features,
+        partsLayers,
+        refDrawnParts,
+      },
+      writable: true,
+      configurable: true,
+    });
+  }, []); // eslint-disable-line
 
   // Feature Mechanism
   useEffect(() => {
@@ -85,6 +90,7 @@ export default function GuiView({
         part.draw({
           g: context,
           converters,
+          pane: paneState,
         });
         refDrawnParts.current.push(part);
       });

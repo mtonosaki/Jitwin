@@ -1,4 +1,5 @@
-import { Converters, GuiPart } from './GuiPart';
+import { GuiPart } from 'mvfp/GuiPart';
+import { Converters } from 'mvfp/GuiTypes';
 import {
   ConverterCodeToLayout,
   ConverterLayoutToCode,
