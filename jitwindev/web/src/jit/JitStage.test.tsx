@@ -32,7 +32,7 @@ describe('She sees GuiView of MVFP', () => {
 });
 
 describe('Sample', () => {
-  it('She sees a first PROCESS on the center of the view', async () => {
+  it.skip('She sees a first PROCESS on the center of the view', async () => {
     // GIVEN
     const { stubCanvas } = testInitFeatureCycle();
     Object.defineProperty(stubCanvas, 'clientWidth', { get: () => 111 }); // set view size
