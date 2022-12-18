@@ -6,6 +6,7 @@ import { GuiPartsLayerCollection } from './GuiPartsCollection';
 import { GuiFeatureCollection } from './GuiFeatureCollection';
 import { screenPosition0 } from './ThreeCoordinatesSystem';
 import { PaneState } from './GuiTypes';
+import { GuiPane, Pane } from './GuiPane';
 
 type Props = {
   className?: string;
@@ -24,6 +25,7 @@ export default function GuiView({
   const refIsBeforeFinished = useRef<GuiFeatureCollection>([]);
   const refDrawnParts = useRef<any[]>([]);
   const [paneState] = useState<PaneState>({ scroll: screenPosition0 });
+  const refDefaultPane = useRef(null);
 
   useEffect(() => {
     // for Testing
@@ -33,6 +35,7 @@ export default function GuiView({
         features,
         partsLayers,
         refDrawnParts,
+        refDefaultPane,
       },
       writable: true,
       configurable: true,
@@ -54,6 +57,7 @@ export default function GuiView({
 
     flatFeatures(features).forEach((feature) => {
       feature.setPartsLayerCollection(partsLayers!);
+      feature.setTargetPane(refDefaultPane.current);
     });
   };
 
@@ -98,7 +102,14 @@ export default function GuiView({
   };
 
   return (
-    <canvas ref={refCanvas} className={className} data-testid={dataTestId} />
+    <>
+      <canvas ref={refCanvas} className={className} data-testid={dataTestId} />
+      <GuiPane
+        ref={refDefaultPane}
+        name="DEFAULT"
+        data-testid={MvfpTestIds.DEFAULT_PANE}
+      />
+    </>
   );
 }
 
@@ -113,9 +124,20 @@ class FeatureHandler extends GuiFeature {
   static initialize() {
     (GuiFeature.prototype as any).setPartsLayerCollection =
       FeatureHandler.prototype.setPartsLayerCollection;
+
+    (GuiFeature.prototype as any).setTargetPane =
+      FeatureHandler.prototype.setTargetPane;
   }
 
   setPartsLayerCollection(partsLayers: GuiPartsLayerCollection) {
     this.partsLayers = partsLayers;
+  }
+
+  setTargetPane(pane: Pane | null) {
+    if (pane) {
+      this.targetPane = pane;
+    } else {
+      this.targetPane = undefined;
+    }
   }
 }

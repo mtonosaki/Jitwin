@@ -3,6 +3,7 @@ import {
   GuiPartsLayerCollection,
 } from './GuiPartsCollection';
 import { makeNewUuid } from './utils/uuid';
+import { Pane } from './GuiPane';
 
 export abstract class GuiFeature {
   public readonly id: string = 'n/a';
@@ -12,6 +13,8 @@ export abstract class GuiFeature {
   // A shared layer collection automatically set by the GuiView.
   // Do not use this instance except for testing.
   protected partsLayers: GuiPartsLayerCollection = new Map();
+
+  protected targetPane: Pane | undefined;
 
   constructor(id?: string) {
     this.id = id || makeNewUuid();
@@ -39,6 +42,10 @@ export abstract class GuiFeature {
 
   public getName(): string {
     return this.constructor.name;
+  }
+
+  public getTargetPane(): Pane | undefined {
+    return this.targetPane;
   }
 
   public toString(): string {

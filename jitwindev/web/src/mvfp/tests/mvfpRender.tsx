@@ -16,6 +16,7 @@ export const mvfpRender = (ui: React.ReactElement): RenderResult => {
   view.features = (global as any).mvfpViewParameter.features;
   view.partsLayers = (global as any).mvfpViewParameter.partsLayers;
   view.refDrawnParts = (global as any).mvfpViewParameter.refDrawnParts;
+  view.refDefaultPane = (global as any).mvfpViewParameter.refDefaultPane;
   return utils;
 };
 

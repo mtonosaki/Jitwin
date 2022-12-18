@@ -15,6 +15,24 @@ export function toBeInTheView(actual: any): jest.CustomMatcherResult {
       pass: true,
     };
   }
+
+  // [GuiPane.name="DEFAULT"]   1:GuiPane  2:name  3: DEFAULT   0:[GuiPane.name="DEFAULT"]
+  const command = /^\[(.+)\.(.+)="(.+)"\]$/.exec(res.filterName);
+  if (command && command[1] === 'GuiPane' && command[2] === 'name') {
+    const actualPaneName = command[3];
+    if (res.foundPane?.getName() === actualPaneName) {
+      return {
+        message: () =>
+          `expected GuiPane not to contain pane, found ${res.filterName} instead.`,
+        pass: true,
+      };
+    }
+    return {
+      message: () => `Unable to find an pane by: ${res.filterName}`,
+      pass: false,
+    };
+  }
+
   return {
     message: () => `Unable to find an part by: ${res.filterName}`,
     pass: false,

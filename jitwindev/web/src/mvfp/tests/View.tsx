@@ -5,15 +5,28 @@ import {
   GuiPartsLayerCollection,
 } from '../GuiPartsCollection';
 import { GuiPart } from '../GuiPart';
+import { GuiPane, Pane } from '../GuiPane';
 
 export type MvfpXxxByResult = {
   method: string;
   filterName: string;
   foundParts?: GuiPart;
   foundLayer?: GuiPartsCollection;
+  foundPane?: Pane;
 };
 
-export const xxxByPartTestId =
+export const xxxPaneByName =
+  (method: string) =>
+  (name: string): MvfpXxxByResult => {
+    const filterName = `[GuiPane.name="${name}"]`;
+    if (name === 'DEFAULT') {
+      const pane = view.refDefaultPane?.current;
+      return { method, filterName, foundPane: pane };
+    }
+    return { method, filterName, foundPane: undefined };
+  };
+
+export const xxxPartByTestId =
   (method: string) =>
   (testId: string): MvfpXxxByResult => {
     const filterName = `[GuiPart.id="${testId}"]`;
@@ -46,11 +59,14 @@ export type MvfpRenderResult = {
   features?: GuiFeatureCollection;
   partsLayers?: GuiPartsLayerCollection;
   refDrawnParts?: React.MutableRefObject<any[]>;
+  refDefaultPane?: React.MutableRefObject<GuiPane>;
   getPartByTestId: (testId: string) => MvfpXxxByResult;
   queryPartByTestId: (testId: string) => MvfpXxxByResult;
+  getPaneByName: (name: string) => MvfpXxxByResult;
 };
 
 export const view: MvfpRenderResult = {
-  getPartByTestId: xxxByPartTestId('getByPartTestId'),
-  queryPartByTestId: xxxByPartTestId('queryByPartTestId'),
+  getPartByTestId: xxxPartByTestId('getPartByTestId'),
+  queryPartByTestId: xxxPartByTestId('queryPartByTestId'),
+  getPaneByName: xxxPaneByName('getPaneByName'),
 };

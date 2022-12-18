@@ -194,6 +194,28 @@ describe('Parts drawing system', () => {
   });
 });
 
+describe('Pane System', () => {
+  it('GuiView have default pane', () => {
+    mvfpRender(<GuiView features={[]} />);
+
+    expect(screen.getByTestId(MvfpTestIds.DEFAULT_PANE)).toBeInTheDocument();
+    expect(view.getPaneByName('DEFAULT')).toBeInTheView();
+  });
+
+  it('Each feature has a target pane, and the default target pane is DEFAULT_PANE', () => {
+    // GIVEN
+    class TestFeature extends GuiFeature {}
+
+    // WHEN
+    const testFeature = new TestFeature();
+    mvfpRender(<GuiView features={[testFeature]} />);
+
+    // THEN
+    const tarPane = testFeature.getTargetPane();
+    expect(tarPane?.getName()).toBe('DEFAULT');
+  });
+});
+
 describe('Scroll System', () => {
   it('View can scroll', async () => {
     // GIVEN
@@ -265,7 +287,9 @@ describe('Scroll System', () => {
       y: { screen: 24 },
     });
 
-    // TODO: change scroll position and verify new parts location
-    
+    // WHEN - Step2 Scroll +10, +10
+    // const pane = view.getPaneByName('DEFAULT');
+
+    // TODO: ACT pane scroll.x + 10 pane scroll.y + 10
   });
 });
