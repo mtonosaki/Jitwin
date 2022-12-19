@@ -25,6 +25,7 @@ import {
   testInitFeatureCycle,
   testNextCycleAsync,
 } from './tests/mvfpRender';
+import { screenOffset } from './utils/coordinateUtils';
 
 describe('Custom html class', () => {
   it('default', () => {
@@ -281,15 +282,26 @@ describe('Scroll System', () => {
     await testNextCycleAsync();
 
     // THEN - Step1  Scroll 0,0
-    const samplePart = view.getPartByTestId('happy-parts');
-    expect(samplePart).toHaveBeenDrawnAt({
-      x: { screen: 30 },
-      y: { screen: 24 },
-    });
+    {
+      const samplePart = view.getPartByTestId('happy-parts');
+      expect(samplePart).toHaveBeenDrawnAt({
+        x: { screen: 30 },
+        y: { screen: 24 },
+      });
+    }
 
     // WHEN - Step2 Scroll +10, +10
-    // const pane = view.getPaneByName('DEFAULT');
+    const def = view.getPaneByName('DEFAULT');
+    def.foundPane!.scroll = screenOffset(def.foundPane!.scroll, 10, 20);
+    await testNextCycleAsync();
 
-    // TODO: ACT pane scroll.x + 10 pane scroll.y + 10
+    // THEN - Step2
+    {
+      const samplePart = view.getPartByTestId('happy-parts');
+      expect(samplePart).toHaveBeenDrawnAt({
+        x: { screen: 20 },
+        y: { screen: 4 },
+      });
+    }
   });
 });
