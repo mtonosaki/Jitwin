@@ -157,7 +157,7 @@ describe('Parts drawing system', () => {
         g.strokeRect(100, 200, 300, 400);
       }
 
-      getScreenPosition(converters: Converters): ScreenPosition {
+      getScreenPosition(dp: DrawProps): ScreenPosition {
         return screenPosition0;
       }
 
@@ -213,7 +213,7 @@ describe('Pane System', () => {
 
     // THEN
     const tarPane = testFeature.getTargetPane();
-    expect(tarPane?.getName()).toBe('DEFAULT');
+    expect(tarPane?.name).toBe('DEFAULT');
   });
 });
 
@@ -274,34 +274,28 @@ describe('Scroll System', () => {
         this.partsLayers.get(33)?.push(part);
       }
     }
-
-    // WHEN
     mvfpRender(
       <GuiView features={[new FakeHappyFeature()]} partsLayers={layers} />
     );
     await testNextCycleAsync();
 
-    // THEN - Step1  Scroll 0,0
-    {
-      const samplePart = view.getPartByTestId('happy-parts');
-      expect(samplePart).toHaveBeenDrawnAt({
-        x: { screen: 30 },
-        y: { screen: 24 },
-      });
-    }
+    // GIVEN  Scroll 0,0
+    const samplePart = view.getPartByTestId('happy-parts');
+    expect(samplePart).toHaveBeenDrawnAt({
+      x: { screen: 30 },
+      y: { screen: 24 },
+    });
 
-    // WHEN - Step2 Scroll +10, +10
+    // WHEN - Scroll View +10, +20
     const def = view.getPaneByName('DEFAULT');
     def.foundPane!.scroll = screenOffset(def.foundPane!.scroll, 10, 20);
     await testNextCycleAsync();
 
-    // THEN - Step2
-    {
-      const samplePart = view.getPartByTestId('happy-parts');
-      expect(samplePart).toHaveBeenDrawnAt({
-        x: { screen: 20 },
-        y: { screen: 4 },
-      });
-    }
+    // THEN
+    expect(samplePart).toHaveBeenDrawnAt({
+      x: { screen: 20 },
+      y: { screen: 4 },
+    });
   });
+  // TODO: clip pane rect
 });

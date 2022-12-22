@@ -48,7 +48,7 @@ describe('three coordinate system', () => {
       }
 
       public verifyGetHogePosition(): void {
-        const screenPosition = this.getScreenPosition(this.dp!.converters);
+        const screenPosition = this.getScreenPosition(this.dp!);
         expect(screenPosition.x.screen).toBe(100);
         expect(screenPosition.y.screen).toBe(4000);
 

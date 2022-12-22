@@ -20,7 +20,7 @@ export function toBeInTheView(actual: any): jest.CustomMatcherResult {
   const command = /^\[(.+)\.(.+)="(.+)"\]$/.exec(res.filterName);
   if (command && command[1] === 'GuiPane' && command[2] === 'name') {
     const actualPaneName = command[3];
-    if (res.foundPane?.getName() === actualPaneName) {
+    if (res.foundPane?.name === actualPaneName) {
       return {
         message: () =>
           `expected GuiPane not to contain pane, found ${res.filterName} instead.`,

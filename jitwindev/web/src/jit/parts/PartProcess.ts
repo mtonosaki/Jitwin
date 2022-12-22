@@ -16,7 +16,7 @@ export class PartProcess extends GuiPartBase<UnitDistance, UnitDistance> {
   }
 
   override draw(dp: DrawProps) {
-    const position = this.getScreenPosition(dp.converters);
+    const position = this.getScreenPosition(dp);
     const size = this.getScreenSizeFromCode(dp.converters, this.codeSize);
 
     dp.g.strokeStyle = 'rgb(64, 64, 48, 0.1)';

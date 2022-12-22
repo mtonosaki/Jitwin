@@ -5,7 +5,7 @@ import { FEATURE_EXECUTION_SPAN_MSEC } from './MvfpParameters';
 import { GuiPartsLayerCollection } from './GuiPartsCollection';
 import { GuiFeatureCollection } from './GuiFeatureCollection';
 import { screenPosition0 } from './ThreeCoordinatesSystem';
-import { PaneState } from './GuiTypes';
+import { DrawProps, PaneState } from './GuiTypes'
 import { GuiPane, Pane } from './GuiPane';
 
 type Props = {
@@ -28,7 +28,7 @@ export default function GuiView({
   const refDefaultPane = useRef(null);
 
   useEffect(() => {
-    // for Testing
+    // for Testing library
     Object.defineProperty(global, 'mvfpViewParameter', {
       value: {
         isBeforeFinished: refIsBeforeFinished.current,
@@ -42,24 +42,21 @@ export default function GuiView({
     });
   }, []); // eslint-disable-line
 
-  // Feature Mechanism
+  // Initialize Feature Mechanism
   useEffect(() => {
-    prepareFeature();
-    executeFeaturesBeforeRun();
-    const hTimer = setInterval(intervalEvent, FEATURE_EXECUTION_SPAN_MSEC);
-    return () => {
-      clearInterval(hTimer);
-    };
-  }, [features]); // eslint-disable-line
-
-  const prepareFeature = () => {
     FeatureHandler.initialize();
 
     flatFeatures(features).forEach((feature) => {
       feature.setPartsLayerCollection(partsLayers!);
       feature.setTargetPane(refDefaultPane.current);
     });
-  };
+
+    executeFeaturesBeforeRun();
+    const hTimer = setInterval(intervalEvent, FEATURE_EXECUTION_SPAN_MSEC);
+    return () => {
+      clearInterval(hTimer);
+    };
+  }, [features]); // eslint-disable-line
 
   const executeFeaturesBeforeRun = () => {
     enabledFeatures(features)
@@ -89,13 +86,14 @@ export default function GuiView({
     );
 
     partsLayers.forEach((layer) => {
+      const converters = layer.getConverters();
+      const dp: DrawProps = {
+        g: context,
+        converters,
+        pane: paneState,
+      }
       layer.forEach((part) => {
-        const converters = layer.getConverters();
-        part.draw({
-          g: context,
-          converters,
-          pane: paneState,
-        });
+        part.draw(dp);
         refDrawnParts.current.push(part);
       });
     });

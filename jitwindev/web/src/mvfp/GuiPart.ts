@@ -18,7 +18,7 @@ export interface GuiPart {
 
   draw(dp: DrawProps): void;
 
-  getScreenPosition(converters: Converters): ScreenPosition;
+  getScreenPosition(dp: DrawProps): ScreenPosition;
 
   getLayoutPosition(
     converters: Converters,
@@ -44,11 +44,11 @@ export abstract class GuiPartBase<TCodeX, TCodeY>
     };
   }
 
-  public getScreenPosition(converters: Converters): ScreenPosition {
+  public getScreenPosition(dp: DrawProps): ScreenPosition {
     if (!this.codePosition)
       throw new GuiUndefinedException('GuiParts.getScreenPosition');
 
-    return this.getScreenPositionFromCode(converters, this.codePosition);
+    return this.getScreenPositionFromCode(dp.converters, this.codePosition);
   }
 
   public getScreenPositionFromCode(

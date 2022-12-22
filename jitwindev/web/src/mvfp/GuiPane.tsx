@@ -1,22 +1,22 @@
 import React from 'react';
 import { ScreenPosition, screenPosition0 } from './ThreeCoordinatesSystem';
 
+export interface Pane {
+  get name(): string;
+  get scroll(): ScreenPosition;
+  set scroll(newPosition: ScreenPosition);
+}
+
 type PaneProps = {
   name: string;
   'data-testid'?: string;
 };
 
-export interface Pane {
-  getName(): string;
-  get scroll(): ScreenPosition;
-  set scroll(newPos: ScreenPosition);
-}
-
 export class GuiPane extends React.Component<PaneProps> implements Pane {
   private currentScroll: ScreenPosition = screenPosition0;
 
   // eslint-disable-next-line react/no-unused-class-component-methods
-  getName(): string {
+  get name(): string {
     const { name } = this.props;
     return name;
   }
@@ -27,8 +27,8 @@ export class GuiPane extends React.Component<PaneProps> implements Pane {
   }
 
   // eslint-disable-next-line react/no-unused-class-component-methods
-  set scroll(pos) {
-    this.currentScroll = pos;
+  set scroll(newPosition) {
+    this.currentScroll = newPosition;
   }
 
   render() {
