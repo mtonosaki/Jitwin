@@ -128,8 +128,8 @@ describe('Parts system', () => {
 
     // THEN
     expect(spyPartsLayersCollection.get(0)).toHaveLength(2);
-    expect(spyPartsLayersCollection.get(0)).toContain(dummyPartA);
-    expect(spyPartsLayersCollection.get(0)).toContain(dummyPartB);
+    expect(spyPartsLayersCollection.get(0)?.filter(it => it.part)).toContain(dummyPartA);
+    expect(spyPartsLayersCollection.get(0)?.filter(it => it.part)).toContain(dummyPartB);
   });
 });
 
@@ -213,8 +213,7 @@ describe('Pane System', () => {
     mvfpRender(<GuiView features={[testFeature]} />);
 
     // THEN
-    const tarPane = testFeature.getTargetPane();
-    expect(tarPane?.name).toBe('DEFAULT');
+    expect(testFeature.pane.name).toBe('DEFAULT');
   });
 });
 
@@ -256,7 +255,8 @@ describe('Scroll System', () => {
           x: { code: '111' }, // = 0x111
           y: { code: '222' }, // = 0x222
         };
-        this.partsLayers.get(33)?.push(part);
+        const pane = this.targetPane;
+        this.partsLayers.get(33)!.push({ part, pane: this.pane });
       }
     }
     mvfpRender(
@@ -267,8 +267,8 @@ describe('Scroll System', () => {
     // GIVEN  Scroll 0,0
     const samplePart = view.getPartByTestId('happy-parts');
     expect(samplePart).toHaveBeenDrawnAt({
-      x: { screen: 0x111 / LPS },
-      y: { screen: 0x222 / LPS },
+      x: { screen: 0x111 / LPS }, // 17.0625
+      y: { screen: 0x222 / LPS }, // 34.125
     });
 
     // WHEN - Scroll View +10, +20
@@ -278,8 +278,8 @@ describe('Scroll System', () => {
 
     // THEN
     expect(samplePart).toHaveBeenDrawnAt({
-      x: { screen: 0x111 / LPS - 10 },
-      y: { screen: 0x222 / LPS - 20 },
+      x: { screen: 0x111 / LPS - 10 }, // 17.0625 - 10
+      y: { screen: 0x222 / LPS - 20 }, // 34.125 - 20
     });
   });
   // TODO: clip pane rect

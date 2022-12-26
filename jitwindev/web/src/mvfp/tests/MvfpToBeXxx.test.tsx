@@ -1,3 +1,4 @@
+import { fakePaneState } from 'mvfp/tests/Fakes'
 import React from 'react';
 import { DrawProps } from 'mvfp/GuiTypes';
 import { FakePart } from './FakePart';
@@ -21,7 +22,7 @@ describe('Custom test methods', () => {
     part.testId = 'test-part-id';
     const layers: GuiPartsLayerCollection = new Map();
     layers.set(0, new GuiPartsCollection());
-    layers.get(0)!.push(part);
+    layers.get(0)!.push({ part, pane: fakePaneState });
     mvfpRender(<GuiView partsLayers={layers} />);
     expect(view.getPartByTestId('test-part-id')).toBeInTheView();
   });
@@ -31,7 +32,7 @@ describe('Custom test methods', () => {
     part.testId = 'not-hit-test-part-id';
     const layers: GuiPartsLayerCollection = new Map();
     layers.set(0, new GuiPartsCollection());
-    layers.get(0)!.push(part);
+    layers.get(0)!.push({ part, pane: fakePaneState });
     mvfpRender(<GuiView partsLayers={layers} />);
     expect(view.queryPartByTestId('test-part-id')).not.toBeInTheView();
   });
@@ -59,7 +60,7 @@ describe('Custom test methods', () => {
     const layer = new GuiPartsCollection();
     layers.set(0, layer);
     const part = new MockPositionPart();
-    layers.get(0)!.push(part);
+    layers.get(0)!.push({ part, pane: fakePaneState });
 
     layer.codeToLayout = {
       convertX(value) {

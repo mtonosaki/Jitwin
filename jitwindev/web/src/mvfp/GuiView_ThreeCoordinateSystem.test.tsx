@@ -1,4 +1,5 @@
 // eslint max-classes-per-file: 0
+import { fakePaneState } from 'mvfp/tests/Fakes'
 import React from 'react';
 import { render } from '@testing-library/react';
 import { GuiPartBase } from 'mvfp/GuiPart';
@@ -39,11 +40,11 @@ describe('three coordinate system', () => {
       public verifyBetweenLayoutAndScreen(): void {
         const sx = this.dp!.converters.layoutToScreen.convertX(
           { layout: 1 },
-          { scroll: screenPosition0 }
+          fakePaneState
         );
         const sy = this.dp!.converters.layoutToScreen.convertY(
           { layout: 4 },
-          { scroll: screenPosition0 }
+          { name: '',  scroll: screenPosition0 }
         );
         const lx = this.dp!.converters.screenToLayout.convertX(
           sx,
@@ -90,7 +91,7 @@ describe('three coordinate system', () => {
 
       override beforeRun() {
         // add the part into common collection
-        this.partsLayers.get(0)?.push(this.mockPart);
+        this.partsLayers.get(0)?.push({ part: this.mockPart, pane: fakePaneState });
         this.mockPart.codePosition = {
           x: { code: 'one' },
           y: { code: 2 },

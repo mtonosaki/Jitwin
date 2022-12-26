@@ -4,8 +4,13 @@ import {
   ConverterCodeToLayout,
   ConverterLayoutToCode,
   ConverterLayoutToScreen,
-  ConverterScreenToLayout,
-} from './ThreeCoordinatesSystem';
+  ConverterScreenToLayout, PaneState,
+} from './ThreeCoordinatesSystem'
+
+export type PartAndPane = {
+  part: GuiPart,
+  pane: PaneState,
+}
 
 // USAGE: HOW TO CUSTOMIZE COORDINATE CONVERTERS
 //
@@ -31,7 +36,7 @@ import {
 //       return { layout: 0 };
 //   }
 // }
-export class GuiPartsCollection extends Array<GuiPart> {
+export class GuiPartsCollection extends Array<PartAndPane> {
   getConverters(): Converters {
     return {
       codeToLayout: this.codeToLayout,

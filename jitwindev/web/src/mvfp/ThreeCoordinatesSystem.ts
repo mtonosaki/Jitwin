@@ -118,5 +118,6 @@ export type ConverterLayoutToCode = {
 };
 
 export type PaneState = {
+  name: string;
   scroll: ScreenPosition;
 };

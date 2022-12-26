@@ -49,6 +49,7 @@ export const xxxPartByTestId =
             foundParts: drawnPart.part,
             foundLayer: drawnPart.layer,
             foundPositioner: drawnPart.positioner,
+            foundPane: drawnPart.positioner.pane,
           };
         }
       }
@@ -57,12 +58,13 @@ export const xxxPartByTestId =
     // @ts-ignore
     for (const layerNo: number of view.partsLayers.keys()) {
       const layer = view.partsLayers.get(layerNo);
-      const filter = layer?.filter((part) => part.testId === testId);
+      const filter = layer?.filter((partPane) => partPane.part.testId === testId);
       if ((filter?.length ?? 0) > 0) {
         return {
           method,
           filterName,
-          foundParts: filter![0],
+          foundParts: filter![0].part,
+          foundPane: filter![0].pane,
           foundLayer: layer,
         };
       }

@@ -1,9 +1,11 @@
-import {
-  GuiPartsCollection,
-  GuiPartsLayerCollection,
-} from './GuiPartsCollection';
-import { makeNewUuid } from './utils/uuid';
-import { Pane } from './GuiPane';
+import { PaneState } from 'mvfp/ThreeCoordinatesSystem'
+import { GuiPartsCollection, GuiPartsLayerCollection, } from './GuiPartsCollection'
+import { makeNewUuid } from './utils/uuid'
+
+export const dummyPane: PaneState = {
+  name: 'dummyPane',
+  scroll: { x: {screen: -9898567574}, y: {screen: 21937457} }
+}
 
 export abstract class GuiFeature {
   public readonly id: string = 'n/a';
@@ -14,7 +16,11 @@ export abstract class GuiFeature {
   // Do not use this instance except for testing.
   protected partsLayers: GuiPartsLayerCollection = new Map();
 
-  protected targetPane: Pane | undefined;
+  protected targetPane: PaneState = dummyPane;
+
+  get pane(): PaneState{
+    return this.targetPane;
+  }
 
   constructor(id?: string) {
     this.id = id || makeNewUuid();
@@ -24,14 +30,14 @@ export abstract class GuiFeature {
     layerNo: number,
     defaultInstanciater?: () => GuiPartsCollection
   ) {
-    const parts = this.partsLayers.get(layerNo);
-    if (parts) {
-      return parts;
+    const partsCollection = this.partsLayers.get(layerNo);
+    if (partsCollection) {
+      return partsCollection;
     }
-    if (!parts && defaultInstanciater) {
-      const newParts = defaultInstanciater();
-      this.partsLayers.set(layerNo, newParts);
-      return newParts;
+    if (!partsCollection && defaultInstanciater) {
+      const newPartsCollection = defaultInstanciater();
+      this.partsLayers.set(layerNo, newPartsCollection);
+      return newPartsCollection;
     }
     return undefined;
   }
@@ -42,10 +48,6 @@ export abstract class GuiFeature {
 
   public getName(): string {
     return this.constructor.name;
-  }
-
-  public getTargetPane(): Pane | undefined {
-    return this.targetPane;
   }
 
   public toString(): string {

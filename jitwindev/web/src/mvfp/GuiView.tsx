@@ -34,7 +34,6 @@ export default function GuiView({
   const refCanvas = useRef<HTMLCanvasElement | null>(null);
   const refIsBeforeFinished = useRef<GuiFeatureCollection>([]);
   const refDrawnParts = useRef<DrawnPart[]>([]);
-  const [paneState] = useState<PaneState>({ scroll: screenPosition0 });
   const refDefaultPane = useRef(null);
 
   useEffect(() => {
@@ -58,7 +57,9 @@ export default function GuiView({
 
     flatFeatures(features).forEach((feature) => {
       feature.setPartsLayerCollection(partsLayers!);
-      feature.setTargetPane(refDefaultPane.current);
+      if( refDefaultPane.current ){
+        feature.setTargetPane(refDefaultPane.current);
+      }
     });
 
     executeFeaturesBeforeRun();
@@ -97,18 +98,18 @@ export default function GuiView({
 
     partsLayers.forEach((layer) => {
       const converters = layer.getConverters();
-      const dp: DrawProps = {
-        g: context,
-        converters,
-        pane: paneState,
-      };
-      layer.forEach((part) => {
-        part.draw(dp);
+      layer.forEach((panePart) => {
+        const dp: DrawProps = {
+          g: context,
+          converters,
+          pane: panePart.pane,
+        };
+        panePart.part.draw(dp);
 
         // save drawn result for testing library
         const drawn: DrawnPart = {
-          part,
-          positioner: { converters, pane: paneState },
+          part: panePart.part,
+          positioner: dp,
           layer,
         };
         refDrawnParts.current.push(drawn);
@@ -148,11 +149,7 @@ class FeatureHandler extends GuiFeature {
     this.partsLayers = partsLayers;
   }
 
-  setTargetPane(pane: Pane | null) {
-    if (pane) {
-      this.targetPane = pane;
-    } else {
-      this.targetPane = undefined;
-    }
+  setTargetPane(pane: Pane) {
+    this.targetPane = pane;
   }
 }
