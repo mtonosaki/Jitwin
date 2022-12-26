@@ -1,9 +1,11 @@
+import { fakePaneState } from 'mvfp/tests/Fakes';
 import React from 'react';
 import { DrawProps } from 'mvfp/GuiTypes';
 import { FakePart } from './FakePart';
 import {
   GuiPartsCollection,
   GuiPartsLayerCollection,
+  LPS,
 } from '../GuiPartsCollection';
 import {
   mvfpRender,
@@ -20,7 +22,7 @@ describe('Custom test methods', () => {
     part.testId = 'test-part-id';
     const layers: GuiPartsLayerCollection = new Map();
     layers.set(0, new GuiPartsCollection());
-    layers.get(0)!.push(part);
+    layers.get(0)!.push({ part, pane: fakePaneState });
     mvfpRender(<GuiView partsLayers={layers} />);
     expect(view.getPartByTestId('test-part-id')).toBeInTheView();
   });
@@ -30,7 +32,7 @@ describe('Custom test methods', () => {
     part.testId = 'not-hit-test-part-id';
     const layers: GuiPartsLayerCollection = new Map();
     layers.set(0, new GuiPartsCollection());
-    layers.get(0)!.push(part);
+    layers.get(0)!.push({ part, pane: fakePaneState });
     mvfpRender(<GuiView partsLayers={layers} />);
     expect(view.queryPartByTestId('test-part-id')).not.toBeInTheView();
   });
@@ -58,7 +60,7 @@ describe('Custom test methods', () => {
     const layer = new GuiPartsCollection();
     layers.set(0, layer);
     const part = new MockPositionPart();
-    layers.get(0)!.push(part);
+    layers.get(0)!.push({ part, pane: fakePaneState });
 
     layer.codeToLayout = {
       convertX(value) {
@@ -70,22 +72,6 @@ describe('Custom test methods', () => {
             return { layout: 100 };
         }
         return { layout: 0 };
-      },
-    };
-    layer.layoutToScreen = {
-      convertX(value) {
-        return { screen: value.layout * 5 };
-      },
-      convertY(value) {
-        return { screen: value.layout * 7 };
-      },
-    };
-    layer.screenToLayout = {
-      convertX(value) {
-        return { layout: value.screen / 5 };
-      },
-      convertY(value) {
-        return { layout: value.screen / 7 };
       },
     };
     layer.layoutToCode = {
@@ -117,8 +103,8 @@ describe('Custom test methods', () => {
       y: { layout: 100 },
     });
     expect(testPart).toHaveBeenDrawnAt({
-      x: { screen: 100 },
-      y: { screen: 700 },
+      x: { screen: 20 / LPS },
+      y: { screen: 100 / LPS },
     });
   });
 });

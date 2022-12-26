@@ -7,10 +7,6 @@ import {
   codeToLayoutLogicalSpaceY,
   layoutToCodeLogicalSpaceX,
   layoutToCodeLogicalSpaceY,
-  layoutToScreenX,
-  layoutToScreenY,
-  screenToLayoutX,
-  screenToLayoutY,
 } from '../PositionConverters';
 import { JitTestIds } from '../tests/JitTestIds';
 
@@ -25,7 +21,7 @@ export class FeatureJitProcess extends GuiFeature {
     const layer = this.layer(LayerIds.JIT_PROCESS, () =>
       makeLayerForJitProcess()
     )!;
-    layer.push(process);
+    layer.push({ part: process, pane: this.targetPane });
   }
 }
 
@@ -38,14 +34,6 @@ function makeLayerForJitProcess(): GuiPartsCollection {
   layer.layoutToCode = {
     convertX: layoutToCodeLogicalSpaceX,
     convertY: layoutToCodeLogicalSpaceY,
-  };
-  layer.layoutToScreen = {
-    convertX: layoutToScreenX,
-    convertY: layoutToScreenY,
-  };
-  layer.screenToLayout = {
-    convertX: screenToLayoutX,
-    convertY: screenToLayoutY,
   };
   return layer;
 }

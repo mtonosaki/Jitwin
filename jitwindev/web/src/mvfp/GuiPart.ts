@@ -1,4 +1,5 @@
-import { Converters, DrawProps } from 'mvfp/GuiTypes';
+import { Converters, DrawProps, Positioner } from 'mvfp/GuiTypes';
+import { GuiUndefinedException } from './GuiExeption';
 import {
   CodePosition,
   CodeSize,
@@ -6,7 +7,6 @@ import {
   ScreenPosition,
   ScreenSize,
 } from './ThreeCoordinatesSystem';
-import { GuiUndefinedException } from './GuiExeption';
 
 export interface GuiPartPosition<TCodeX, TCodeY> {
   codePosition?: CodePosition<TCodeX, TCodeY>;
@@ -18,10 +18,10 @@ export interface GuiPart {
 
   draw(dp: DrawProps): void;
 
-  getScreenPosition(converters: Converters): ScreenPosition;
+  getScreenPosition(positioner: Positioner): ScreenPosition;
 
   getLayoutPosition(
-    converters: Converters,
+    positioner: Positioner,
     screenPosition: ScreenPosition
   ): LayoutPosition;
 
@@ -44,42 +44,60 @@ export abstract class GuiPartBase<TCodeX, TCodeY>
     };
   }
 
-  public getScreenPosition(converters: Converters): ScreenPosition {
+  public getScreenPosition(positioner: Positioner): ScreenPosition {
     if (!this.codePosition)
       throw new GuiUndefinedException('GuiParts.getScreenPosition');
 
-    return this.getScreenPositionFromCode(converters, this.codePosition);
+    return this.getScreenPositionFromCode(positioner, this.codePosition);
   }
 
   public getScreenPositionFromCode(
-    converters: Converters,
+    positioner: Positioner,
     codePosition: CodePosition<TCodeX, TCodeY>
   ): ScreenPosition {
-    const lx = converters.codeToLayout.convertX(codePosition.x);
-    const ly = converters.codeToLayout.convertY(codePosition.y);
-    const sx = converters.layoutToScreen.convertX(lx);
-    const sy = converters.layoutToScreen.convertY(ly);
+    const lx = positioner.converters.codeToLayout.convertX(codePosition.x);
+    const ly = positioner.converters.codeToLayout.convertY(codePosition.y);
+    const sx = positioner.converters.layoutToScreen.convertX(
+      lx,
+      positioner.pane
+    );
+    const sy = positioner.converters.layoutToScreen.convertY(
+      ly,
+      positioner.pane
+    );
     return { x: sx, y: sy };
   }
 
   public getScreenSizeFromCode(
-    converters: Converters,
+    positioner: Positioner,
     codeSize: CodeSize<TCodeX, TCodeY>
   ): ScreenSize {
-    const lx = converters.codeToLayout.convertX(codeSize.width);
-    const ly = converters.codeToLayout.convertY(codeSize.height);
-    const sx = converters.layoutToScreen.convertX(lx);
-    const sy = converters.layoutToScreen.convertY(ly);
+    const lx = positioner.converters.codeToLayout.convertX(codeSize.width);
+    const ly = positioner.converters.codeToLayout.convertY(codeSize.height);
+    const sx = positioner.converters.layoutToScreen.convertX(
+      lx,
+      positioner.pane
+    );
+    const sy = positioner.converters.layoutToScreen.convertY(
+      ly,
+      positioner.pane
+    );
     return { width: sx, height: sy };
   }
 
   public getLayoutPosition(
-    converters: Converters,
+    positioner: Positioner,
     screenPosition: ScreenPosition
   ): LayoutPosition {
     return {
-      x: converters.screenToLayout.convertX(screenPosition.x),
-      y: converters.screenToLayout.convertY(screenPosition.y),
+      x: positioner.converters.screenToLayout.convertX(
+        screenPosition.x,
+        positioner.pane
+      ),
+      y: positioner.converters.screenToLayout.convertY(
+        screenPosition.y,
+        positioner.pane
+      ),
     };
   }
 
@@ -94,13 +112,13 @@ export abstract class GuiPartBase<TCodeX, TCodeY>
   }
 
   getCodePositionFromScreen(
-    converters: Converters,
+    positioner: Positioner,
     spos: ScreenPosition
   ): CodePosition<TCodeX, TCodeY> {
-    const layoutPos = this.getLayoutPosition(converters, spos);
+    const layoutPos = this.getLayoutPosition(positioner, spos);
     return {
-      x: converters.layoutToCode.convertX(layoutPos.x),
-      y: converters.layoutToCode.convertY(layoutPos.y),
+      x: positioner.converters.layoutToCode.convertX(layoutPos.x),
+      y: positioner.converters.layoutToCode.convertY(layoutPos.y),
     };
   }
 }

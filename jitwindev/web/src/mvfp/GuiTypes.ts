@@ -3,7 +3,7 @@ import {
   ConverterLayoutToCode,
   ConverterLayoutToScreen,
   ConverterScreenToLayout,
-  ScreenPosition,
+  PaneState,
 } from './ThreeCoordinatesSystem';
 
 export type Converters = {
@@ -13,8 +13,9 @@ export type Converters = {
   layoutToCode: ConverterLayoutToCode;
 };
 
-export type PaneState = {
-  scroll: ScreenPosition;
+export type Positioner = {
+  converters: Converters;
+  pane: PaneState;
 };
 
 export type DrawProps = {

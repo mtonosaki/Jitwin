@@ -15,7 +15,7 @@ export default class FakeFeature extends GuiFeature {
       this.partsLayers.set(0, new GuiPartsCollection());
     }
     this.mockParts.forEach((part) => {
-      this.partsLayers.get(0)?.push(part);
+      this.partsLayers.get(0)?.push({ part, pane: this.pane });
     });
   }
 }
