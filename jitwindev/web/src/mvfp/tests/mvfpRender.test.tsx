@@ -32,9 +32,9 @@ describe('feature utility', () => {
     expect(view.features).toContain(feature1);
     expect(view.features).toContain(feature2);
     expect(view.partsLayers).toBe(layers);
-    expect(view.partsLayers?.get(0)).toContain(part1);
-    expect(view.partsLayers?.get(0)).toContain(part2);
-    expect(view.partsLayers?.get(0)).toContain(part3);
+    expect(view.partsLayers?.get(0)?.map((it) => it.part)).toContain(part1);
+    expect(view.partsLayers?.get(0)?.map((it) => it.part)).toContain(part2);
+    expect(view.partsLayers?.get(0)?.map((it) => it.part)).toContain(part3);
   });
 
   it('Bill can test with features and parts layer collection Part 2', () => {
@@ -61,9 +61,9 @@ describe('feature utility', () => {
     expect(view.features).toContain(feature2);
     expect(view.features).toContain(feature3);
     expect(view.partsLayers).toBe(layers);
-    expect(view.partsLayers?.get(0)).toContain(part1);
-    expect(view.partsLayers?.get(0)).toContain(part2);
-    expect(view.partsLayers?.get(0)).toContain(part3);
-    expect(view.partsLayers?.get(0)).toContain(part4);
+    expect(view.partsLayers?.get(0)?.map((it) => it.part)).toContain(part1);
+    expect(view.partsLayers?.get(0)?.map((it) => it.part)).toContain(part2);
+    expect(view.partsLayers?.get(0)?.map((it) => it.part)).toContain(part3);
+    expect(view.partsLayers?.get(0)?.map((it) => it.part)).toContain(part4);
   });
 });

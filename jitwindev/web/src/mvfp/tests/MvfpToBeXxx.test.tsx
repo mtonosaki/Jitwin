@@ -1,4 +1,4 @@
-import { fakePaneState } from 'mvfp/tests/Fakes'
+import { fakePaneState } from 'mvfp/tests/Fakes';
 import React from 'react';
 import { DrawProps } from 'mvfp/GuiTypes';
 import { FakePart } from './FakePart';

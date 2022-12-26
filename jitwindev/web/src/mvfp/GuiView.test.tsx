@@ -128,8 +128,12 @@ describe('Parts system', () => {
 
     // THEN
     expect(spyPartsLayersCollection.get(0)).toHaveLength(2);
-    expect(spyPartsLayersCollection.get(0)?.filter(it => it.part)).toContain(dummyPartA);
-    expect(spyPartsLayersCollection.get(0)?.filter(it => it.part)).toContain(dummyPartB);
+    expect(spyPartsLayersCollection.get(0)?.map((it) => it.part)).toContain(
+      dummyPartA
+    );
+    expect(spyPartsLayersCollection.get(0)?.map((it) => it.part)).toContain(
+      dummyPartB
+    );
   });
 });
 
@@ -255,7 +259,6 @@ describe('Scroll System', () => {
           x: { code: '111' }, // = 0x111
           y: { code: '222' }, // = 0x222
         };
-        const pane = this.targetPane;
         this.partsLayers.get(33)!.push({ part, pane: this.pane });
       }
     }
@@ -278,8 +281,8 @@ describe('Scroll System', () => {
 
     // THEN
     expect(samplePart).toHaveBeenDrawnAt({
-      x: { screen: 0x111 / LPS - 10 }, // 17.0625 - 10
-      y: { screen: 0x222 / LPS - 20 }, // 34.125 - 20
+      x: { screen: 0x111 / LPS + 10 }, // 17.0625 + 10
+      y: { screen: 0x222 / LPS + 20 }, // 34.125 + 20
     });
   });
   // TODO: clip pane rect

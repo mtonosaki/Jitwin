@@ -1,16 +1,15 @@
 import { GuiPart } from 'mvfp/GuiPart';
-import React, { useEffect, useRef, useState } from 'react';
-import { MvfpTestIds } from './tests/MvfpTestIds';
+import React, { useEffect, useRef } from 'react';
 import { GuiFeature } from './GuiFeature';
-import { FEATURE_EXECUTION_SPAN_MSEC } from './MvfpParameters';
+import { GuiFeatureCollection } from './GuiFeatureCollection';
+import { GuiPane, Pane } from './GuiPane';
 import {
   GuiPartsCollection,
   GuiPartsLayerCollection,
 } from './GuiPartsCollection';
-import { GuiFeatureCollection } from './GuiFeatureCollection';
-import { PaneState, screenPosition0 } from './ThreeCoordinatesSystem';
 import { DrawProps, Positioner } from './GuiTypes';
-import { GuiPane, Pane } from './GuiPane';
+import { FEATURE_EXECUTION_SPAN_MSEC } from './MvfpParameters';
+import { MvfpTestIds } from './tests/MvfpTestIds';
 
 type Props = {
   className?: string;
@@ -57,7 +56,7 @@ export default function GuiView({
 
     flatFeatures(features).forEach((feature) => {
       feature.setPartsLayerCollection(partsLayers!);
-      if( refDefaultPane.current ){
+      if (refDefaultPane.current) {
         feature.setTargetPane(refDefaultPane.current);
       }
     });

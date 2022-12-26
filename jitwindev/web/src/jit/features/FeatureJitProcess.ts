@@ -21,7 +21,7 @@ export class FeatureJitProcess extends GuiFeature {
     const layer = this.layer(LayerIds.JIT_PROCESS, () =>
       makeLayerForJitProcess()
     )!;
-    layer.push({part: process, pane: this.targetPane });
+    layer.push({ part: process, pane: this.targetPane });
   }
 }
 

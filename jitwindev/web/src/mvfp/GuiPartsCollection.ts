@@ -4,13 +4,14 @@ import {
   ConverterCodeToLayout,
   ConverterLayoutToCode,
   ConverterLayoutToScreen,
-  ConverterScreenToLayout, PaneState,
-} from './ThreeCoordinatesSystem'
+  ConverterScreenToLayout,
+  PaneState,
+} from './ThreeCoordinatesSystem';
 
 export type PartAndPane = {
-  part: GuiPart,
-  pane: PaneState,
-}
+  part: GuiPart;
+  pane: PaneState;
+};
 
 // USAGE: HOW TO CUSTOMIZE COORDINATE CONVERTERS
 //

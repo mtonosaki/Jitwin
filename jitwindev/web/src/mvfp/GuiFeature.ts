@@ -1,11 +1,14 @@
-import { PaneState } from 'mvfp/ThreeCoordinatesSystem'
-import { GuiPartsCollection, GuiPartsLayerCollection, } from './GuiPartsCollection'
-import { makeNewUuid } from './utils/uuid'
+import { PaneState } from 'mvfp/ThreeCoordinatesSystem';
+import {
+  GuiPartsCollection,
+  GuiPartsLayerCollection,
+} from './GuiPartsCollection';
+import { makeNewUuid } from './utils/uuid';
 
 export const dummyPane: PaneState = {
   name: 'dummyPane',
-  scroll: { x: {screen: -9898567574}, y: {screen: 21937457} }
-}
+  scroll: { x: { screen: -9898567574 }, y: { screen: 21937457 } },
+};
 
 export abstract class GuiFeature {
   public readonly id: string = 'n/a';
@@ -18,7 +21,7 @@ export abstract class GuiFeature {
 
   protected targetPane: PaneState = dummyPane;
 
-  get pane(): PaneState{
+  get pane(): PaneState {
     return this.targetPane;
   }
 

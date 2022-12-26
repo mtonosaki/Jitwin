@@ -58,7 +58,9 @@ export const xxxPartByTestId =
     // @ts-ignore
     for (const layerNo: number of view.partsLayers.keys()) {
       const layer = view.partsLayers.get(layerNo);
-      const filter = layer?.filter((partPane) => partPane.part.testId === testId);
+      const filter = layer?.filter(
+        (partPane) => partPane.part.testId === testId
+      );
       if ((filter?.length ?? 0) > 0) {
         return {
           method,
