@@ -3,11 +3,12 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { GuiPartBase } from 'mvfp/GuiPart';
 import { DrawProps } from 'mvfp/GuiTypes';
-import { LayoutX } from './ThreeCoordinatesSystem';
+import { LayoutX, screenPosition0 } from './ThreeCoordinatesSystem';
 import { GuiFeature } from './GuiFeature';
 import {
   GuiPartsCollection,
   GuiPartsLayerCollection,
+  LPS,
 } from './GuiPartsCollection';
 import GuiView from './GuiView';
 import { testInitFeatureCycle, testNextCycleAsync } from './tests/mvfpRender';
@@ -36,26 +37,35 @@ describe('three coordinate system', () => {
       }
 
       public verifyBetweenLayoutAndScreen(): void {
-        const sx = this.dp!.converters.layoutToScreen.convertX({ layout: 1 });
-        const sy = this.dp!.converters.layoutToScreen.convertY({ layout: 4 });
-        const lx = this.dp!.converters.screenToLayout.convertX(sx);
-        const ly = this.dp!.converters.screenToLayout.convertY(sy);
+        const sx = this.dp!.converters.layoutToScreen.convertX(
+          { layout: 1 },
+          { scroll: screenPosition0 }
+        );
+        const sy = this.dp!.converters.layoutToScreen.convertY(
+          { layout: 4 },
+          { scroll: screenPosition0 }
+        );
+        const lx = this.dp!.converters.screenToLayout.convertX(
+          sx,
+          this.dp!.pane
+        );
+        const ly = this.dp!.converters.screenToLayout.convertY(
+          sy,
+          this.dp!.pane
+        );
 
-        expect(sx.screen).toBe(100);
-        expect(sy.screen).toBe(4000);
         expect(lx.layout).toBe(1);
         expect(ly.layout).toBe(4);
+        expect(sx.screen).toBe(1 / LPS);
+        expect(sy.screen).toBe(4 / LPS);
       }
 
       public verifyGetHogePosition(): void {
-        const screenPosition = this.getScreenPosition(this.dp!);
-        expect(screenPosition.x.screen).toBe(100);
-        expect(screenPosition.y.screen).toBe(4000);
+        const screenPosition = this.getScreenPosition(this.dp!); // from Code
+        expect(screenPosition.x.screen).toBe(1 / LPS);
+        expect(screenPosition.y.screen).toBe(4 / LPS);
 
-        const layoutPosition = this.getLayoutPosition(
-          this.dp!.converters,
-          screenPosition
-        );
+        const layoutPosition = this.getLayoutPosition(this.dp!, screenPosition);
         expect(layoutPosition.x.layout).toBe(1);
         expect(layoutPosition.y.layout).toBe(4);
 
@@ -67,7 +77,7 @@ describe('three coordinate system', () => {
         expect(codePositionFromLayout.y.code).toBe(2);
 
         const codePositionFromScreen = this.getCodePositionFromScreen(
-          this.dp!.converters,
+          this.dp!,
           screenPosition
         );
         expect(codePositionFromScreen.x.code).toBe('one');
@@ -120,22 +130,6 @@ describe('three coordinate system', () => {
       // set anonymous function version
       convertY(value) {
         return { layout: (value.code as number) * 2 };
-      },
-    };
-    layer.layoutToScreen = {
-      convertX(value) {
-        return { screen: value.layout * 100 };
-      },
-      convertY(value) {
-        return { screen: value.layout * 1000 };
-      },
-    };
-    layer.screenToLayout = {
-      convertX(value) {
-        return { layout: value.screen / 100 };
-      },
-      convertY(value) {
-        return { layout: value.screen / 1000 };
       },
     };
     layer.layoutToCode = {

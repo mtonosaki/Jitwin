@@ -1,18 +1,24 @@
 // eslint max-classes-per-file: 0
-import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { GuiPart, GuiPartBase } from 'mvfp/GuiPart';
-import { Converters, DrawProps } from 'mvfp/GuiTypes';
 import { GuiFeature } from 'mvfp/GuiFeature';
-import GuiView from './GuiView';
+import { GuiPart, GuiPartBase } from 'mvfp/GuiPart';
+import { DrawProps, Positioner } from 'mvfp/GuiTypes';
+import React from 'react';
 import {
   GuiPartsCollection,
   GuiPartsLayerCollection,
+  LPS,
 } from './GuiPartsCollection';
+import GuiView from './GuiView';
+import FakeFeature from './tests/FakeFeature';
+import { FakePart } from './tests/FakePart';
+import {
+  mvfpRender,
+  testInitFeatureCycle,
+  testNextCycleAsync,
+} from './tests/mvfpRender';
 import { MvfpTestIds } from './tests/MvfpTestIds';
 import SpyFeature from './tests/SpyFeature';
-import { FakePart } from './tests/FakePart';
-import FakeFeature from './tests/FakeFeature';
 import { view } from './tests/View';
 import {
   CodePosition,
@@ -20,11 +26,6 @@ import {
   ScreenPosition,
   screenPosition0,
 } from './ThreeCoordinatesSystem';
-import {
-  mvfpRender,
-  testInitFeatureCycle,
-  testNextCycleAsync,
-} from './tests/mvfpRender';
 import { screenOffset } from './utils/coordinateUtils';
 
 describe('Custom html class', () => {
@@ -162,7 +163,7 @@ describe('Parts drawing system', () => {
       }
 
       getLayoutPosition(
-        converters: Converters,
+        positioner: Positioner,
         screenPosition: ScreenPosition
       ): LayoutPosition {
         return { x: { layout: 0 }, y: { layout: 0 } };
@@ -242,22 +243,6 @@ describe('Scroll System', () => {
         return { code: value.layout.toString(16) };
       },
     };
-    layer.layoutToScreen = {
-      convertX(value) {
-        return { screen: value.layout * 3 };
-      },
-      convertY(value) {
-        return { screen: value.layout * 2 };
-      },
-    };
-    layer.screenToLayout = {
-      convertX(value) {
-        return { layout: value.screen / 3 };
-      },
-      convertY(value) {
-        return { layout: value.screen / 2 };
-      },
-    };
 
     class FakeHappyPart extends GuiPartBase<string, string> {
       draw(dp: DrawProps): void {}
@@ -268,8 +253,8 @@ describe('Scroll System', () => {
         const part = new FakeHappyPart();
         part.testId = 'happy-parts';
         part.codePosition = {
-          x: { code: 'a' }, // = 10
-          y: { code: 'c' }, // = 12
+          x: { code: '111' }, // = 0x111
+          y: { code: '222' }, // = 0x222
         };
         this.partsLayers.get(33)?.push(part);
       }
@@ -282,8 +267,8 @@ describe('Scroll System', () => {
     // GIVEN  Scroll 0,0
     const samplePart = view.getPartByTestId('happy-parts');
     expect(samplePart).toHaveBeenDrawnAt({
-      x: { screen: 30 },
-      y: { screen: 24 },
+      x: { screen: 0x111 / LPS },
+      y: { screen: 0x222 / LPS },
     });
 
     // WHEN - Scroll View +10, +20
@@ -293,8 +278,8 @@ describe('Scroll System', () => {
 
     // THEN
     expect(samplePart).toHaveBeenDrawnAt({
-      x: { screen: 20 },
-      y: { screen: 4 },
+      x: { screen: 0x111 / LPS - 10 },
+      y: { screen: 0x222 / LPS - 20 },
     });
   });
   // TODO: clip pane rect

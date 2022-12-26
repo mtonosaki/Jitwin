@@ -65,8 +65,10 @@ export function toHaveBeenDrawnAt(
   expect: any
 ): jest.CustomMatcherResult {
   const res = actual as MvfpXxxByResult;
-  if (res.foundParts && res.foundLayer) {
-    if (view.refDrawnParts?.current.includes(res.foundParts)) {
+  if (res.foundParts && res.foundLayer && res.foundPositioner) {
+    if (
+      view.refDrawnParts?.current.map((it) => it.part).includes(res.foundParts)
+    ) {
       const expectLayoutPosition = ifLayoutPosition(expect);
       if (expectLayoutPosition) {
         const c2l = res.foundLayer.getConverters().codeToLayout;
@@ -95,7 +97,7 @@ export function toHaveBeenDrawnAt(
       const expectScreenPosition = ifScreenPosition(expect);
       if (expectScreenPosition) {
         const actualScreenPosition = res.foundParts.getScreenPosition(
-          res.foundLayer.getConverters()
+          res.foundPositioner
         );
         if (
           actualScreenPosition.x.screen === expectScreenPosition.x.screen &&

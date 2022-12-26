@@ -51,20 +51,20 @@ export class GuiPartsCollection extends Array<GuiPart> {
   };
 
   layoutToScreen: ConverterLayoutToScreen = {
-    convertX(value) {
-      return { screen: 0 }; // dummy
+    convertX(value, pane) {
+      return { screen: value.layout / LPS + pane.scroll.x.screen };
     },
-    convertY(value) {
-      return { screen: 0 }; // dummy
+    convertY(value, pane) {
+      return { screen: value.layout / LPS + pane.scroll.y.screen };
     },
   };
 
   screenToLayout: ConverterScreenToLayout = {
-    convertX(value) {
-      return { layout: 0 }; // dummy
+    convertX(value, pane) {
+      return { layout: (value.screen - pane.scroll.x.screen) * LPS };
     },
-    convertY(value) {
-      return { layout: 0 }; // dummy
+    convertY(value, pane) {
+      return { layout: (value.screen - pane.scroll.y.screen) * LPS };
     },
   };
 
@@ -76,3 +76,4 @@ export class GuiPartsCollection extends Array<GuiPart> {
 }
 
 export type GuiPartsLayerCollection = Map<number, GuiPartsCollection>;
+export const LPS: number = 16.0; // Layout pixels Per Screen

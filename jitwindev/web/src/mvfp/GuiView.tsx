@@ -1,11 +1,15 @@
+import { GuiPart } from 'mvfp/GuiPart';
 import React, { useEffect, useRef, useState } from 'react';
 import { MvfpTestIds } from './tests/MvfpTestIds';
 import { GuiFeature } from './GuiFeature';
 import { FEATURE_EXECUTION_SPAN_MSEC } from './MvfpParameters';
-import { GuiPartsLayerCollection } from './GuiPartsCollection';
+import {
+  GuiPartsCollection,
+  GuiPartsLayerCollection,
+} from './GuiPartsCollection';
 import { GuiFeatureCollection } from './GuiFeatureCollection';
-import { screenPosition0 } from './ThreeCoordinatesSystem';
-import { DrawProps, PaneState } from './GuiTypes'
+import { PaneState, screenPosition0 } from './ThreeCoordinatesSystem';
+import { DrawProps, Positioner } from './GuiTypes';
 import { GuiPane, Pane } from './GuiPane';
 
 type Props = {
@@ -13,6 +17,12 @@ type Props = {
   features?: GuiFeatureCollection;
   partsLayers?: GuiPartsLayerCollection;
   'data-testid'?: string;
+};
+
+export type DrawnPart = {
+  part: GuiPart;
+  positioner: Positioner;
+  layer: GuiPartsCollection;
 };
 
 export default function GuiView({
@@ -23,7 +33,7 @@ export default function GuiView({
 }: Props) {
   const refCanvas = useRef<HTMLCanvasElement | null>(null);
   const refIsBeforeFinished = useRef<GuiFeatureCollection>([]);
-  const refDrawnParts = useRef<any[]>([]);
+  const refDrawnParts = useRef<DrawnPart[]>([]);
   const [paneState] = useState<PaneState>({ scroll: screenPosition0 });
   const refDefaultPane = useRef(null);
 
@@ -91,10 +101,17 @@ export default function GuiView({
         g: context,
         converters,
         pane: paneState,
-      }
+      };
       layer.forEach((part) => {
         part.draw(dp);
-        refDrawnParts.current.push(part);
+
+        // save drawn result for testing library
+        const drawn: DrawnPart = {
+          part,
+          positioner: { converters, pane: paneState },
+          layer,
+        };
+        refDrawnParts.current.push(drawn);
       });
     });
   };

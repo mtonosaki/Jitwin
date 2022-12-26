@@ -4,6 +4,7 @@ import { FakePart } from './FakePart';
 import {
   GuiPartsCollection,
   GuiPartsLayerCollection,
+  LPS,
 } from '../GuiPartsCollection';
 import {
   mvfpRender,
@@ -72,22 +73,6 @@ describe('Custom test methods', () => {
         return { layout: 0 };
       },
     };
-    layer.layoutToScreen = {
-      convertX(value) {
-        return { screen: value.layout * 5 };
-      },
-      convertY(value) {
-        return { screen: value.layout * 7 };
-      },
-    };
-    layer.screenToLayout = {
-      convertX(value) {
-        return { layout: value.screen / 5 };
-      },
-      convertY(value) {
-        return { layout: value.screen / 7 };
-      },
-    };
     layer.layoutToCode = {
       convertX(value) {
         return { code: value.layout / 2 };
@@ -117,8 +102,8 @@ describe('Custom test methods', () => {
       y: { layout: 100 },
     });
     expect(testPart).toHaveBeenDrawnAt({
-      x: { screen: 100 },
-      y: { screen: 700 },
+      x: { screen: 20 / LPS },
+      y: { screen: 100 / LPS },
     });
   });
 });

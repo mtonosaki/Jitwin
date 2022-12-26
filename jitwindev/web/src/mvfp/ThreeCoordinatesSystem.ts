@@ -103,16 +103,20 @@ export type ConverterCodeToLayout = {
 };
 
 export type ConverterLayoutToScreen = {
-  convertX: (value: LayoutX) => ScreenX;
-  convertY: (value: LayoutY) => ScreenY;
+  convertX: (value: LayoutX, pane: PaneState) => ScreenX;
+  convertY: (value: LayoutY, pane: PaneState) => ScreenY;
 };
 
 export type ConverterScreenToLayout = {
-  convertX: (value: ScreenX) => LayoutX;
-  convertY: (value: ScreenY) => LayoutY;
+  convertX: (value: ScreenX, pane: PaneState) => LayoutX;
+  convertY: (value: ScreenY, pane: PaneState) => LayoutY;
 };
 
 export type ConverterLayoutToCode = {
   convertX: (value: LayoutX) => any; // any is CodeX<TCodeX>
   convertY: (value: LayoutY) => any; // any is CodeY<TCodeY>
+};
+
+export type PaneState = {
+  scroll: ScreenPosition;
 };
