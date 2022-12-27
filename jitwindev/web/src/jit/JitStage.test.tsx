@@ -1,14 +1,10 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import JitStage from './JitStage';
-import { TestIds } from '../tests/TestIds';
-import { JitTestIds } from './tests/JitTestIds';
-import { view } from '../mvfp/tests/View';
-import {
-  mvfpRender,
-  testInitFeatureCycle,
-  testNextCycleAsync,
-} from '../mvfp/tests/mvfpRender';
+import { render, screen } from '@testing-library/react'
+import React from 'react'
+import { mvfpRender, testInitFeatureCycle, testNextCycleAsync, } from '../mvfp/tests/mvfpRender'
+import { view } from '../mvfp/tests/View'
+import { TestIds } from '../tests/TestIds'
+import JitStage from './JitStage'
+import { JitTestIds } from './tests/JitTestIds'
 
 describe('Edit mode', () => {
   it('When readonly mode, she sees readonly mode message', () => {
@@ -32,7 +28,7 @@ describe('She sees GuiView of MVFP', () => {
 });
 
 describe('Sample', () => {
-  it.skip('She sees a first PROCESS on the center of the view', async () => {
+  it('She sees a first PROCESS on the center of the view', async () => {
     // GIVEN
     const { stubCanvas } = testInitFeatureCycle();
     Object.defineProperty(stubCanvas, 'clientWidth', { get: () => 111 }); // set view size

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { TestIds } from 'tests/TestIds';
-import GuiView from 'mvfp/GuiView';
-import { GuiFeatureCollection } from 'mvfp/GuiFeatureCollection';
-import styles from './JitStage.module.scss';
-import { FeatureJitProcess } from './features/FeatureJitProcess';
-import { GuiPartsLayerCollection } from '../mvfp/GuiPartsCollection';
+import { GuiFeatureCollection } from 'mvfp/GuiFeatureCollection'
+import GuiView from 'mvfp/GuiView'
+import React, { useEffect, useState } from 'react'
+import { TestIds } from 'tests/TestIds'
+import { GuiPartsLayerCollection } from '../mvfp/GuiPartsCollection'
+import { FeatureJitProcess } from './features/FeatureJitProcess'
+import styles from './JitStage.module.scss'
 
 type Props = {
   isReadonly: boolean;
