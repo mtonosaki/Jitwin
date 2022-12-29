@@ -32,7 +32,7 @@ export abstract class GuiFeature {
   protected layer(
     layerNo: number,
     defaultInstanciater?: () => GuiPartsCollection
-  ) {
+  ): GuiPartsCollection {
     const partsCollection = this.partsLayers.get(layerNo);
     if (partsCollection) {
       return partsCollection;
@@ -42,7 +42,7 @@ export abstract class GuiFeature {
       this.partsLayers.set(layerNo, newPartsCollection);
       return newPartsCollection;
     }
-    return undefined;
+    throw new Error('FATAL ERROR: Could not find/generate layer');
   }
 
   public beforeRun(): void {}

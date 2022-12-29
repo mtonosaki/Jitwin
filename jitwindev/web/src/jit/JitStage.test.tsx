@@ -1,10 +1,14 @@
-import { render, screen } from '@testing-library/react'
-import React from 'react'
-import { mvfpRender, testInitFeatureCycle, testNextCycleAsync, } from '../mvfp/tests/mvfpRender'
-import { view } from '../mvfp/tests/View'
-import { TestIds } from '../tests/TestIds'
-import JitStage from './JitStage'
-import { JitTestIds } from './tests/JitTestIds'
+import { render, screen } from '@testing-library/react';
+import React from 'react';
+import {
+  mvfpRender,
+  testInitFeatureCycle,
+  testNextCycleAsync,
+} from '../mvfp/tests/mvfpRender';
+import { view } from '../mvfp/tests/View';
+import { TestIds } from '../tests/TestIds';
+import JitStage from './JitStage';
+import { JitTestIds } from './tests/JitTestIds';
 
 describe('Edit mode', () => {
   it('When readonly mode, she sees readonly mode message', () => {
