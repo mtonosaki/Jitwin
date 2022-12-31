@@ -35,18 +35,22 @@ describe('Sample', () => {
   it('She sees a first PROCESS on the center of the view', async () => {
     // GIVEN
     testInitFeatureCycle();
-    const stubClientWidth = jest.spyOn(
+    const stubGetBoundingClientRect = jest.spyOn(
       HTMLDivElement.prototype,
-      'clientWidth',
-      'get'
+      'getBoundingClientRect'
     );
-    const stubClientHeight = jest.spyOn(
-      HTMLDivElement.prototype,
-      'clientHeight',
-      'get'
-    );
-    stubClientWidth.mockReturnValue(1728);
-    stubClientHeight.mockReturnValue(576);
+    const fakeRect: DOMRect = {
+      height: 576,
+      width: 1728,
+      x: 0,
+      y: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      top: 0,
+      toJSON(): any {},
+    };
+    stubGetBoundingClientRect.mockReturnValue(fakeRect);
 
     // WHEN
     mvfpRender(<JitStage isReadonly={false} features={[]} />);
@@ -61,7 +65,6 @@ describe('Sample', () => {
     });
 
     // RESTORE
-    stubClientWidth.mockRestore();
-    stubClientHeight.mockRestore();
+    stubGetBoundingClientRect.mockRestore();
   });
 });

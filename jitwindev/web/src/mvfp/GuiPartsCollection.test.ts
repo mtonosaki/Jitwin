@@ -1,4 +1,8 @@
-import { PaneState } from 'mvfp/ThreeCoordinatesSystem';
+import {
+  PaneState,
+  screenPosition0,
+  screenSize0,
+} from 'mvfp/ThreeCoordinatesSystem';
 import { GuiPartsCollection } from './GuiPartsCollection';
 import { FakePart } from './tests/FakePart';
 
@@ -10,12 +14,14 @@ describe('General', () => {
     const fakePaneA: PaneState = {
       name: 'fakePaneA',
       scroll: { x: { screen: 11 }, y: { screen: 22 } },
-      paneSize: { width: { screen: 0 }, height: { screen: 0 } },
+      paneTopLeft: screenPosition0,
+      paneSize: screenSize0,
     };
     const fakePaneB: PaneState = {
       name: 'fakePaneB',
       scroll: { x: { screen: 33 }, y: { screen: 44 } },
-      paneSize: { width: { screen: 0 }, height: { screen: 0 } },
+      paneTopLeft: screenPosition0,
+      paneSize: screenSize0,
     };
 
     parts.push({ part: fakePartA, pane: fakePaneA });
@@ -51,17 +57,19 @@ describe('General', () => {
     const pane: PaneState = {
       name: 'fake',
       scroll: { x: { screen: 20 }, y: { screen: 30 } },
+      paneTopLeft: { x: { screen: 48 }, y: { screen: 32 } },
       paneSize: { width: { screen: 160 }, height: { screen: 320 } },
     };
 
     expect(it.convertX({ layout: 0 }, pane, false)).toEqual({ screen: 0 });
-    expect(it.convertX({ layout: 0 }, pane, true)).toEqual({ screen: 20 });
+    expect(it.convertX({ layout: 0 }, pane, true)).toEqual({ screen: 68 });
+
     expect(it.convertX({ layout: 160 }, pane, false)).toEqual({ screen: 80 });
-    expect(it.convertX({ layout: 160 }, pane, true)).toEqual({ screen: 100 });
+    expect(it.convertX({ layout: 160 }, pane, true)).toEqual({ screen: 148 });
     expect(it.convertY({ layout: 0 }, pane, false)).toEqual({ screen: 0 });
-    expect(it.convertY({ layout: 0 }, pane, true)).toEqual({ screen: 30 });
+    expect(it.convertY({ layout: 0 }, pane, true)).toEqual({ screen: 62 });
     expect(it.convertY({ layout: 160 }, pane, false)).toEqual({ screen: 80 });
-    expect(it.convertY({ layout: 160 }, pane, true)).toEqual({ screen: 110 });
+    expect(it.convertY({ layout: 160 }, pane, true)).toEqual({ screen: 142 });
   });
 
   it('Have converter screen to layout', () => {
@@ -70,16 +78,24 @@ describe('General', () => {
     const pane: PaneState = {
       name: 'fake',
       scroll: { x: { screen: 20 }, y: { screen: 30 } },
+      paneTopLeft: { x: { screen: 48 }, y: { screen: 32 } },
       paneSize: { width: { screen: 160 }, height: { screen: 320 } },
     };
 
+    // 68 = 20 + 48
+    // 160 = 320 / 2[LPSX] + 0 + 0
+    // 228 = 320 / 2[LPSX] + 20 + 48
     expect(it.convertX({ screen: 0 }, pane, false)).toEqual({ layout: 0 });
-    expect(it.convertX({ screen: 20 }, pane, true)).toEqual({ layout: 0 });
+    expect(it.convertX({ screen: 68 }, pane, true)).toEqual({ layout: 0 });
     expect(it.convertX({ screen: 160 }, pane, false)).toEqual({ layout: 320 });
-    expect(it.convertX({ screen: 180 }, pane, true)).toEqual({ layout: 320 });
+    expect(it.convertX({ screen: 228 }, pane, true)).toEqual({ layout: 320 });
+
+    // 62 = 30 + 32
+    // 160 = 320 / 2[LPSY] + 0 + 0
+    // 222 = 320 / 2[LPSY] + 30 + 32
     expect(it.convertY({ screen: 0 }, pane, false)).toEqual({ layout: 0 });
-    expect(it.convertY({ screen: 30 }, pane, true)).toEqual({ layout: 0 });
+    expect(it.convertY({ screen: 62 }, pane, true)).toEqual({ layout: 0 });
     expect(it.convertY({ screen: 160 }, pane, false)).toEqual({ layout: 320 });
-    expect(it.convertY({ screen: 190 }, pane, true)).toEqual({ layout: 320 });
+    expect(it.convertY({ screen: 222 }, pane, true)).toEqual({ layout: 320 });
   });
 });

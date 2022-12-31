@@ -1,18 +1,23 @@
 // eslint max-classes-per-file: 0
-import { fakePaneState } from 'mvfp/tests/Fakes';
-import React from 'react';
 import { render } from '@testing-library/react';
 import { GuiPartBase } from 'mvfp/GuiPart';
 import { DrawProps } from 'mvfp/GuiTypes';
-import { LayoutX, screenPosition0 } from './ThreeCoordinatesSystem';
+import { fakePaneState } from 'mvfp/tests/Fakes';
+import React from 'react';
 import { GuiFeature } from './GuiFeature';
 import {
   GuiPartsCollection,
   GuiPartsLayerCollection,
-  LPS,
+  LPSX,
+  LPSY,
 } from './GuiPartsCollection';
 import GuiView from './GuiView';
 import { testInitFeatureCycle, testNextCycleAsync } from './tests/mvfpRender';
+import {
+  LayoutX,
+  screenPosition0,
+  screenSize0,
+} from './ThreeCoordinatesSystem';
 
 describe('three coordinate system', () => {
   it('code position can be converted to/from screen position.', async () => {
@@ -48,7 +53,8 @@ describe('three coordinate system', () => {
           {
             name: '',
             scroll: screenPosition0,
-            paneSize: { width: { screen: 0 }, height: { screen: 0 } },
+            paneTopLeft: screenPosition0,
+            paneSize: screenSize0,
           },
           true
         );
@@ -65,14 +71,14 @@ describe('three coordinate system', () => {
 
         expect(lx.layout).toBe(1);
         expect(ly.layout).toBe(4);
-        expect(sx.screen).toBe(1 / LPS);
-        expect(sy.screen).toBe(4 / LPS);
+        expect(sx.screen).toBe(1 / LPSX);
+        expect(sy.screen).toBe(4 / LPSY);
       }
 
       public verifyGetHogePosition(): void {
         const screenPosition = this.getScreenPosition(this.dp!); // from Code
-        expect(screenPosition.x.screen).toBe(1 / LPS);
-        expect(screenPosition.y.screen).toBe(4 / LPS);
+        expect(screenPosition.x.screen).toBe(1 / LPSX);
+        expect(screenPosition.y.screen).toBe(4 / LPSY);
 
         const layoutPosition = this.getLayoutPosition(this.dp!, screenPosition);
         expect(layoutPosition.x.layout).toBe(1);

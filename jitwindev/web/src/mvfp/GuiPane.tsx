@@ -3,12 +3,18 @@ import {
   ScreenPosition,
   screenPosition0,
   ScreenSize,
+  screenSize0,
 } from './ThreeCoordinatesSystem';
 
 export interface Pane {
   get name(): string;
+
   get scroll(): ScreenPosition;
+
   set scroll(newPosition: ScreenPosition);
+
+  get paneTopLeft(): ScreenPosition;
+
   get paneSize(): ScreenSize;
 }
 
@@ -38,12 +44,26 @@ export class GuiPane extends React.Component<PaneProps> implements Pane {
   get paneSize(): ScreenSize {
     const pane = this.refPane.current;
     if (pane) {
+      const clientRect = pane.getBoundingClientRect();
       return {
-        width: { screen: pane.clientWidth },
-        height: { screen: pane.clientHeight },
+        width: { screen: clientRect.width },
+        height: { screen: clientRect.height },
       };
     }
-    return { width: { screen: 0 }, height: { screen: 0 } };
+    return screenSize0;
+  }
+
+  // eslint-disable-next-line react/no-unused-class-component-methods
+  get paneTopLeft(): ScreenPosition {
+    const pane = this.refPane.current;
+    if (pane) {
+      const clientRect = pane.getBoundingClientRect();
+      return {
+        x: { screen: clientRect.left },
+        y: { screen: clientRect.top },
+      };
+    }
+    return screenPosition0;
   }
 
   // eslint-disable-next-line react/no-unused-class-component-methods

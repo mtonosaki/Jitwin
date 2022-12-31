@@ -5,7 +5,8 @@ import { FakePart } from './FakePart';
 import {
   GuiPartsCollection,
   GuiPartsLayerCollection,
-  LPS,
+  LPSX,
+  LPSY,
 } from '../GuiPartsCollection';
 import {
   mvfpRender,
@@ -103,8 +104,8 @@ describe('Custom test methods', () => {
       y: { layout: 100 },
     });
     expect(testPart).toHaveBeenDrawnAt({
-      x: { screen: 20 / LPS },
-      y: { screen: 100 / LPS },
+      x: { screen: 20 / LPSX },
+      y: { screen: 100 / LPSY },
     });
   });
 });
