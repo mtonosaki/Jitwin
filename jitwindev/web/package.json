@@ -26,6 +26,7 @@
   },
   "scripts": {
     "start": "HTTPS=true react-scripts start",
+    "startHttp": "react-scripts start",
     "build": "react-scripts build",
     "lint": "prettier --write src --ext ts --ext tsx && eslint src --ext ts --ext tsx --fix",
     "build:docker": "react-scripts build",

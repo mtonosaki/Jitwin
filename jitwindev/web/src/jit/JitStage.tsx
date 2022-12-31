@@ -24,7 +24,6 @@ export default function JitStage({ isReadonly, features }: Props) {
     <div className={styles.container} data-testid={TestIds.JIT_STAGE}>
       <GuiView
         data-testid={TestIds.JIT_STAGE_GUI_VIEW}
-        className={styles.canvas}
         features={stageFeatures}
         partsLayers={partsLayers}
       />

@@ -40,19 +40,27 @@ describe('three coordinate system', () => {
       public verifyBetweenLayoutAndScreen(): void {
         const sx = this.dp!.converters.layoutToScreen.convertX(
           { layout: 1 },
-          fakePaneState
+          fakePaneState,
+          true
         );
         const sy = this.dp!.converters.layoutToScreen.convertY(
           { layout: 4 },
-          { name: '', scroll: screenPosition0 }
+          {
+            name: '',
+            scroll: screenPosition0,
+            paneSize: { width: { screen: 0 }, height: { screen: 0 } },
+          },
+          true
         );
         const lx = this.dp!.converters.screenToLayout.convertX(
           sx,
-          this.dp!.pane
+          this.dp!.pane,
+          true
         );
         const ly = this.dp!.converters.screenToLayout.convertY(
           sy,
-          this.dp!.pane
+          this.dp!.pane,
+          true
         );
 
         expect(lx.layout).toBe(1);

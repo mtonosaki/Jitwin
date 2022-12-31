@@ -1,7 +1,8 @@
 import { GuiFeature } from 'mvfp/GuiFeature';
 import { GuiPartsCollection } from 'mvfp/GuiPartsCollection';
-import { PartProcess } from '../parts/PartProcess';
+import { ScreenX, ScreenY } from 'mvfp/ThreeCoordinatesSystem';
 import { LayerIds } from '../LayerIds';
+import { PartProcess } from '../parts/PartProcess';
 import {
   codeToLayoutLogicalSpaceX,
   codeToLayoutLogicalSpaceY,
@@ -14,14 +15,24 @@ export class FeatureJitProcess extends GuiFeature {
   override beforeRun() {
     super.beforeRun();
 
+    // make sample process
     const process = Object.assign(new PartProcess(), {
       testId: JitTestIds.SAMPLE_JIT_PROCESS,
       codePosition: { x: { code: { m: 10 } }, y: { code: { m: 5 } } },
     });
-    const layer = this.layer(LayerIds.JIT_PROCESS, () =>
-      makeLayerForJitProcess()
-    )!;
+    const layer = this.layer(LayerIds.JIT_PROCESS, makeLayerForJitProcess)!;
     layer.push({ part: process, pane: this.targetPane });
+
+    // scroll the sample to the center of the view.
+    const positioner = {
+      converters: layer.getConverters(),
+      pane: this.targetPane,
+    };
+    const pos = process.getScreenPosition(positioner);
+    const { paneSize } = this.targetPane;
+    const dx: ScreenX = { screen: paneSize.width.screen / 2 - pos.x.screen };
+    const dy: ScreenY = { screen: paneSize.height.screen / 2 - pos.y.screen };
+    this.targetPane.scroll = { x: dx, y: dy };
   }
 }
 

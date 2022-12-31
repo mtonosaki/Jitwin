@@ -35,13 +35,6 @@ describe('Custom html class', () => {
     const canvas = screen.getByTestId(MvfpTestIds.VIEW_CANVAS);
     expect(canvas.className).toBe('');
   });
-
-  it('set', () => {
-    render(<GuiView className="test-class" />);
-
-    const canvas = screen.getByTestId(MvfpTestIds.VIEW_CANVAS);
-    expect(canvas).toHaveClass('test-class');
-  });
 });
 
 describe('feature.beforeRun', () => {
@@ -182,8 +175,8 @@ describe('Parts drawing system', () => {
     const spyWidthValue = jest.fn();
     const spyHeightValue = jest.fn();
     Object.defineProperty(stubCanvas, 'clientWidth', { get: () => 111 });
-    Object.defineProperty(stubCanvas, 'width', { set: spyWidthValue });
     Object.defineProperty(stubCanvas, 'clientHeight', { get: () => 222 });
+    Object.defineProperty(stubCanvas, 'width', { set: spyWidthValue });
     Object.defineProperty(stubCanvas, 'height', { set: spyHeightValue });
 
     // WHEN

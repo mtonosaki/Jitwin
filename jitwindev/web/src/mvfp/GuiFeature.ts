@@ -5,11 +5,6 @@ import {
 } from './GuiPartsCollection';
 import { makeNewUuid } from './utils/uuid';
 
-export const dummyPane: PaneState = {
-  name: 'dummyPane',
-  scroll: { x: { screen: -9898567574 }, y: { screen: 21937457 } },
-};
-
 export abstract class GuiFeature {
   public readonly id: string = 'n/a';
 
@@ -37,7 +32,7 @@ export abstract class GuiFeature {
     if (partsCollection) {
       return partsCollection;
     }
-    if (!partsCollection && defaultInstanciater) {
+    if (defaultInstanciater) {
       const newPartsCollection = defaultInstanciater();
       this.partsLayers.set(layerNo, newPartsCollection);
       return newPartsCollection;
@@ -59,3 +54,9 @@ export abstract class GuiFeature {
     }`;
   }
 }
+
+export const dummyPane: PaneState = {
+  paneSize: { width: { screen: 23421234 }, height: { screen: 542811 } },
+  name: 'dummyPane',
+  scroll: { x: { screen: -9898567574 }, y: { screen: 21937457 } },
+};
