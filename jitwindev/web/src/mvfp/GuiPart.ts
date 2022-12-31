@@ -4,6 +4,7 @@ import {
   CodePosition,
   CodeSize,
   LayoutPosition,
+  LayoutSize,
   ScreenPosition,
   ScreenSize,
 } from './ThreeCoordinatesSystem';
@@ -59,11 +60,13 @@ export abstract class GuiPartBase<TCodeX, TCodeY>
     const ly = positioner.converters.codeToLayout.convertY(codePosition.y);
     const sx = positioner.converters.layoutToScreen.convertX(
       lx,
-      positioner.pane
+      positioner.pane,
+      true
     );
     const sy = positioner.converters.layoutToScreen.convertY(
       ly,
-      positioner.pane
+      positioner.pane,
+      true
     );
     return { x: sx, y: sy };
   }
@@ -76,11 +79,13 @@ export abstract class GuiPartBase<TCodeX, TCodeY>
     const ly = positioner.converters.codeToLayout.convertY(codeSize.height);
     const sx = positioner.converters.layoutToScreen.convertX(
       lx,
-      positioner.pane
+      positioner.pane,
+      false
     );
     const sy = positioner.converters.layoutToScreen.convertY(
       ly,
-      positioner.pane
+      positioner.pane,
+      false
     );
     return { width: sx, height: sy };
   }
@@ -92,11 +97,31 @@ export abstract class GuiPartBase<TCodeX, TCodeY>
     return {
       x: positioner.converters.screenToLayout.convertX(
         screenPosition.x,
-        positioner.pane
+        positioner.pane,
+        true
       ),
       y: positioner.converters.screenToLayout.convertY(
         screenPosition.y,
-        positioner.pane
+        positioner.pane,
+        true
+      ),
+    };
+  }
+
+  public getLayoutSize(
+    positioner: Positioner,
+    screenSize: ScreenSize
+  ): LayoutSize {
+    return {
+      width: positioner.converters.screenToLayout.convertX(
+        screenSize.width,
+        positioner.pane,
+        false
+      ),
+      height: positioner.converters.screenToLayout.convertY(
+        screenSize.width,
+        positioner.pane,
+        false
       ),
     };
   }

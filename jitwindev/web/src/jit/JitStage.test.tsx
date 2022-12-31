@@ -1,14 +1,14 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
-import JitStage from './JitStage';
-import { TestIds } from '../tests/TestIds';
-import { JitTestIds } from './tests/JitTestIds';
-import { view } from '../mvfp/tests/View';
+import React from 'react';
 import {
   mvfpRender,
   testInitFeatureCycle,
   testNextCycleAsync,
 } from '../mvfp/tests/mvfpRender';
+import { view } from '../mvfp/tests/View';
+import { TestIds } from '../tests/TestIds';
+import JitStage from './JitStage';
+import { JitTestIds } from './tests/JitTestIds';
 
 describe('Edit mode', () => {
   it('When readonly mode, she sees readonly mode message', () => {
@@ -32,22 +32,36 @@ describe('She sees GuiView of MVFP', () => {
 });
 
 describe('Sample', () => {
-  it.skip('She sees a first PROCESS on the center of the view', async () => {
+  it('She sees a first PROCESS on the center of the view', async () => {
     // GIVEN
-    const { stubCanvas } = testInitFeatureCycle();
-    Object.defineProperty(stubCanvas, 'clientWidth', { get: () => 111 }); // set view size
-    Object.defineProperty(stubCanvas, 'clientHeight', { get: () => 222 });
+    testInitFeatureCycle();
+    const stubClientWidth = jest.spyOn(
+      HTMLDivElement.prototype,
+      'clientWidth',
+      'get'
+    );
+    const stubClientHeight = jest.spyOn(
+      HTMLDivElement.prototype,
+      'clientHeight',
+      'get'
+    );
+    stubClientWidth.mockReturnValue(1728);
+    stubClientHeight.mockReturnValue(576);
 
     // WHEN
     mvfpRender(<JitStage isReadonly={false} features={[]} />);
     await testNextCycleAsync();
 
+    // THEN
     const samplePart = view.getPartByTestId(JitTestIds.SAMPLE_JIT_PROCESS);
     expect(samplePart).toBeInTheView();
     expect(samplePart).toHaveBeenDrawnAt({
-      // center x,y width=20px, height=20px
-      x: { screen: 45.5 }, // = 111 / 2 - 20/2
-      y: { screen: 101 }, // = 222 / 2 - 20/2
+      x: { screen: 864 }, // center x = 1728 / 2
+      y: { screen: 288 }, // center y = 576 / 2
     });
+
+    // RESTORE
+    stubClientWidth.mockRestore();
+    stubClientHeight.mockRestore();
   });
 });

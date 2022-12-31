@@ -56,30 +56,42 @@ export class GuiPartsCollection extends Array<PartAndPane> {
     },
   };
 
-  layoutToScreen: ConverterLayoutToScreen = {
-    convertX(value, pane) {
-      return { screen: value.layout / LPS + pane.scroll.x.screen };
-    },
-    convertY(value, pane) {
-      return { screen: value.layout / LPS + pane.scroll.y.screen };
-    },
-  };
-
-  screenToLayout: ConverterScreenToLayout = {
-    convertX(value, pane) {
-      return { layout: (value.screen - pane.scroll.x.screen) * LPS };
-    },
-    convertY(value, pane) {
-      return { layout: (value.screen - pane.scroll.y.screen) * LPS };
-    },
-  };
-
   layoutToCode: ConverterLayoutToCode = {
     // dummy
     convertX: (value) => undefined, // return type is CodeX<T>
     convertY: (value) => undefined, // return type is CodeY<T>
   };
+
+  readonly layoutToScreen: ConverterLayoutToScreen = {
+    convertX(value, pane, considerScroll) {
+      return {
+        screen:
+          value.layout / LPS + (considerScroll ? pane.scroll.x.screen : 0),
+      };
+    },
+    convertY(value, pane, considerScroll) {
+      return {
+        screen:
+          value.layout / LPS + (considerScroll ? pane.scroll.y.screen : 0),
+      };
+    },
+  };
+
+  readonly screenToLayout: ConverterScreenToLayout = {
+    convertX(value, pane, considerScroll) {
+      return {
+        layout:
+          (value.screen - (considerScroll ? pane.scroll.x.screen : 0)) * LPS,
+      };
+    },
+    convertY(value, pane, considerScroll) {
+      return {
+        layout:
+          (value.screen - (considerScroll ? pane.scroll.y.screen : 0)) * LPS,
+      };
+    },
+  };
 }
 
 export type GuiPartsLayerCollection = Map<number, GuiPartsCollection>;
-export const LPS: number = 16.0; // Layout pixels Per Screen
+export const LPS: number = 2.0; // Layout logical pixels Per Screen display pixel

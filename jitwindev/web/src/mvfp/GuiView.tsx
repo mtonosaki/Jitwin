@@ -12,7 +12,6 @@ import { FEATURE_EXECUTION_SPAN_MSEC } from './MvfpParameters';
 import { MvfpTestIds } from './tests/MvfpTestIds';
 
 type Props = {
-  className?: string;
   features?: GuiFeatureCollection;
   partsLayers?: GuiPartsLayerCollection;
   'data-testid'?: string;
@@ -25,7 +24,6 @@ export type DrawnPart = {
 };
 
 export default function GuiView({
-  className,
   features = [],
   partsLayers = new Map(),
   'data-testid': dataTestId = MvfpTestIds.VIEW_CANVAS,
@@ -118,10 +116,21 @@ export default function GuiView({
 
   return (
     <>
-      <canvas ref={refCanvas} className={className} data-testid={dataTestId} />
+      <canvas
+        ref={refCanvas}
+        data-testid={dataTestId}
+        style={{ width: '100%', height: '100%' }}
+      />
       <GuiPane
         ref={refDefaultPane}
         name="DEFAULT"
+        style={{
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
+          backgroundColor: '#ff000022',
+          border: 'solid 24px #ff000033',
+        }}
         data-testid={MvfpTestIds.DEFAULT_PANE}
       />
     </>

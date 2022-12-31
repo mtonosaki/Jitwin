@@ -98,18 +98,34 @@ export const screenRectangle0 = {
 };
 
 export type ConverterCodeToLayout = {
-  convertX: (codeValueX: any) => LayoutX;
-  convertY: (codeValueY: any) => LayoutY;
+  convertX: (codeValueX: any /* CodeX */) => LayoutX;
+  convertY: (codeValueY: any /* CodeY */) => LayoutY;
 };
 
 export type ConverterLayoutToScreen = {
-  convertX: (value: LayoutX, pane: PaneState) => ScreenX;
-  convertY: (value: LayoutY, pane: PaneState) => ScreenY;
+  convertX: (
+    value: LayoutX,
+    pane: PaneState,
+    considerScroll: boolean
+  ) => ScreenX;
+  convertY: (
+    value: LayoutY,
+    pane: PaneState,
+    considerScroll: boolean
+  ) => ScreenY;
 };
 
 export type ConverterScreenToLayout = {
-  convertX: (value: ScreenX, pane: PaneState) => LayoutX;
-  convertY: (value: ScreenY, pane: PaneState) => LayoutY;
+  convertX: (
+    value: ScreenX,
+    pane: PaneState,
+    considerScroll: boolean
+  ) => LayoutX;
+  convertY: (
+    value: ScreenY,
+    pane: PaneState,
+    considerScroll: boolean
+  ) => LayoutY;
 };
 
 export type ConverterLayoutToCode = {
@@ -120,4 +136,5 @@ export type ConverterLayoutToCode = {
 export type PaneState = {
   name: string;
   scroll: ScreenPosition;
+  paneSize: ScreenSize;
 };

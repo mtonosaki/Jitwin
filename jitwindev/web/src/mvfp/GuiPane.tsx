@@ -1,24 +1,49 @@
 import React from 'react';
-import { ScreenPosition, screenPosition0 } from './ThreeCoordinatesSystem';
+import {
+  ScreenPosition,
+  screenPosition0,
+  ScreenSize,
+} from './ThreeCoordinatesSystem';
 
 export interface Pane {
   get name(): string;
   get scroll(): ScreenPosition;
   set scroll(newPosition: ScreenPosition);
+  get paneSize(): ScreenSize;
 }
 
 type PaneProps = {
   name: string;
   'data-testid'?: string;
+  style?: React.CSSProperties;
 };
 
 export class GuiPane extends React.Component<PaneProps> implements Pane {
   private currentScroll: ScreenPosition = screenPosition0;
 
+  private refPane: React.RefObject<HTMLDivElement>;
+
+  constructor(props: Readonly<PaneProps>) {
+    super(props);
+    this.refPane = React.createRef<HTMLDivElement>();
+  }
+
   // eslint-disable-next-line react/no-unused-class-component-methods
   get name(): string {
     const { name } = this.props;
     return name;
+  }
+
+  // eslint-disable-next-line react/no-unused-class-component-methods
+  get paneSize(): ScreenSize {
+    const pane = this.refPane.current;
+    if (pane) {
+      return {
+        width: { screen: pane.clientWidth },
+        height: { screen: pane.clientHeight },
+      };
+    }
+    return { width: { screen: 0 }, height: { screen: 0 } };
   }
 
   // eslint-disable-next-line react/no-unused-class-component-methods
@@ -32,7 +57,7 @@ export class GuiPane extends React.Component<PaneProps> implements Pane {
   }
 
   render() {
-    const { 'data-testid': testId } = this.props;
-    return <div data-testid={testId} />;
+    const { 'data-testid': testId, style } = this.props;
+    return <div data-testid={testId} ref={this.refPane} style={style} />;
   }
 }
