@@ -125,11 +125,13 @@ export default function GuiView({
         ref={refDefaultPane}
         name="DEFAULT"
         style={{
+          top: '0',
+          left: '0',
           width: '100%',
           height: '100%',
           position: 'absolute',
-          backgroundColor: '#ff000022',
-          border: 'solid 24px #ff000033',
+          backgroundColor: 'transparent',
+          border: 'none',
         }}
         data-testid={MvfpTestIds.DEFAULT_PANE}
       />

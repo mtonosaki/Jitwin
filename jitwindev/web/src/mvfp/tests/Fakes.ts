@@ -1,7 +1,12 @@
-import { PaneState, screenPosition0 } from 'mvfp/ThreeCoordinatesSystem';
+import {
+  PaneState,
+  screenPosition0,
+  screenSize0,
+} from 'mvfp/ThreeCoordinatesSystem';
 
 export const fakePaneState: PaneState = {
   name: 'fakePaneState',
   scroll: screenPosition0,
-  paneSize: { width: { screen: 0 }, height: { screen: 0 } },
+  paneTopLeft: screenPosition0,
+  paneSize: screenSize0,
 };

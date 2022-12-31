@@ -119,12 +119,12 @@ export type ConverterScreenToLayout = {
   convertX: (
     value: ScreenX,
     pane: PaneState,
-    considerScroll: boolean
+    considerOffset: boolean
   ) => LayoutX;
   convertY: (
     value: ScreenY,
     pane: PaneState,
-    considerScroll: boolean
+    considerOffset: boolean
   ) => LayoutY;
 };
 
@@ -136,5 +136,6 @@ export type ConverterLayoutToCode = {
 export type PaneState = {
   name: string;
   scroll: ScreenPosition;
+  paneTopLeft: ScreenPosition;
   paneSize: ScreenSize;
 };

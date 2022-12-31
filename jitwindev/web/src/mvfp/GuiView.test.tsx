@@ -7,7 +7,8 @@ import React from 'react';
 import {
   GuiPartsCollection,
   GuiPartsLayerCollection,
-  LPS,
+  LPSX,
+  LPSY,
 } from './GuiPartsCollection';
 import GuiView from './GuiView';
 import FakeFeature from './tests/FakeFeature';
@@ -263,8 +264,8 @@ describe('Scroll System', () => {
     // GIVEN  Scroll 0,0
     const samplePart = view.getPartByTestId('happy-parts');
     expect(samplePart).toHaveBeenDrawnAt({
-      x: { screen: 0x111 / LPS }, // 17.0625
-      y: { screen: 0x222 / LPS }, // 34.125
+      x: { screen: 0x111 / LPSX }, // 17.0625
+      y: { screen: 0x222 / LPSY }, // 34.125
     });
 
     // WHEN - Scroll View +10, +20
@@ -274,8 +275,8 @@ describe('Scroll System', () => {
 
     // THEN
     expect(samplePart).toHaveBeenDrawnAt({
-      x: { screen: 0x111 / LPS + 10 }, // 17.0625 + 10
-      y: { screen: 0x222 / LPS + 20 }, // 34.125 + 20
+      x: { screen: 0x111 / LPSX + 10 }, // 17.0625 + 10
+      y: { screen: 0x222 / LPSY + 20 }, // 34.125 + 20
     });
   });
   // TODO: clip pane rect

@@ -29,9 +29,13 @@ export class FeatureJitProcess extends GuiFeature {
       pane: this.targetPane,
     };
     const pos = process.getScreenPosition(positioner);
-    const { paneSize } = this.targetPane;
-    const dx: ScreenX = { screen: paneSize.width.screen / 2 - pos.x.screen };
-    const dy: ScreenY = { screen: paneSize.height.screen / 2 - pos.y.screen };
+    const { paneSize, paneTopLeft } = this.targetPane;
+    const dx: ScreenX = {
+      screen: paneSize.width.screen / 2 + paneTopLeft.x.screen - pos.x.screen,
+    };
+    const dy: ScreenY = {
+      screen: paneSize.height.screen / 2 + paneTopLeft.y.screen - pos.y.screen,
+    };
     this.targetPane.scroll = { x: dx, y: dy };
   }
 }

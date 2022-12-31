@@ -56,7 +56,8 @@ export abstract class GuiFeature {
 }
 
 export const dummyPane: PaneState = {
-  paneSize: { width: { screen: 23421234 }, height: { screen: 542811 } },
   name: 'dummyPane',
+  paneTopLeft: { x: { screen: 1218 }, y: { screen: 99267 } },
+  paneSize: { width: { screen: 23421234 }, height: { screen: 542811 } },
   scroll: { x: { screen: -9898567574 }, y: { screen: 21937457 } },
 };

@@ -63,35 +63,50 @@ export class GuiPartsCollection extends Array<PartAndPane> {
   };
 
   readonly layoutToScreen: ConverterLayoutToScreen = {
-    convertX(value, pane, considerScroll) {
+    convertX(value, pane, considerOffset) {
       return {
         screen:
-          value.layout / LPS + (considerScroll ? pane.scroll.x.screen : 0),
+          value.layout / LPSX +
+          (considerOffset
+            ? pane.scroll.x.screen + pane.paneTopLeft.x.screen
+            : 0),
       };
     },
     convertY(value, pane, considerScroll) {
       return {
         screen:
-          value.layout / LPS + (considerScroll ? pane.scroll.y.screen : 0),
+          value.layout / LPSY +
+          (considerScroll
+            ? pane.scroll.y.screen + pane.paneTopLeft.y.screen
+            : 0),
       };
     },
   };
 
   readonly screenToLayout: ConverterScreenToLayout = {
-    convertX(value, pane, considerScroll) {
+    convertX(value, pane, considerOffset) {
       return {
         layout:
-          (value.screen - (considerScroll ? pane.scroll.x.screen : 0)) * LPS,
+          (value.screen -
+            (considerOffset
+              ? pane.scroll.x.screen + pane.paneTopLeft.x.screen
+              : 0)) *
+          LPSX,
       };
     },
     convertY(value, pane, considerScroll) {
       return {
         layout:
-          (value.screen - (considerScroll ? pane.scroll.y.screen : 0)) * LPS,
+          (value.screen -
+            (considerScroll
+              ? pane.scroll.y.screen + pane.paneTopLeft.y.screen
+              : 0)) *
+          LPSY,
       };
     },
   };
 }
 
 export type GuiPartsLayerCollection = Map<number, GuiPartsCollection>;
-export const LPS: number = 2.0; // Layout logical pixels Per Screen display pixel
+export const LPSX: number = 2.0; // Layout logical pixels Per Screen display pixel
+export const LPSY: number = 2.0; // Layout logical pixels Per Screen display pixel
