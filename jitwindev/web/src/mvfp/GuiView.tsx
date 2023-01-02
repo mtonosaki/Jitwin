@@ -1,19 +1,22 @@
-import { GuiPart } from 'mvfp/GuiPart'
-import { callbackAddLog } from 'mvfp/utils/LogSystem'
-import React, { useEffect, useRef } from 'react'
-import { GuiFeature } from './GuiFeature'
-import { GuiFeatureCollection } from './GuiFeatureCollection'
-import { GuiPane, Pane } from './GuiPane'
-import { GuiPartsCollection, GuiPartsLayerCollection, } from './GuiPartsCollection'
-import { DrawProps, Positioner } from './GuiTypes'
-import { FEATURE_EXECUTION_SPAN_MSEC } from './MvfpParameters'
-import { MvfpTestIds } from './tests/MvfpTestIds'
+import { GuiPart } from 'mvfp/GuiPart';
+import { CallbackAddLog } from 'mvfp/utils/LogSystem';
+import React, { useEffect, useRef } from 'react';
+import { GuiFeature } from './GuiFeature';
+import { GuiFeatureCollection } from './GuiFeatureCollection';
+import { GuiPane, Pane } from './GuiPane';
+import {
+  GuiPartsCollection,
+  GuiPartsLayerCollection,
+} from './GuiPartsCollection';
+import { DrawProps, Positioner } from './GuiTypes';
+import { FEATURE_EXECUTION_SPAN_MSEC } from './MvfpParameters';
+import { MvfpTestIds } from './tests/MvfpTestIds';
 
 type Props = {
   features?: GuiFeatureCollection;
   partsLayers?: GuiPartsLayerCollection;
   'data-testid'?: string;
-  onAddLog?: callbackAddLog;
+  onAddLog?: CallbackAddLog;
 };
 
 export type DrawnPart = {
@@ -161,7 +164,7 @@ class FeatureHandler extends GuiFeature {
       FeatureHandler.prototype.setAddLog;
   }
 
-  setAddLog(addLog: callbackAddLog): void {
+  setAddLog(addLog: CallbackAddLog): void {
     this.addLog = addLog;
   }
 

@@ -1,16 +1,16 @@
 import { GuiFeatureCollection } from 'mvfp/GuiFeatureCollection';
+import { GuiPartsLayerCollection } from 'mvfp/GuiPartsCollection';
 import GuiView from 'mvfp/GuiView';
-import { callbackAddLog } from 'mvfp/utils/LogSystem'
+import { CallbackAddLog } from 'mvfp/utils/LogSystem';
 import React, { useEffect, useState } from 'react';
 import { TestIds } from 'tests/TestIds';
-import { GuiPartsLayerCollection } from '../mvfp/GuiPartsCollection';
 import { FeatureJitProcess } from './features/FeatureJitProcess';
 import styles from './JitStage.module.scss';
 
 type Props = {
   isReadonly: boolean;
   features: GuiFeatureCollection;
-  onAddLog?: callbackAddLog;
+  onAddLog?: CallbackAddLog;
 };
 
 export default function JitStage({ isReadonly, features, onAddLog }: Props) {

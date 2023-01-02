@@ -5,11 +5,12 @@ export type LogRecord = {
   message: string;
 };
 
-export function newLog(message: string, level: LogLevel = 'INF'): LogRecord {
-  return {
-    level,
-    message,
-  };
-}
+export const newLog = (
+  message: string,
+  level: LogLevel = 'INF'
+): LogRecord => ({
+  level,
+  message,
+});
 
-export type callbackAddLog = (log: LogRecord) => void;
+export type CallbackAddLog = (log: LogRecord) => void;

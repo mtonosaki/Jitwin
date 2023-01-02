@@ -1,6 +1,7 @@
 import { GuiFeature } from 'mvfp/GuiFeature';
 import { GuiPartsCollection } from 'mvfp/GuiPartsCollection';
 import { ScreenX, ScreenY } from 'mvfp/ThreeCoordinatesSystem';
+import { newLog } from 'mvfp/utils/LogSystem';
 import { LayerIds } from '../LayerIds';
 import { PartProcess } from '../parts/PartProcess';
 import {
@@ -14,6 +15,7 @@ import { JitTestIds } from '../tests/JitTestIds';
 export class FeatureJitProcess extends GuiFeature {
   override beforeRun() {
     super.beforeRun();
+    this.addLog(newLog('ok...feature JitProcess'));
 
     // make sample process
     const process = Object.assign(new PartProcess(), {

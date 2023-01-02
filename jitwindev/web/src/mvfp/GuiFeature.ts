@@ -1,5 +1,5 @@
 import { PaneState } from 'mvfp/ThreeCoordinatesSystem';
-import { callbackAddLog, LogRecord } from 'mvfp/utils/LogSystem';
+import { CallbackAddLog, LogRecord } from 'mvfp/utils/LogSystem';
 import {
   GuiPartsCollection,
   GuiPartsLayerCollection,
@@ -49,7 +49,7 @@ export abstract class GuiFeature {
     return this.constructor.name;
   }
 
-  protected addLog: callbackAddLog = (log: LogRecord): void => {
+  protected addLog: CallbackAddLog = (log: LogRecord): void => {
     const now = new Date(Date.now());
     const hh = String(now.getHours()).padStart(2, '0');
     const mm = String(now.getMinutes()).padStart(2, '0');

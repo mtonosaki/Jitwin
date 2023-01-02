@@ -1,14 +1,14 @@
 import { render, screen } from '@testing-library/react';
-import { GuiFeature } from 'mvfp/GuiFeature'
-import { LogRecord } from 'mvfp/utils/LogSystem'
-import React from 'react';
+import { GuiFeature } from 'mvfp/GuiFeature';
 import {
   mvfpRender,
   testInitFeatureCycle,
   testNextCycleAsync,
-} from '../mvfp/tests/mvfpRender';
-import { view } from '../mvfp/tests/View';
-import { TestIds } from '../tests/TestIds';
+} from 'mvfp/tests/mvfpRender';
+import { view } from 'mvfp/tests/View';
+import { LogRecord } from 'mvfp/utils/LogSystem';
+import React from 'react';
+import { TestIds } from 'tests/TestIds';
 import JitStage from './JitStage';
 import { JitTestIds } from './tests/JitTestIds';
 
@@ -40,14 +40,20 @@ describe('Log System', () => {
       static expectedLog: LogRecord = { message: 'test log', level: 'DBG' };
 
       beforeRun() {
-        super.beforeRun()
-        this.addLog(FakeFeature.expectedLog)
+        super.beforeRun();
+        this.addLog(FakeFeature.expectedLog);
       }
     }
 
     // WHEN
     const spyOnAddLog = jest.fn();
-    render(<JitStage isReadonly={false} features={[new FakeFeature()]} onAddLog={spyOnAddLog}/>);
+    render(
+      <JitStage
+        isReadonly={false}
+        features={[new FakeFeature()]}
+        onAddLog={spyOnAddLog}
+      />
+    );
 
     // THEN
     expect(spyOnAddLog).toHaveBeenCalledWith(FakeFeature.expectedLog);
