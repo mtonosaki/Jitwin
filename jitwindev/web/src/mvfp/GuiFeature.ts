@@ -1,4 +1,5 @@
 import { PaneState } from 'mvfp/ThreeCoordinatesSystem';
+import { callbackAddLog, LogRecord } from 'mvfp/utils/LogSystem';
 import {
   GuiPartsCollection,
   GuiPartsLayerCollection,
@@ -47,6 +48,21 @@ export abstract class GuiFeature {
   public getName(): string {
     return this.constructor.name;
   }
+
+  protected addLog: callbackAddLog = (log: LogRecord): void => {
+    const now = new Date(Date.now());
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    const ss = String(now.getSeconds()).padStart(2, '0');
+    const level = `${log.level.substring(0, 1)}`;
+    if (level === 'E') {
+      // eslint-disable-next-line no-console
+      console.error(`[${level}] ${hh}:${mm}:${ss} ${log.message}`);
+    } else {
+      // eslint-disable-next-line no-console
+      console.log(`[${level}] ${hh}:${mm}:${ss} ${log.message}`);
+    }
+  };
 
   public toString(): string {
     return `${this.getName()} id=${this.id} ${

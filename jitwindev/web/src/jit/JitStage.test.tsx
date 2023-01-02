@@ -1,4 +1,6 @@
 import { render, screen } from '@testing-library/react';
+import { GuiFeature } from 'mvfp/GuiFeature'
+import { LogRecord } from 'mvfp/utils/LogSystem'
 import React from 'react';
 import {
   mvfpRender,
@@ -28,6 +30,27 @@ describe('She sees GuiView of MVFP', () => {
   it('She sees GuiView', () => {
     render(<JitStage isReadonly={false} features={[]} />);
     expect(screen.getByTestId(TestIds.JIT_STAGE_GUI_VIEW)).toBeInTheDocument();
+  });
+});
+
+describe('Log System', () => {
+  it('Bill can change addLog implementation', async () => {
+    // GIVEN
+    class FakeFeature extends GuiFeature {
+      static expectedLog: LogRecord = { message: 'test log', level: 'DBG' };
+
+      beforeRun() {
+        super.beforeRun()
+        this.addLog(FakeFeature.expectedLog)
+      }
+    }
+
+    // WHEN
+    const spyOnAddLog = jest.fn();
+    render(<JitStage isReadonly={false} features={[new FakeFeature()]} onAddLog={spyOnAddLog}/>);
+
+    // THEN
+    expect(spyOnAddLog).toHaveBeenCalledWith(FakeFeature.expectedLog);
   });
 });
 

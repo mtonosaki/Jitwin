@@ -1,3 +1,4 @@
+import { callbackAddLog } from 'mvfp/utils/LogSystem'
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { TestIds } from 'tests/TestIds';
@@ -20,13 +21,17 @@ export default function MainPage({ sessionRepository }: Props) {
     setIsReadonly(authenticatedUser?.userId !== targetOid);
   }, [targetOid, authenticatedUser]);
 
+  const onAddLog: callbackAddLog = (log) => {
+
+  }
+
   return (
     <div className={styles.base} data-testid={TestIds.PAGE_MAIN}>
       <div data-testid={`${TestIds.PAGE_MAIN}-${targetOid}`} />
       <div className={styles.container}>
         <HeaderPanel sessionRepository={sessionRepository} />
         <div className={styles.vMargin}>
-          <JitStage isReadonly={isReadonly} features={[]} />
+          <JitStage isReadonly={isReadonly} features={[]} onAddLog={onAddLog} />
         </div>
       </div>
     </div>

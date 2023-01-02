@@ -93,3 +93,9 @@ describe('Sophie`s Main Page', () => {
     });
   });
 });
+
+describe('Log System', () => {
+  it('Having log broker', () => {
+    
+  })
+})

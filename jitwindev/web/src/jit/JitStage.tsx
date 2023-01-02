@@ -1,5 +1,6 @@
 import { GuiFeatureCollection } from 'mvfp/GuiFeatureCollection';
 import GuiView from 'mvfp/GuiView';
+import { callbackAddLog } from 'mvfp/utils/LogSystem'
 import React, { useEffect, useState } from 'react';
 import { TestIds } from 'tests/TestIds';
 import { GuiPartsLayerCollection } from '../mvfp/GuiPartsCollection';
@@ -9,9 +10,10 @@ import styles from './JitStage.module.scss';
 type Props = {
   isReadonly: boolean;
   features: GuiFeatureCollection;
+  onAddLog?: callbackAddLog;
 };
 
-export default function JitStage({ isReadonly, features }: Props) {
+export default function JitStage({ isReadonly, features, onAddLog }: Props) {
   const [stageFeatures, setStageFeatures] = useState<GuiFeatureCollection>([]);
   const [partsLayers] = useState<GuiPartsLayerCollection>(new Map());
 
@@ -26,6 +28,7 @@ export default function JitStage({ isReadonly, features }: Props) {
         data-testid={TestIds.JIT_STAGE_GUI_VIEW}
         features={stageFeatures}
         partsLayers={partsLayers}
+        onAddLog={onAddLog}
       />
       {isReadonly && (
         <div className={styles.readonlyBar}>

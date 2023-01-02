@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { GuiFeature } from 'mvfp/GuiFeature';
 import { GuiPart, GuiPartBase } from 'mvfp/GuiPart';
 import { DrawProps, Positioner } from 'mvfp/GuiTypes';
+import { newLog } from 'mvfp/utils/LogSystem';
 import React from 'react';
 import {
   GuiPartsCollection,
@@ -256,6 +257,7 @@ describe('Scroll System', () => {
         this.partsLayers.get(33)!.push({ part, pane: this.pane });
       }
     }
+
     mvfpRender(
       <GuiView features={[new FakeHappyFeature()]} partsLayers={layers} />
     );
@@ -279,5 +281,79 @@ describe('Scroll System', () => {
       y: { screen: 0x222 / LPSY + 20 }, // 34.125 + 20
     });
   });
-  // TODO: clip pane rect
+});
+
+describe('Log System', () => {
+  it('Bill can add log message', () => {
+    // GIVEN
+    class FakeLogFeature extends GuiFeature {
+      beforeRun() {
+        super.beforeRun();
+        this.addLog(newLog('testing information1'));
+        this.addLog(newLog('testing information2', 'INF'));
+        this.addLog(newLog('testing warning', 'WAR'));
+        this.addLog(newLog('testing debug', 'DBG'));
+        this.addLog(newLog('testing error', 'ERR'));
+      }
+    }
+
+    const spyConsoleLog = jest.fn();
+    const spyConsoleError = jest.fn();
+    console.log = spyConsoleLog; // eslint-disable-line no-console
+    console.error = spyConsoleError; // eslint-disable-line no-console
+    const stubNow = jest.fn();
+    Date.now = stubNow;
+    stubNow.mockReturnValueOnce(new Date(2022, 0, 1, 13, 14, 15).getTime());
+    stubNow.mockReturnValueOnce(new Date(2022, 3, 14, 14, 14, 16).getTime());
+    stubNow.mockReturnValueOnce(new Date(2022, 5, 15, 15, 14, 17).getTime());
+    stubNow.mockReturnValueOnce(new Date(2022, 7, 16, 16, 14, 18).getTime());
+    stubNow.mockReturnValueOnce(new Date(2022, 9, 23, 17, 14, 19).getTime());
+
+    // WHEN
+    mvfpRender(<GuiView features={[new FakeLogFeature()]} />);
+
+    // THEN
+    expect(spyConsoleLog).toHaveBeenCalledWith(
+      '[I] 13:14:15 testing information1'
+    );
+    expect(spyConsoleLog).toHaveBeenCalledWith(
+      '[I] 14:14:16 testing information2'
+    );
+    expect(spyConsoleLog).toHaveBeenCalledWith('[W] 15:14:17 testing warning');
+    expect(spyConsoleLog).toHaveBeenCalledWith('[D] 16:14:18 testing debug');
+    expect(spyConsoleError).toHaveBeenCalledWith('[E] 17:14:19 testing error');
+  });
+
+  it('Bill can specify callback of addLog', () => {
+    // GIVEN
+    class FakeFeatureA extends GuiFeature {
+      static expectedLog = newLog('testing information1', 'WAR');
+
+      beforeRun() {
+        super.beforeRun();
+        this.addLog(FakeFeatureA.expectedLog);
+      }
+    }
+    class FakeFeatureB extends GuiFeature {
+      static expectedLog = newLog('testing information2', 'ERR');
+
+      beforeRun() {
+        super.beforeRun();
+        this.addLog(FakeFeatureB.expectedLog);
+      }
+    }
+
+    // WHEN
+    const spyCallbackAddSpy = jest.fn();
+    mvfpRender(
+      <GuiView
+        features={[new FakeFeatureA(), new FakeFeatureB()]}
+        onAddLog={spyCallbackAddSpy}
+      />
+    );
+
+    // THEN
+    expect(spyCallbackAddSpy).toHaveBeenCalledWith(FakeFeatureA.expectedLog);
+    expect(spyCallbackAddSpy).toHaveBeenCalledWith(FakeFeatureB.expectedLog);
+  });
 });
