@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
 import { render, screen } from '@testing-library/react';
-import { TestIds } from 'tests/TestIds';
-import { RecoilRoot } from 'recoil';
-import { makeMockSessionRepository } from 'tests/testUtilities';
-import { useParams } from 'react-router-dom';
+import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
 import { mocked } from 'jest-mock';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
+import { TestIds } from 'tests/TestIds';
+import { makeMockSessionRepository } from 'tests/testUtilities';
 import MainPage from './MainPage';
-import { useAuthenticatedUser } from '../hooks/useAuthenticatedUser';
 
 const mockSpyNavigate = jest.fn();
 const mockStubUseParams = mocked(useParams);
@@ -21,7 +21,10 @@ describe('Sophie`s Main Page', () => {
     mockStubUseParams.mockReturnValue({ targetOid: 'userid-sophie-9988' });
     render(
       <RecoilRoot>
-        <MainPage sessionRepository={makeMockSessionRepository()} />
+        <MainPage
+          sessionRepository={makeMockSessionRepository()}
+          features={[]}
+        />
       </RecoilRoot>
     );
     expect(screen.getByTestId(TestIds.PANEL_HEADER)).toBeInTheDocument();
@@ -31,7 +34,10 @@ describe('Sophie`s Main Page', () => {
     mockStubUseParams.mockReturnValue({ targetOid: 'userid-sophie-9988' });
     render(
       <RecoilRoot>
-        <MainPage sessionRepository={makeMockSessionRepository()} />
+        <MainPage
+          sessionRepository={makeMockSessionRepository()}
+          features={[]}
+        />
       </RecoilRoot>
     );
     expect(screen.getByTestId(TestIds.JIT_STAGE)).toBeInTheDocument();
@@ -53,8 +59,14 @@ describe('Sophie`s Main Page', () => {
             userPrincipalName: 'mturner@example.com',
           });
         }, []); // eslint-disable-line react-hooks/exhaustive-deps
-        return <MainPage sessionRepository={makeMockSessionRepository()} />;
+        return (
+          <MainPage
+            sessionRepository={makeMockSessionRepository()}
+            features={[]}
+          />
+        );
       }
+
       render(
         <RecoilRoot>
           <CustomDraw />
@@ -80,8 +92,14 @@ describe('Sophie`s Main Page', () => {
             userPrincipalName: 'mturner@example.com',
           });
         }, []); // eslint-disable-line react-hooks/exhaustive-deps
-        return <MainPage sessionRepository={makeMockSessionRepository()} />;
+        return (
+          <MainPage
+            sessionRepository={makeMockSessionRepository()}
+            features={[]}
+          />
+        );
       }
+
       render(
         <RecoilRoot>
           <CustomDraw />

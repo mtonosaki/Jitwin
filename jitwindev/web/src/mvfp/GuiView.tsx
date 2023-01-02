@@ -1,4 +1,5 @@
 import { GuiPart } from 'mvfp/GuiPart';
+import { CallbackAddLog } from 'mvfp/utils/LogSystem';
 import React, { useEffect, useRef } from 'react';
 import { GuiFeature } from './GuiFeature';
 import { GuiFeatureCollection } from './GuiFeatureCollection';
@@ -15,6 +16,7 @@ type Props = {
   features?: GuiFeatureCollection;
   partsLayers?: GuiPartsLayerCollection;
   'data-testid'?: string;
+  onAddLog?: CallbackAddLog;
 };
 
 export type DrawnPart = {
@@ -27,6 +29,7 @@ export default function GuiView({
   features = [],
   partsLayers = new Map(),
   'data-testid': dataTestId = MvfpTestIds.VIEW_CANVAS,
+  onAddLog,
 }: Props) {
   const refCanvas = useRef<HTMLCanvasElement | null>(null);
   const refIsBeforeFinished = useRef<GuiFeatureCollection>([]);
@@ -56,6 +59,9 @@ export default function GuiView({
       feature.setPartsLayerCollection(partsLayers!);
       if (refDefaultPane.current) {
         feature.setTargetPane(refDefaultPane.current);
+      }
+      if (onAddLog) {
+        feature.setAddLog(onAddLog);
       }
     });
 
@@ -153,6 +159,13 @@ class FeatureHandler extends GuiFeature {
 
     (GuiFeature.prototype as any).setTargetPane =
       FeatureHandler.prototype.setTargetPane;
+
+    (GuiFeature.prototype as any).setAddLog =
+      FeatureHandler.prototype.setAddLog;
+  }
+
+  setAddLog(addLog: CallbackAddLog): void {
+    this.addLog = addLog;
   }
 
   setPartsLayerCollection(partsLayers: GuiPartsLayerCollection) {

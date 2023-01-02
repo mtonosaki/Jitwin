@@ -46,7 +46,9 @@ export default function App() {
       />
       <Route
         path="/:targetOid/stage"
-        element={<MainPage sessionRepository={sessionRepository} />}
+        element={
+          <MainPage sessionRepository={sessionRepository} features={[]} />
+        }
       />
     </Routes>
   );
