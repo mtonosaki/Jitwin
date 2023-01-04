@@ -6,7 +6,7 @@ import {
   testNextCycleAsync,
 } from 'mvfp/tests/mvfpRender';
 import { view } from 'mvfp/tests/View';
-import { LogRecord } from 'mvfp/utils/LogSystem';
+import { LogRecord, nullLogger } from 'mvfp/utils/LogSystem';
 import React from 'react';
 import { TestIds } from 'tests/TestIds';
 import JitStage from './JitStage';
@@ -14,13 +14,13 @@ import { JitTestIds } from './tests/JitTestIds';
 
 describe('Edit mode', () => {
   it('When readonly mode, she sees readonly mode message', () => {
-    render(<JitStage isReadonly features={[]} />);
+    render(<JitStage isReadonly features={[]} onAddLog={nullLogger} />);
 
     expect(screen.getByText('readonly mode')).toBeInTheDocument();
   });
 
   it('When NOT readonly mode, she does NOT see readonly mode message', () => {
-    render(<JitStage isReadonly={false} features={[]} />);
+    render(<JitStage isReadonly={false} features={[]} onAddLog={nullLogger} />);
 
     expect(screen.queryByText('readonly mode')).not.toBeInTheDocument();
   });
@@ -28,7 +28,7 @@ describe('Edit mode', () => {
 
 describe('She sees GuiView of MVFP', () => {
   it('She sees GuiView', () => {
-    render(<JitStage isReadonly={false} features={[]} />);
+    render(<JitStage isReadonly={false} features={[]} onAddLog={nullLogger} />);
     expect(screen.getByTestId(TestIds.JIT_STAGE_GUI_VIEW)).toBeInTheDocument();
   });
 });
@@ -82,7 +82,9 @@ describe('Sample', () => {
     stubGetBoundingClientRect.mockReturnValue(fakeRect);
 
     // WHEN
-    mvfpRender(<JitStage isReadonly={false} features={[]} />);
+    mvfpRender(
+      <JitStage isReadonly={false} features={[]} onAddLog={nullLogger} />
+    );
     await testNextCycleAsync();
 
     // THEN

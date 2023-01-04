@@ -14,3 +14,5 @@ export const newLog = (
 });
 
 export type CallbackAddLog = (log: LogRecord) => void;
+
+export const nullLogger: CallbackAddLog = (log) => {};

@@ -13,14 +13,13 @@ import { makeFeatureTester } from 'mvfp/tests/featureTester';
 describe('Feature JitProcess', () => {
   it('Sophie have a sample process', () => {
     // GIVEN
-    const feature = new FeatureJitProcess();
+    const feature = makeFeatureTester(new FeatureJitProcess());
 
     // WHEN
     feature.beforeRun();
 
     // THEN
-    const theFeatureHandler = makeFeatureTester(feature);
-    const layer = theFeatureHandler.layer(LayerIds.JIT_PROCESS);
+    const layer = feature.layer(LayerIds.JIT_PROCESS);
     const converter = layer.getConverters();
     expect(converter.codeToLayout.convertX).toEqual(codeToLayoutLogicalSpaceX);
     expect(converter.codeToLayout.convertY).toEqual(codeToLayoutLogicalSpaceY);
