@@ -334,6 +334,7 @@ describe('Log System', () => {
         this.addLog(FakeFeatureA.expectedLog);
       }
     }
+
     class FakeFeatureB extends GuiFeature {
       static expectedLog = newLog('testing information2', 'ERR');
 

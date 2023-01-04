@@ -27,7 +27,7 @@ type PaneProps = {
 export class GuiPane extends React.Component<PaneProps> implements Pane {
   private currentScroll: ScreenPosition = screenPosition0;
 
-  private refPane: React.RefObject<HTMLDivElement>;
+  private readonly refPane: React.RefObject<HTMLDivElement>;
 
   constructor(props: Readonly<PaneProps>) {
     super(props);

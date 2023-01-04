@@ -32,7 +32,7 @@ export default function HeaderPanel({ sessionRepository }: Props) {
           <button
             type="button"
             className={styles.logo}
-            onClick={(e) => {
+            onClick={() => {
               navigate('/', { replace: true });
             }}
           >
@@ -48,7 +48,7 @@ export default function HeaderPanel({ sessionRepository }: Props) {
               >
                 <button
                   type="button"
-                  onClick={(e) => {
+                  onClick={() => {
                     setIsMenuOpen(!isMenuOpen);
                   }}
                 >
