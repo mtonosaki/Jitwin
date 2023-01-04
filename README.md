@@ -4,7 +4,7 @@
 - [Project](https://github.com/users/mtonosaki/projects/1)    
 - [Wiki](https://github.com/mtonosaki/Jitwin/wiki)   
 
-# Jitwin
+# Jitwin α
 "Just-in-time + Twin" - Digital twin platform is like a broker between the real world and a virtual world to help you both to respect the real world and to find revolution idea in a virtual space.
 
 # Overview
