@@ -1,4 +1,4 @@
-import { ScreenPosition } from '../ThreeCoordinatesSystem';
+import { ScreenPosition } from '../ThreeCoordinatesSystem'
 
 export const screenOffset = (
   pos: ScreenPosition,
@@ -7,4 +7,4 @@ export const screenOffset = (
 ): ScreenPosition => ({
   x: { screen: pos.x.screen + x },
   y: { screen: pos.y.screen + y },
-});
+})

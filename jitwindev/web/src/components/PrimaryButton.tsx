@@ -1,10 +1,10 @@
-import React, { ButtonHTMLAttributes } from 'react';
-import classNames from 'classnames';
-import styles from './PrimaryButton.module.scss';
+import React, { ButtonHTMLAttributes } from 'react'
+import classNames from 'classnames'
+import styles from './PrimaryButton.module.scss'
 
 type Props = {
-  icon?: 'login';
-} & ButtonHTMLAttributes<HTMLButtonElement>;
+  icon?: 'login'
+} & ButtonHTMLAttributes<HTMLButtonElement>
 
 export default function PrimaryButton({
   className,
@@ -24,7 +24,7 @@ export default function PrimaryButton({
         {...originalProps}
         onClick={(e) => {
           if (!disabled && onClick) {
-            onClick(e);
+            onClick(e)
           }
         }}
       >
@@ -38,5 +38,5 @@ export default function PrimaryButton({
         {children}
       </button>
     </div>
-  );
+  )
 }

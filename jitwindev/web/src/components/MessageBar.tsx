@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { TestIds } from 'tests/TestIds';
-import { newMessage, useMessageRecords } from 'hooks/useMessageRecords';
-import { getVersion } from 'app/AppVersion';
-import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
-import classNames from 'classnames';
-import styles from './MessageBar.module.scss';
-import DateTimeTwin from './DateTimeTwin';
+import React, { useEffect, useState } from 'react'
+import { TestIds } from 'tests/TestIds'
+import { newMessage, useMessageRecords } from 'hooks/useMessageRecords'
+import { getVersion } from 'app/AppVersion'
+import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser'
+import classNames from 'classnames'
+import styles from './MessageBar.module.scss'
+import DateTimeTwin from './DateTimeTwin'
 
 function makeOpacityValue(isBarOpen: boolean, key: number): number {
   if (isBarOpen) {
-    return 1.0;
+    return 1.0
   }
-  if (key === 0) return 1.0;
-  return 0.5;
+  if (key === 0) return 1.0
+  return 0.5
 }
 
 export default function MessageBar() {
-  const [addMessage, messageRecords] = useMessageRecords();
-  const [user] = useAuthenticatedUser();
-  const [isBarOpen, setIsBarOpen] = useState(false);
-  const [closeStyle, setCloseStyle] = useState('');
+  const [addMessage, messageRecords] = useMessageRecords()
+  const [user] = useAuthenticatedUser()
+  const [isBarOpen, setIsBarOpen] = useState(false)
+  const [closeStyle, setCloseStyle] = useState('')
 
   useEffect(() => {
     if (user) {
@@ -28,12 +28,12 @@ export default function MessageBar() {
           newMessage(
             `${user.givenName}, welcome to Jitwin version ${getVersion()}`
           )
-        );
+        )
       } else {
-        addMessage(newMessage(`Welcome to Jitwin version ${getVersion()}`));
+        addMessage(newMessage(`Welcome to Jitwin version ${getVersion()}`))
       }
     }
-  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -77,8 +77,8 @@ export default function MessageBar() {
         )}
         data-testid={TestIds.MESSAGE_OPEN_CLOSE_HANDLE}
         onClick={() => {
-          setCloseStyle(styles.close);
-          setIsBarOpen(!isBarOpen);
+          setCloseStyle(styles.close)
+          setIsBarOpen(!isBarOpen)
         }}
       >
         <img
@@ -91,5 +91,5 @@ export default function MessageBar() {
         />
       </button>
     </>
-  );
+  )
 }

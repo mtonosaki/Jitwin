@@ -1,4 +1,4 @@
 export type MessageRecord = {
-  dateTimeReal: Date;
-  message: string;
-};
+  dateTimeReal: Date
+  message: string
+}

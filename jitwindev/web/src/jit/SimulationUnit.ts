@@ -1,7 +1,7 @@
 export type UnitDistance = {
-  m: number;
-};
+  m: number
+}
 
 export type UnitSpeed = {
-  mPerSecond: number;
-};
+  mPerSecond: number
+}

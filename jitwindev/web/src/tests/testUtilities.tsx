@@ -1,5 +1,5 @@
-import HttpClientCustom from 'network/HttpClientCustom';
-import SessionRepository from '../repos/SessionRepository';
+import HttpClientCustom from 'network/HttpClientCustom'
+import SessionRepository from '../repos/SessionRepository'
 
 export const fakeHttpClient: HttpClientCustom = {
   host: 'fake-client-host',
@@ -7,7 +7,7 @@ export const fakeHttpClient: HttpClientCustom = {
   post: jest.fn(),
   delete: jest.fn(),
   patch: jest.fn(),
-};
+}
 
 export function makeMockSessionRepository(): SessionRepository {
   return {
@@ -15,5 +15,5 @@ export function makeMockSessionRepository(): SessionRepository {
     resetInLoginProcess: jest.fn(),
     isInLoginProcess: jest.fn(),
     logoutSession: jest.fn(),
-  };
+  }
 }

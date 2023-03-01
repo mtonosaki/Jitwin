@@ -1,29 +1,29 @@
-import { GuiPart } from 'mvfp/GuiPart';
-import { CallbackAddLog } from 'mvfp/utils/LogSystem';
-import React, { useEffect, useRef } from 'react';
-import { GuiFeature } from './GuiFeature';
-import { GuiFeatureCollection } from './GuiFeatureCollection';
-import { GuiPane, Pane } from './GuiPane';
+import { GuiPart } from 'mvfp/GuiPart'
+import { CallbackAddLog } from 'mvfp/utils/LogSystem'
+import React, { useEffect, useRef } from 'react'
+import { GuiFeature } from './GuiFeature'
+import { GuiFeatureCollection } from './GuiFeatureCollection'
+import { GuiPane, Pane } from './GuiPane'
 import {
   GuiPartsCollection,
   GuiPartsLayerCollection,
-} from './GuiPartsCollection';
-import { DrawProps, Positioner } from './GuiTypes';
-import { FEATURE_EXECUTION_SPAN_MSEC } from './MvfpParameters';
-import { MvfpTestIds } from './tests/MvfpTestIds';
+} from './GuiPartsCollection'
+import { DrawProps, Positioner } from './GuiTypes'
+import { FEATURE_EXECUTION_SPAN_MSEC } from './MvfpParameters'
+import { MvfpTestIds } from './tests/MvfpTestIds'
 
 type Props = {
-  features?: GuiFeatureCollection;
-  partsLayers?: GuiPartsLayerCollection;
-  'data-testid'?: string;
-  onAddLog?: CallbackAddLog;
-};
+  features?: GuiFeatureCollection
+  partsLayers?: GuiPartsLayerCollection
+  'data-testid'?: string
+  onAddLog?: CallbackAddLog
+}
 
 export type DrawnPart = {
-  part: GuiPart;
-  positioner: Positioner;
-  layer: GuiPartsCollection;
-};
+  part: GuiPart
+  positioner: Positioner
+  layer: GuiPartsCollection
+}
 
 export default function GuiView({
   features = [],
@@ -31,10 +31,10 @@ export default function GuiView({
   'data-testid': dataTestId = MvfpTestIds.VIEW_CANVAS,
   onAddLog,
 }: Props) {
-  const refCanvas = useRef<HTMLCanvasElement | null>(null);
-  const refIsBeforeFinished = useRef<GuiFeatureCollection>([]);
-  const refDrawnParts = useRef<DrawnPart[]>([]);
-  const refDefaultPane = useRef(null);
+  const refCanvas = useRef<HTMLCanvasElement | null>(null)
+  const refIsBeforeFinished = useRef<GuiFeatureCollection>([])
+  const refDrawnParts = useRef<DrawnPart[]>([])
+  const refDefaultPane = useRef(null)
 
   useEffect(() => {
     // for Testing library
@@ -48,77 +48,77 @@ export default function GuiView({
       },
       writable: true,
       configurable: true,
-    });
-  }, []); // eslint-disable-line
+    })
+  }, []) // eslint-disable-line
 
   // Initialize Feature Mechanism
   useEffect(() => {
-    FeatureHandler.initialize();
+    FeatureHandler.initialize()
 
     flatFeatures(features).forEach((feature) => {
-      feature.setPartsLayerCollection(partsLayers!);
+      feature.setPartsLayerCollection(partsLayers!)
       if (refDefaultPane.current) {
-        feature.setTargetPane(refDefaultPane.current);
+        feature.setTargetPane(refDefaultPane.current)
       }
       if (onAddLog) {
-        feature.setAddLog(onAddLog);
+        feature.setAddLog(onAddLog)
       }
-    });
+    })
 
-    executeFeaturesBeforeRun();
-    const hTimer = setInterval(intervalEvent, FEATURE_EXECUTION_SPAN_MSEC);
+    executeFeaturesBeforeRun()
+    const hTimer = setInterval(intervalEvent, FEATURE_EXECUTION_SPAN_MSEC)
     return () => {
-      clearInterval(hTimer);
-    };
-  }, [features]); // eslint-disable-line
+      clearInterval(hTimer)
+    }
+  }, [features]) // eslint-disable-line
 
   const executeFeaturesBeforeRun = () => {
     enabledFeatures(features)
       .filter((feature) => !refIsBeforeFinished.current.includes(feature))
       .forEach((feature) => {
-        feature.beforeRun();
-        refIsBeforeFinished.current.push(feature);
-      });
-  };
+        feature.beforeRun()
+        refIsBeforeFinished.current.push(feature)
+      })
+  }
 
   const intervalEvent = () => {
     // follow disabled->enabled timing beforeRun()
-    executeFeaturesBeforeRun();
+    executeFeaturesBeforeRun()
 
     // Draw Parts
-    refDrawnParts.current.splice(0);
-    const context = refCanvas.current?.getContext('2d');
-    if (!context) return;
+    refDrawnParts.current.splice(0)
+    const context = refCanvas.current?.getContext('2d')
+    if (!context) return
 
-    context.canvas.width = context.canvas.clientWidth;
-    context.canvas.height = context.canvas.clientHeight;
+    context.canvas.width = context.canvas.clientWidth
+    context.canvas.height = context.canvas.clientHeight
     context.clearRect(
       0,
       0,
       context.canvas.clientWidth,
       context.canvas.clientHeight
-    );
+    )
 
     partsLayers.forEach((layer) => {
-      const converters = layer.getConverters();
+      const converters = layer.getConverters()
       layer.forEach((panePart) => {
         const dp: DrawProps = {
           g: context,
           converters,
           pane: panePart.pane,
-        };
-        panePart.part.draw(dp);
+        }
+        panePart.part.draw(dp)
 
         // save drawn result for testing library
         const drawn: DrawnPart = {
           part: panePart.part,
           positioner: dp,
           layer,
-        };
-        refDrawnParts.current.push(drawn);
-      });
-    });
-  };
+        }
+        refDrawnParts.current.push(drawn)
+      })
+    })
+  }
 
   return (
     <>
@@ -142,37 +142,35 @@ export default function GuiView({
         data-testid={MvfpTestIds.DEFAULT_PANE}
       />
     </>
-  );
+  )
 }
 
 const flatFeatures = (root?: GuiFeatureCollection) =>
-  root!.map((it) => it as FeatureHandler);
+  root!.map((it) => it as FeatureHandler)
 
 const enabledFeatures = (root?: GuiFeatureCollection) =>
-  flatFeatures(root).filter((it) => it.enabled);
+  flatFeatures(root).filter((it) => it.enabled)
 
 // Partial class of GuiFeature for internal GuiView.
 class FeatureHandler extends GuiFeature {
   static initialize() {
-    (GuiFeature.prototype as any).setPartsLayerCollection =
-      FeatureHandler.prototype.setPartsLayerCollection;
-
-    (GuiFeature.prototype as any).setTargetPane =
-      FeatureHandler.prototype.setTargetPane;
-
-    (GuiFeature.prototype as any).setAddLog =
-      FeatureHandler.prototype.setAddLog;
+    ;(GuiFeature.prototype as any).setPartsLayerCollection =
+      FeatureHandler.prototype.setPartsLayerCollection
+    ;(GuiFeature.prototype as any).setTargetPane =
+      FeatureHandler.prototype.setTargetPane
+    ;(GuiFeature.prototype as any).setAddLog =
+      FeatureHandler.prototype.setAddLog
   }
 
   setAddLog(addLog: CallbackAddLog): void {
-    this.addLog = addLog;
+    this.addLog = addLog
   }
 
   setPartsLayerCollection(partsLayers: GuiPartsLayerCollection) {
-    this.partsLayers = partsLayers;
+    this.partsLayers = partsLayers
   }
 
   setTargetPane(pane: Pane) {
-    this.targetPane = pane;
+    this.targetPane = pane
   }
 }

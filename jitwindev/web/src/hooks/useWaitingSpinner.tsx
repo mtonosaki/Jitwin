@@ -1,5 +1,5 @@
-import { useCallback } from 'react';
-import { useWaitingSpinnerCounter } from './hookWaitingSpinnerValue';
+import { useCallback } from 'react'
+import { useWaitingSpinnerCounter } from './hookWaitingSpinnerValue'
 
 // USAGE
 // const [requestToShowWaitingSpinner, requestToHideWaitingSpinner] = useWaitingSpinner();
@@ -11,19 +11,19 @@ export const useWaitingSpinner: () => readonly [
   () => void,
   boolean
 ] = () => {
-  const [showingCounter, setShowingCounter] = useWaitingSpinnerCounter();
+  const [showingCounter, setShowingCounter] = useWaitingSpinnerCounter()
 
   const requestToShowWaitingSpinner = useCallback(() => {
-    setShowingCounter(showingCounter + 1);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    setShowingCounter(showingCounter + 1)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const requestToHideWaitingSpinner = useCallback(() => {
-    setShowingCounter(Math.max(0, showingCounter - 1));
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    setShowingCounter(Math.max(0, showingCounter - 1))
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return [
     requestToShowWaitingSpinner,
     requestToHideWaitingSpinner,
     showingCounter > 0,
-  ] as const;
-};
+  ] as const
+}

@@ -1,10 +1,10 @@
-import React from 'react';
-import { useWaitingSpinner } from 'hooks/useWaitingSpinner';
-import { TestIds } from 'tests/TestIds';
-import styles from './WaitingSpinner.module.scss';
+import React from 'react'
+import { useWaitingSpinner } from 'hooks/useWaitingSpinner'
+import { TestIds } from 'tests/TestIds'
+import styles from './WaitingSpinner.module.scss'
 
 export default function WaitingSpinner() {
-  const [, , isShowLoadingSpinner] = useWaitingSpinner();
+  const [, , isShowLoadingSpinner] = useWaitingSpinner()
 
   if (isShowLoadingSpinner) {
     return (
@@ -16,7 +16,7 @@ export default function WaitingSpinner() {
         <img src="/img/spnner-box.gif" alt="loading spinner" />
         <p>Loading...</p>
       </div>
-    );
+    )
   }
-  return <div />;
+  return <div />
 }

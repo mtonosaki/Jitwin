@@ -1,9 +1,9 @@
-export type LogLevel = 'ERR' | 'WAR' | 'INF' | 'DBG';
+export type LogLevel = 'ERR' | 'WAR' | 'INF' | 'DBG'
 
 export type LogRecord = {
-  level: LogLevel;
-  message: string;
-};
+  level: LogLevel
+  message: string
+}
 
 export const newLog = (
   message: string,
@@ -11,8 +11,8 @@ export const newLog = (
 ): LogRecord => ({
   level,
   message,
-});
+})
 
-export type CallbackAddLog = (log: LogRecord) => void;
+export type CallbackAddLog = (log: LogRecord) => void
 
-export const nullLogger: CallbackAddLog = (log) => {};
+export const nullLogger: CallbackAddLog = (log) => {}

@@ -1,14 +1,14 @@
-import React from 'react';
-import styles from './DateTime.module.scss';
+import React from 'react'
+import styles from './DateTime.module.scss'
 
 type Props = {
-  value: number;
-  vr: 'Virtual' | 'Real';
-};
+  value: number
+  vr: 'Virtual' | 'Real'
+}
 
 export default function DateTimeTwin({ value, vr }: Props) {
-  const dateTime = new Date(value);
-  const style = vr === 'Real' ? styles.real : styles.virtual;
+  const dateTime = new Date(value)
+  const style = vr === 'Real' ? styles.real : styles.virtual
 
   return (
     <span className={style}>
@@ -20,5 +20,5 @@ export default function DateTimeTwin({ value, vr }: Props) {
       </span>
       <span>:{String(dateTime.getSeconds()).padStart(2, '0')}</span>
     </span>
-  );
+  )
 }

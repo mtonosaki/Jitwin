@@ -1,8 +1,8 @@
 export default class HttpClientCustom {
-  public readonly host: string;
+  public readonly host: string
 
   constructor(host: string) {
-    this.host = host;
+    this.host = host
   }
 
   async post(path: string, body?: any): Promise<any> {
@@ -12,22 +12,22 @@ export default class HttpClientCustom {
       headers: {
         'Content-Type': 'application/json',
       },
-    });
+    })
 
     try {
-      const jsonResponse = await response.json();
-      return jsonResponse;
+      const jsonResponse = await response.json()
+      return jsonResponse
     } catch (e) {
-      return undefined;
+      return undefined
     }
   }
 
   async get(path: string): Promise<any> {
-    const response = await fetch(this.host + path, { method: 'GET' });
+    const response = await fetch(this.host + path, { method: 'GET' })
     if (!response.ok) {
-      throw Error('Status is not ok');
+      throw Error('Status is not ok')
     }
-    return response.json();
+    return response.json()
   }
 
   async patch(path: string, body: any): Promise<any> {
@@ -37,28 +37,28 @@ export default class HttpClientCustom {
       headers: {
         'Content-Type': 'application/json',
       },
-    });
+    })
 
     if (
       !response.headers.has('content-length') ||
       response.headers.get('content-length') === '0'
     )
-      return undefined;
+      return undefined
 
-    return response.json();
+    return response.json()
   }
 
   async delete(path: string): Promise<any> {
     const response = await fetch(this.host + path, {
       method: 'DELETE',
-    });
+    })
 
     if (
       !response.headers.has('content-length') ||
       response.headers.get('content-length') === '0'
     )
-      return undefined;
+      return undefined
 
-    return response.json();
+    return response.json()
   }
 }

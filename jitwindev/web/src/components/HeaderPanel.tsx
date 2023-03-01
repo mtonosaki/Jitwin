@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { TestIds } from 'tests/TestIds';
-import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
-import SessionRepository from 'repos/SessionRepository';
-import MessageBar from './MessageBar';
-import styles from './HeaderPanel.module.scss';
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { TestIds } from 'tests/TestIds'
+import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser'
+import SessionRepository from 'repos/SessionRepository'
+import MessageBar from './MessageBar'
+import styles from './HeaderPanel.module.scss'
 
 type Props = {
-  sessionRepository: SessionRepository;
-};
+  sessionRepository: SessionRepository
+}
 
 export default function HeaderPanel({ sessionRepository }: Props) {
-  const [authenticatedUser] = useAuthenticatedUser();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate();
+  const [authenticatedUser] = useAuthenticatedUser()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const navigate = useNavigate()
 
   return (
     <>
@@ -23,7 +23,7 @@ export default function HeaderPanel({ sessionRepository }: Props) {
           data-testid={TestIds.MODAL_BACKGROUND}
           className={styles.modalBackground}
           onClick={() => {
-            setIsMenuOpen(false);
+            setIsMenuOpen(false)
           }}
         />
       )}
@@ -33,7 +33,7 @@ export default function HeaderPanel({ sessionRepository }: Props) {
             type="button"
             className={styles.logo}
             onClick={() => {
-              navigate('/', { replace: true });
+              navigate('/', { replace: true })
             }}
           >
             <span>Jitwin</span>
@@ -49,7 +49,7 @@ export default function HeaderPanel({ sessionRepository }: Props) {
                 <button
                   type="button"
                   onClick={() => {
-                    setIsMenuOpen(!isMenuOpen);
+                    setIsMenuOpen(!isMenuOpen)
                   }}
                 >
                   <div className={styles.accountText}>
@@ -71,8 +71,8 @@ export default function HeaderPanel({ sessionRepository }: Props) {
                   <button
                     type="button"
                     onClick={async () => {
-                      await sessionRepository.logoutSession();
-                      window.location.href = '/';
+                      await sessionRepository.logoutSession()
+                      window.location.href = '/'
                     }}
                   >
                     <img src="/icons/logout.svg" alt="Logout" />
@@ -85,5 +85,5 @@ export default function HeaderPanel({ sessionRepository }: Props) {
         </div>
       </div>
     </>
-  );
+  )
 }

@@ -24,9 +24,9 @@
   },
   "scripts": {
     "start": "HTTPS=true react-scripts start",
-    "build": "react-scripts build",
-    "lint": "prettier --write src --ext ts --ext tsx && eslint src --ext ts --ext tsx --fix",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "build:docker": "react-scripts build",
+    "lint": "prettier --write src --ext ts --ext tsx && eslint src --ext ts --ext tsx --fix",
     "test": "react-scripts test --watchAll=false",
     "eject": "react-scripts eject"
   },
@@ -100,7 +100,8 @@
     "globalSetup": "<rootDir>/src/tests/globalSetup.js"
   },
   "prettier": {
-    "singleQuote": true
+    "singleQuote": true,
+    "semi": false
   },
   "proxy": "http://localhost:8080"
 }

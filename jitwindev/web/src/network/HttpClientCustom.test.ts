@@ -1,4 +1,4 @@
-import HttpClientCustom from 'network/HttpClientCustom';
+import HttpClientCustom from 'network/HttpClientCustom'
 
 describe('post()', () => {
   const cases = [
@@ -14,7 +14,7 @@ describe('post()', () => {
       body: { param1: 'param1', param2: 'param2' },
       expectedUrl: 'https://hoge.example.com/api-name',
     },
-  ];
+  ]
 
   it.each(cases)(
     'Set parameter to fetch',
@@ -22,38 +22,38 @@ describe('post()', () => {
       // Given
       global.fetch = jest
         .fn()
-        .mockResolvedValueOnce(new Response(JSON.stringify('')));
-      const httpClient = new HttpClientCustom(host);
+        .mockResolvedValueOnce(new Response(JSON.stringify('')))
+      const httpClient = new HttpClientCustom(host)
 
       // When
-      await httpClient.post(path, body);
+      await httpClient.post(path, body)
 
       // Then
       expect(global.fetch).toHaveBeenCalledWith(expectedUrl, {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
         method: 'POST',
-      });
+      })
     }
-  );
+  )
 
   it.each(cases)('Get response', async ({ host, path, body }) => {
     // Given
-    const expectedResponse = { id: 'id-9999-8888' };
+    const expectedResponse = { id: 'id-9999-8888' }
     global.fetch = jest.fn().mockResolvedValue(
       new Response(JSON.stringify(expectedResponse), {
         headers: { 'content-length': '8' },
       })
-    );
+    )
 
-    const httpClient = new HttpClientCustom(host);
+    const httpClient = new HttpClientCustom(host)
 
     // When
-    const response = await httpClient.post(path, body);
+    const response = await httpClient.post(path, body)
 
     // Then
-    expect(response).toEqual(expectedResponse);
-  });
+    expect(response).toEqual(expectedResponse)
+  })
 
   it.each(cases)(
     'Get undefined from no response API',
@@ -61,21 +61,21 @@ describe('post()', () => {
       // Given
       const headers: Record<string, string> = {
         'content-length': '0',
-      };
+      }
       global.fetch = jest
         .fn()
-        .mockResolvedValue(new Response(null, { status: 200, headers }));
+        .mockResolvedValue(new Response(null, { status: 200, headers }))
 
-      const httpClient = new HttpClientCustom(host);
+      const httpClient = new HttpClientCustom(host)
 
       // When
-      const response = await httpClient.post(path, body);
+      const response = await httpClient.post(path, body)
 
       // Then
-      expect(response).toBeUndefined();
+      expect(response).toBeUndefined()
     }
-  );
-});
+  )
+})
 
 describe('patch()', () => {
   const cases = [
@@ -91,7 +91,7 @@ describe('patch()', () => {
       body: { param1: 'param1', param2: 'param2' },
       expectedUrl: 'https://hoge.example.com/api-name',
     },
-  ];
+  ]
 
   it.each(cases)(
     'Set parameter to fetch',
@@ -99,38 +99,38 @@ describe('patch()', () => {
       // Given
       global.fetch = jest
         .fn()
-        .mockResolvedValueOnce(new Response(JSON.stringify('')));
-      const httpClient = new HttpClientCustom(host);
+        .mockResolvedValueOnce(new Response(JSON.stringify('')))
+      const httpClient = new HttpClientCustom(host)
 
       // When
-      await httpClient.patch(path, body);
+      await httpClient.patch(path, body)
 
       // Then
       expect(global.fetch).toHaveBeenCalledWith(expectedUrl, {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
         method: 'PATCH',
-      });
+      })
     }
-  );
+  )
 
   it.each(cases)('Get response', async ({ host, path, body }) => {
     // Given
-    const expectedResponse = { id: '4444-5567' };
+    const expectedResponse = { id: '4444-5567' }
     global.fetch = jest.fn().mockResolvedValue(
       new Response(JSON.stringify(expectedResponse), {
         headers: { 'content-length': '8' },
       })
-    );
+    )
 
-    const httpClient = new HttpClientCustom(host);
+    const httpClient = new HttpClientCustom(host)
 
     // When
-    const response = await httpClient.patch(path, body);
+    const response = await httpClient.patch(path, body)
 
     // Then
-    expect(response).toEqual(expectedResponse);
-  });
+    expect(response).toEqual(expectedResponse)
+  })
 
   it.each(cases)(
     'Get undefined from no response API',
@@ -138,21 +138,21 @@ describe('patch()', () => {
       // Given
       const headers: Record<string, string> = {
         'content-length': '0',
-      };
+      }
       global.fetch = jest
         .fn()
-        .mockResolvedValue(new Response(null, { status: 200, headers }));
+        .mockResolvedValue(new Response(null, { status: 200, headers }))
 
-      const httpClient = new HttpClientCustom(host);
+      const httpClient = new HttpClientCustom(host)
 
       // When
-      const response = await httpClient.patch(path, body);
+      const response = await httpClient.patch(path, body)
 
       // Then
-      expect(response).toBeUndefined();
+      expect(response).toBeUndefined()
     }
-  );
-});
+  )
+})
 
 describe('delete()', () => {
   const cases = [
@@ -166,7 +166,7 @@ describe('delete()', () => {
       path: '/api-name',
       expectedUrl: 'https://fuga.example.com/api-name',
     },
-  ];
+  ]
 
   it.each(cases)(
     'Set parameter to fetch',
@@ -174,18 +174,18 @@ describe('delete()', () => {
       // Given
       global.fetch = jest
         .fn()
-        .mockResolvedValueOnce(new Response(JSON.stringify('')));
-      const httpClient = new HttpClientCustom(host);
+        .mockResolvedValueOnce(new Response(JSON.stringify('')))
+      const httpClient = new HttpClientCustom(host)
 
       // When
-      await httpClient.delete(path);
+      await httpClient.delete(path)
 
       // Then
       expect(global.fetch).toHaveBeenCalledWith(expectedUrl, {
         method: 'DELETE',
-      });
+      })
     }
-  );
+  )
 
   it.each(cases)(
     'Get undefined from no response API',
@@ -193,34 +193,34 @@ describe('delete()', () => {
       // Given
       const headers: Record<string, string> = {
         'content-length': '0',
-      };
+      }
       global.fetch = jest
         .fn()
-        .mockResolvedValue(new Response(null, { status: 200, headers }));
+        .mockResolvedValue(new Response(null, { status: 200, headers }))
 
-      const httpClient = new HttpClientCustom(host);
+      const httpClient = new HttpClientCustom(host)
 
       // When
-      const response = await httpClient.delete(path);
+      const response = await httpClient.delete(path)
 
       // Then
-      expect(response).toBeUndefined();
+      expect(response).toBeUndefined()
     }
-  );
-});
+  )
+})
 
 describe('get()', () => {
-  let httpClient: HttpClientCustom;
+  let httpClient: HttpClientCustom
 
   beforeEach(() => {
     const response = new Response(
       JSON.stringify({ key1: 'value1', key2: true, key3: [1, 2, 3] }),
       { status: 200 }
-    );
-    global.fetch = jest.fn().mockResolvedValueOnce(response);
+    )
+    global.fetch = jest.fn().mockResolvedValueOnce(response)
 
-    httpClient = new HttpClientCustom('https://hoge.example.com');
-  });
+    httpClient = new HttpClientCustom('https://hoge.example.com')
+  })
 
   it('Throw error when receiving http status other than 200', async () => {
     const response = new Response(
@@ -228,25 +228,25 @@ describe('get()', () => {
       {
         status: 403,
       }
-    );
-    global.fetch = jest.fn().mockResolvedValueOnce(response);
+    )
+    global.fetch = jest.fn().mockResolvedValueOnce(response)
     await expect(async () => {
-      await httpClient.get('/test-get-api');
-    }).rejects.toThrow('Status is not ok');
-  });
+      await httpClient.get('/test-get-api')
+    }).rejects.toThrow('Status is not ok')
+  })
 
   it('Set parameter to fetch', async () => {
-    await httpClient.get('/test-get-api');
+    await httpClient.get('/test-get-api')
 
     expect(global.fetch).toHaveBeenCalledWith(
       'https://hoge.example.com/test-get-api',
       { method: 'GET' }
-    );
-  });
+    )
+  })
 
   it('Get response', async () => {
-    const result = await httpClient.get('/test-get-api');
+    const result = await httpClient.get('/test-get-api')
 
-    expect(result).toEqual({ key1: 'value1', key2: true, key3: [1, 2, 3] });
-  });
-});
+    expect(result).toEqual({ key1: 'value1', key2: true, key3: [1, 2, 3] })
+  })
+})

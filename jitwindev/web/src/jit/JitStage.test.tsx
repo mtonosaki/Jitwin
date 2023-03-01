@@ -1,73 +1,73 @@
-import { render, screen } from '@testing-library/react';
-import { GuiFeature } from 'mvfp/GuiFeature';
+import { render, screen } from '@testing-library/react'
+import { GuiFeature } from 'mvfp/GuiFeature'
 import {
   mvfpRender,
   testInitFeatureCycle,
   testNextCycleAsync,
-} from 'mvfp/tests/mvfpRender';
-import { view } from 'mvfp/tests/View';
-import { LogRecord, nullLogger } from 'mvfp/utils/LogSystem';
-import React from 'react';
-import { TestIds } from 'tests/TestIds';
-import JitStage from './JitStage';
-import { JitTestIds } from './tests/JitTestIds';
+} from 'mvfp/tests/mvfpRender'
+import { view } from 'mvfp/tests/View'
+import { LogRecord, nullLogger } from 'mvfp/utils/LogSystem'
+import React from 'react'
+import { TestIds } from 'tests/TestIds'
+import JitStage from './JitStage'
+import { JitTestIds } from './tests/JitTestIds'
 
 describe('Edit mode', () => {
   it('When readonly mode, she sees readonly mode message', () => {
-    render(<JitStage isReadonly features={[]} onAddLog={nullLogger} />);
+    render(<JitStage isReadonly features={[]} onAddLog={nullLogger} />)
 
-    expect(screen.getByText('readonly mode')).toBeInTheDocument();
-  });
+    expect(screen.getByText('readonly mode')).toBeInTheDocument()
+  })
 
   it('When NOT readonly mode, she does NOT see readonly mode message', () => {
-    render(<JitStage isReadonly={false} features={[]} onAddLog={nullLogger} />);
+    render(<JitStage isReadonly={false} features={[]} onAddLog={nullLogger} />)
 
-    expect(screen.queryByText('readonly mode')).not.toBeInTheDocument();
-  });
-});
+    expect(screen.queryByText('readonly mode')).not.toBeInTheDocument()
+  })
+})
 
 describe('She sees GuiView of MVFP', () => {
   it('She sees GuiView', () => {
-    render(<JitStage isReadonly={false} features={[]} onAddLog={nullLogger} />);
-    expect(screen.getByTestId(TestIds.JIT_STAGE_GUI_VIEW)).toBeInTheDocument();
-  });
-});
+    render(<JitStage isReadonly={false} features={[]} onAddLog={nullLogger} />)
+    expect(screen.getByTestId(TestIds.JIT_STAGE_GUI_VIEW)).toBeInTheDocument()
+  })
+})
 
 describe('Log System', () => {
   it('Bill can change addLog implementation', async () => {
     // GIVEN
     class FakeFeature extends GuiFeature {
-      static expectedLog: LogRecord = { message: 'test log', level: 'DBG' };
+      static expectedLog: LogRecord = { message: 'test log', level: 'DBG' }
 
       beforeRun() {
-        super.beforeRun();
-        this.addLog(FakeFeature.expectedLog);
+        super.beforeRun()
+        this.addLog(FakeFeature.expectedLog)
       }
     }
 
     // WHEN
-    const spyOnAddLog = jest.fn();
+    const spyOnAddLog = jest.fn()
     render(
       <JitStage
         isReadonly={false}
         features={[new FakeFeature()]}
         onAddLog={spyOnAddLog}
       />
-    );
+    )
 
     // THEN
-    expect(spyOnAddLog).toHaveBeenCalledWith(FakeFeature.expectedLog);
-  });
-});
+    expect(spyOnAddLog).toHaveBeenCalledWith(FakeFeature.expectedLog)
+  })
+})
 
 describe('Sample', () => {
   it('She sees a first PROCESS on the center of the view', async () => {
     // GIVEN
-    testInitFeatureCycle();
+    testInitFeatureCycle()
     const stubGetBoundingClientRect = jest.spyOn(
       HTMLDivElement.prototype,
       'getBoundingClientRect'
-    );
+    )
     const fakeRect: DOMRect = {
       height: 576,
       width: 1728,
@@ -78,24 +78,24 @@ describe('Sample', () => {
       right: 0,
       top: 0,
       toJSON(): any {},
-    };
-    stubGetBoundingClientRect.mockReturnValue(fakeRect);
+    }
+    stubGetBoundingClientRect.mockReturnValue(fakeRect)
 
     // WHEN
     mvfpRender(
       <JitStage isReadonly={false} features={[]} onAddLog={nullLogger} />
-    );
-    await testNextCycleAsync();
+    )
+    await testNextCycleAsync()
 
     // THEN
-    const samplePart = view.getPartByTestId(JitTestIds.SAMPLE_JIT_PROCESS);
-    expect(samplePart).toBeInTheView();
+    const samplePart = view.getPartByTestId(JitTestIds.SAMPLE_JIT_PROCESS)
+    expect(samplePart).toBeInTheView()
     expect(samplePart).toHaveBeenDrawnAt({
       x: { screen: 864 }, // center x = 1728 / 2
       y: { screen: 288 }, // center y = 576 / 2
-    });
+    })
 
     // RESTORE
-    stubGetBoundingClientRect.mockRestore();
-  });
-});
+    stubGetBoundingClientRect.mockRestore()
+  })
+})

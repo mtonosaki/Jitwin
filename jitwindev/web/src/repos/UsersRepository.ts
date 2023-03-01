@@ -1,5 +1,5 @@
-import { User } from 'models/User';
+import { User } from 'models/User'
 
 export interface UsersRepository {
-  getMe(): Promise<User>;
+  getMe(): Promise<User>
 }

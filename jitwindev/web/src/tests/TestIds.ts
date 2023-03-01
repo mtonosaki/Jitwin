@@ -14,4 +14,4 @@ export const TestIds = {
   MESSAGE_OPEN_CLOSE_HANDLE: 'MESSAGE_OPEN_CLOSE_HANDLE',
   JIT_STAGE: 'JIT_STAGE',
   JIT_STAGE_GUI_VIEW: 'JIT_STAGE_GUI_VIEW',
-} as const;
+} as const

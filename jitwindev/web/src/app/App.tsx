@@ -1,42 +1,42 @@
-import React, { useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import { UsersRepository } from 'repos/UsersRepository';
-import UsersRepositoryBackend from 'repos/UsersRepositoryBackend';
-import SessionRepositoryNetwork from 'repos/SessionRepositoryNetwork';
-import HttpClientCustom from 'network/HttpClientCustom';
-import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser';
-import { useAuthenticateStatus } from 'hooks/useAuthenticateStatus';
-import HomePage from 'pages/HomePage';
-import MainPage from 'pages/MainPage';
+import React, { useEffect } from 'react'
+import { Route, Routes } from 'react-router-dom'
+import { UsersRepository } from 'repos/UsersRepository'
+import UsersRepositoryBackend from 'repos/UsersRepositoryBackend'
+import SessionRepositoryNetwork from 'repos/SessionRepositoryNetwork'
+import HttpClientCustom from 'network/HttpClientCustom'
+import { useAuthenticatedUser } from 'hooks/useAuthenticatedUser'
+import { useAuthenticateStatus } from 'hooks/useAuthenticateStatus'
+import HomePage from 'pages/HomePage'
+import MainPage from 'pages/MainPage'
 
 export default function App() {
-  const httpClient = new HttpClientCustom(process.env.REACT_APP_API_HOST!);
+  const httpClient = new HttpClientCustom(process.env.REACT_APP_API_HOST!)
   const usersRepository: UsersRepository = new UsersRepositoryBackend(
     httpClient
-  );
+  )
   const sessionRepository = new SessionRepositoryNetwork(
     sessionStorage,
     httpClient
-  );
-  const [, setAuthenticatedUser] = useAuthenticatedUser();
-  const [, setAuthenticateStatus] = useAuthenticateStatus();
+  )
+  const [, setAuthenticatedUser] = useAuthenticatedUser()
+  const [, setAuthenticateStatus] = useAuthenticateStatus()
 
   useEffect(() => {
-    setAuthenticateStatus('waiting');
+    setAuthenticateStatus('waiting')
 
     usersRepository
       .getMe()
       .then((me) => {
-        setAuthenticatedUser(me);
-        setAuthenticateStatus('confirmed');
+        setAuthenticatedUser(me)
+        setAuthenticateStatus('confirmed')
       })
       .catch(() => {
-        setAuthenticatedUser(undefined);
-        setAuthenticateStatus('error');
-      });
+        setAuthenticatedUser(undefined)
+        setAuthenticateStatus('error')
+      })
 
-    return () => setAuthenticateStatus('beforeConfirm');
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    return () => setAuthenticateStatus('beforeConfirm')
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Routes>
@@ -51,5 +51,5 @@ export default function App() {
         }
       />
     </Routes>
-  );
+  )
 }

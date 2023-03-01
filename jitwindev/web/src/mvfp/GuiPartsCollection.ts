@@ -1,17 +1,17 @@
-import { GuiPart } from 'mvfp/GuiPart';
-import { Converters } from 'mvfp/GuiTypes';
+import { GuiPart } from 'mvfp/GuiPart'
+import { Converters } from 'mvfp/GuiTypes'
 import {
   ConverterCodeToLayout,
   ConverterLayoutToCode,
   ConverterLayoutToScreen,
   ConverterScreenToLayout,
   PaneState,
-} from './ThreeCoordinatesSystem';
+} from './ThreeCoordinatesSystem'
 
 export type PartAndPane = {
-  part: GuiPart;
-  pane: PaneState;
-};
+  part: GuiPart
+  pane: PaneState
+}
 
 // USAGE: HOW TO CUSTOMIZE COORDINATE CONVERTERS
 //
@@ -44,23 +44,23 @@ export class GuiPartsCollection extends Array<PartAndPane> {
       layoutToScreen: this.layoutToScreen,
       screenToLayout: this.screenToLayout,
       layoutToCode: this.layoutToCode,
-    };
+    }
   }
 
   codeToLayout: ConverterCodeToLayout = {
     convertX(codeValue) {
-      return { layout: 0 }; // dummy
+      return { layout: 0 } // dummy
     },
     convertY(codeValue) {
-      return { layout: 0 }; // dummy
+      return { layout: 0 } // dummy
     },
-  };
+  }
 
   layoutToCode: ConverterLayoutToCode = {
     // dummy
     convertX: (value) => undefined, // return type is CodeX<T>
     convertY: (value) => undefined, // return type is CodeY<T>
-  };
+  }
 
   readonly layoutToScreen: ConverterLayoutToScreen = {
     convertX(value, pane, considerOffset) {
@@ -70,7 +70,7 @@ export class GuiPartsCollection extends Array<PartAndPane> {
           (considerOffset
             ? pane.scroll.x.screen + pane.paneTopLeft.x.screen
             : 0),
-      };
+      }
     },
     convertY(value, pane, considerScroll) {
       return {
@@ -79,9 +79,9 @@ export class GuiPartsCollection extends Array<PartAndPane> {
           (considerScroll
             ? pane.scroll.y.screen + pane.paneTopLeft.y.screen
             : 0),
-      };
+      }
     },
-  };
+  }
 
   readonly screenToLayout: ConverterScreenToLayout = {
     convertX(value, pane, considerOffset) {
@@ -92,7 +92,7 @@ export class GuiPartsCollection extends Array<PartAndPane> {
               ? pane.scroll.x.screen + pane.paneTopLeft.x.screen
               : 0)) *
           LPSX,
-      };
+      }
     },
     convertY(value, pane, considerScroll) {
       return {
@@ -102,11 +102,11 @@ export class GuiPartsCollection extends Array<PartAndPane> {
               ? pane.scroll.y.screen + pane.paneTopLeft.y.screen
               : 0)) *
           LPSY,
-      };
+      }
     },
-  };
+  }
 }
 
-export type GuiPartsLayerCollection = Map<number, GuiPartsCollection>;
-export const LPSX: number = 2.0; // Layout logical pixels Per Screen display pixel
-export const LPSY: number = 2.0; // Layout logical pixels Per Screen display pixel
+export type GuiPartsLayerCollection = Map<number, GuiPartsCollection>
+export const LPSX: number = 2.0 // Layout logical pixels Per Screen display pixel
+export const LPSY: number = 2.0 // Layout logical pixels Per Screen display pixel
