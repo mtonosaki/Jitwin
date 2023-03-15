@@ -1,0 +1,25 @@
+name: Unit Tests
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  frontend:
+    runs-on: node:16-alpine
+    
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
+      - name: environment
+        run: |
+          cd ./web
+          yarn install
+          yarn lint
+          yarn test:ci
