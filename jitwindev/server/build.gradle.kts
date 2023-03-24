@@ -23,14 +23,14 @@ repositories {
 }
 
 dependencies {
-    implementation("org.postgresql:postgresql")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.postgresql:postgresql:42.5.4")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.0.4")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.boot:spring-boot-devtools")
-    implementation("com.vladmihalcea:hibernate-types-55:2.16.2")
+    implementation("com.vladmihalcea:hibernate-types-55:2.21.1")
     implementation("com.azure.spring:spring-cloud-azure-starter-active-directory:4.2.0")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
@@ -38,8 +38,8 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
-    testImplementation("com.h2database:h2")
-    testImplementation("com.ninja-squad:springmockk:3.1.1")
+    testImplementation("com.h2database:h2:2.1.210")
+    testImplementation("com.ninja-squad:springmockk:4.0.2")
 }
 
 tasks.withType<KotlinCompile> {

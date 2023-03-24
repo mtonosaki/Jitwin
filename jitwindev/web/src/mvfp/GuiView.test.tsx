@@ -265,6 +265,7 @@ describe('Scroll System', () => {
 
     // GIVEN  Scroll 0,0
     const samplePart = view.getPartByTestId('happy-parts')
+    expect(layers.has(33)).toBeTruthy()
     expect(samplePart).toHaveBeenDrawnAt({
       x: { screen: 0x111 / LPSX }, // 17.0625
       y: { screen: 0x222 / LPSY }, // 34.125
