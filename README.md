@@ -5,7 +5,7 @@
 - [Wiki](https://github.com/mtonosaki/Jitwin/wiki)   
 
 # Jitwin
-"Just-in-time + Twin" - Digital twin platform is like a broker between the real world and a virtual world to help you both to respect the real world and to find revolution idea in a virtual space.
+"Just-in-time + Twin" - Digital twin platform like a broker between the real world and a virtual world to help you both to respect the real world and to find revolution idea in a virtual space.
 
 # Overview
 1. Value Stream Mapping (VSM) GUI Editor.
