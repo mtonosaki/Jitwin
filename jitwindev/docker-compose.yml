@@ -15,7 +15,7 @@ services:
       - 8080:8080
     tty: true
   db:
-    image: postgres
+    image: postgres:15
     container_name: jitwindb
     ports:
       - "5432:5432"
